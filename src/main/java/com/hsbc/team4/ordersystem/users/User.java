@@ -1,4 +1,4 @@
-package com.hsbc.team4.ordersystem.domain;
+package com.hsbc.team4.ordersystem.users;
 
 import com.hsbc.team4.ordersystem.common.base.BaseEntity;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.domain
+ * @Package : com.hsbc.team4.ordersystem.products.domain
  * @Description :
  * @Date : 2018/8/1
  */

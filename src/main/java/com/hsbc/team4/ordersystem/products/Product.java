@@ -1,11 +1,9 @@
-package com.hsbc.team4.ordersystem.domain;
+package com.hsbc.team4.ordersystem.products;
 
 import com.hsbc.team4.ordersystem.common.base.BaseEntity;
-import com.hsbc.team4.ordersystem.dto.ProductDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.jpa.util.BeanDefinitionUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.domain
+ * @Package : com.hsbc.team4.ordersystem.products.domain
  * @Description :
  * @Date : 2018/8/1
  */

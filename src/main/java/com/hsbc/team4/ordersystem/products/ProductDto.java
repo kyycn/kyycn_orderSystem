@@ -1,4 +1,4 @@
-package com.hsbc.team4.ordersystem.dto;
+package com.hsbc.team4.ordersystem.products;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.dto
+ * @Package : com.hsbc.team4.ordersystem.products.dto
  * @Description :
  * @Date : 2018/8/2
  */

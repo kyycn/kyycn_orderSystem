@@ -1,7 +1,7 @@
 package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
-import com.hsbc.team4.ordersystem.domain.User;
+import com.hsbc.team4.ordersystem.users.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

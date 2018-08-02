@@ -1,8 +1,6 @@
-package com.hsbc.team4.ordersystem.controller;
+package com.hsbc.team4.ordersystem.users;
 
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
-import com.hsbc.team4.ordersystem.domain.User;
-import com.hsbc.team4.ordersystem.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.controller
+ * @Package : com.hsbc.team4.ordersystem.products.controller
  * @Description :
  * @Date : 2018/8/1
  */

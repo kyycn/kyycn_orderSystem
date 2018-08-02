@@ -1,13 +1,13 @@
-package com.hsbc.team4.ordersystem.service;
+package com.hsbc.team4.ordersystem.users;
 
 import com.hsbc.team4.ordersystem.common.base.IBaseService;
-import com.hsbc.team4.ordersystem.domain.User;
+import com.hsbc.team4.ordersystem.users.User;
 
 /**
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.service
+ * @Package : com.hsbc.team4.ordersystem.products.service
  * @Description :
  * @Date : 2018/8/1
  */

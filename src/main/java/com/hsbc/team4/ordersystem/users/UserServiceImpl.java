@@ -1,7 +1,8 @@
-package com.hsbc.team4.ordersystem.service;
+package com.hsbc.team4.ordersystem.users;
 
-import com.hsbc.team4.ordersystem.dao.IUserRepository;
-import com.hsbc.team4.ordersystem.domain.User;
+import com.hsbc.team4.ordersystem.users.IUserRepository;
+import com.hsbc.team4.ordersystem.users.IUserService;
+import com.hsbc.team4.ordersystem.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -10,12 +11,12 @@ import org.springframework.stereotype.Service;
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.service
+ * @Package : com.hsbc.team4.ordersystem.products.service
  * @Description :
  * @Date : 2018/8/1
  */
 @Service
-public class UserServiceImpl implements IUserService{
+public class UserServiceImpl implements IUserService {
 
     private final IUserRepository iUserRepository;
 
