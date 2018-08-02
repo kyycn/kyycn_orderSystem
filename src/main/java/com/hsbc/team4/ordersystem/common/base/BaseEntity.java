@@ -1,8 +1,6 @@
 package com.hsbc.team4.ordersystem.common.base;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
@@ -34,7 +32,7 @@ public class BaseEntity {
      */
     private long updateTime;
     /**
-     * 是否可用（0：可用，1：软删除，2：永久删除)
+     * status（0：可用，1：软删除，2：永久删除)
      */
     @Column(name="status", columnDefinition = "INT default 0")
     private int status = 0;
