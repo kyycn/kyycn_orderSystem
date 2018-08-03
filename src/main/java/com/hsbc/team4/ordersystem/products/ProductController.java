@@ -2,6 +2,9 @@ package com.hsbc.team4.ordersystem.products;
 
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("product")
+@Api(value = "product")
 public class ProductController {
     private final IProductService productService;
 
@@ -28,8 +32,9 @@ public class ProductController {
      * @param productDto
      * @return User
      */
+    @ApiOperation(value = "save product", httpMethod = "POST", notes = "save product", response = ResponseResults.class)
     @PostMapping("/")
-    public ResponseResults saveProduct(@RequestBody ProductDto productDto){
+    public ResponseResults saveProduct(@ApiParam(required = true,name = "productDto",value = "productDto project") @RequestBody ProductDto productDto){
         BeanValidator.validateObject(productDto);
         Product product=Product.adaptProduct(productDto);
         return ResponseResults.responseBySuccess("ok",productService.addEntity(product));
@@ -40,8 +45,9 @@ public class ProductController {
      * @param productDto
      * @return User
      */
+    @ApiOperation(value = "update product", httpMethod = "POST", notes = "update product", response = ResponseResults.class)
     @PutMapping("/")
-    public ResponseResults updateProduct(@RequestBody  ProductDto productDto){
+    public ResponseResults updateProduct(@ApiParam(required = true,name = "productDto",value = "productDto project")@RequestBody  ProductDto productDto){
         BeanValidator.validateObject(productDto);
         Product product=Product.adaptProduct(productDto);
         return ResponseResults.responseBySuccess("ok",productService.updateEntity(product));
@@ -52,8 +58,9 @@ public class ProductController {
      * @param id
      * @return String
      */
+    @ApiOperation(value = "delete by Id", httpMethod = "DELETE", notes = "delete product by Id", response = ResponseResults.class)
     @DeleteMapping("/{id}")
-    public ResponseResults deleteProductById(@PathVariable String  id){
+    public ResponseResults deleteProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String  id){
         return ResponseResults.responseBySuccess("ok",productService.updateStatusById(id,1));
     }
 
@@ -62,8 +69,9 @@ public class ProductController {
      * @param id
      * @return User
      */
+    @ApiOperation(value = "get by Id", httpMethod = "GET", notes = "get product by id", response = ResponseResults.class)
     @GetMapping("/{id}")
-    public ResponseResults queryProductById(@PathVariable String id){
+    public ResponseResults queryProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String id){
         return ResponseResults.responseBySuccess("ok",productService.findById(id));
     }
 
@@ -74,6 +82,7 @@ public class ProductController {
      * @param status
      * @return
      */
+    @ApiOperation(value = "status", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
     @GetMapping("/{status}")
     public ResponseResults getProductList(@RequestParam(value = "current",defaultValue = "0") int current,
                                        @RequestParam(value = "current",defaultValue = "10") int pageSize,

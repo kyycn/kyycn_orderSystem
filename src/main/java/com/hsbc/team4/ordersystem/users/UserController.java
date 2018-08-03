@@ -62,11 +62,11 @@ public class UserController {
         return ResponseResults.responseBySuccess("ok",userService.findById(id));
     }
 
-    @GetMapping("user/{status}")
+    @GetMapping("user")
     public ResponseResults getUserList(@RequestParam(value = "current",defaultValue = "0") int current,
-                                       @RequestParam(value = "current",defaultValue = "10") int pageSize,
-                                       @PathVariable int status){
-        return ResponseResults.responseBySuccess("ok",userService.findByStatus(current,pageSize,status));
+                                       @RequestParam(value = "current",defaultValue = "10") int pageSize
+                                       ){
+        return ResponseResults.responseBySuccess("ok");
     }
 
 

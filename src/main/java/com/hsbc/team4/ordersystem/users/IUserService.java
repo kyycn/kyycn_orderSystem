@@ -12,4 +12,5 @@ import com.hsbc.team4.ordersystem.users.User;
  * @Date : 2018/8/1
  */
 public interface IUserService extends IBaseService<User>{
+    
 }

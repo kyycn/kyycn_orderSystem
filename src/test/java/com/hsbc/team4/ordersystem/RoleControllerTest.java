@@ -1,6 +1,7 @@
 package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
+import com.hsbc.team4.ordersystem.roles.Role;
 import com.hsbc.team4.ordersystem.users.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,11 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @Project : ordersystem
  * @Package : com.hsbc.team4.ordersystem
  * @Description :
- * @Date : 2018/8/1
+ * @Date : 2018/8/3
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserTest {
+public class RoleControllerTest {
     @Autowired
     private WebApplicationContext context;
     private MockMvc mockMvc;
@@ -38,16 +39,19 @@ public class UserTest {
 
     }
 
+    /**
+     * saveRole
+     */
     @Test
-    public void saveUser(){
-        User user=new User();
-        user.setId("20150613");
-        user.setUsername("奇点");
-        user.setEmail("2235390423@qq.com");
-        String json= JSON.toJSONString(user);
+    public void saveRole(){
+        Role role=new Role();
+        role.setId("20150612");
+        role.setRoleName("超级管理员");
+        role.setCreateTime(System.currentTimeMillis());
+        String json= JSON.toJSONString(role);
         if(!"".equals(json)){
             try {
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/role/")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -62,23 +66,14 @@ public class UserTest {
 
     }
 
+    /**
+     * queryRoleId
+     */
     @Test
-    public void queryByUserId(){
+    public void queryByRoleId(){
         String id="20150612";
         try {
-            mockMvc.perform(get("/user/"+id)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @Test
-    public void getUserList(){
-        try {
-            mockMvc.perform(get("/user")
+            mockMvc.perform(get("/role/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -88,15 +83,33 @@ public class UserTest {
         }
     }
 
+    /**
+     * getRoleList
+     */
     @Test
-    public void updateUser() {
-        User user=new User();
-        user.setId("20150612");
-        user.setUsername("奇点");
-        user.setPhone("15626283540");
-        String json=JSON.toJSONString(user);
+    public void getRoleList(){
         try {
-            mockMvc.perform(put("/user")
+            mockMvc.perform(get("/role/0")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * updateRole
+     */
+    @Test
+    public void updateRole() {
+        Role role=new Role();
+        role.setId("20150612");
+        role.setRoleName("普通管理员");
+        String json=JSON.toJSONString(role);
+        try {
+            mockMvc.perform(put("/role/")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(json)
                     .accept(MediaType.APPLICATION_JSON))
@@ -108,11 +121,14 @@ public class UserTest {
 
     }
 
+    /**
+     * deleteByRoleId
+     */
     @Test
-    public void deleteByUserId() {
-        String id="20150611";
+    public void deleteByRoleId() {
+        String id="20150612";
         try {
-            mockMvc.perform(delete("/user/"+id)
+            mockMvc.perform(delete("/role/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
