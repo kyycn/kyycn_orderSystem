@@ -20,15 +20,28 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Data
 public class Manager extends BaseEntity {
+    /**
+     * manager id
+     */
     @Id
     private String id;
+
+    /**
+     * manager name connect to
+     */
     @NotBlank(message = "The username can not be empty")
     private String name;
-    @NotBlank(message = "The username can not be empty")
-    private String password;
-    @NotBlank(message = "The username can not be empty")
+
+    /**
+     * manager workNumber
+     */
+    @NotBlank(message = "The workNumber can not be empty")
     private String workNumber;
-    @NotBlank(message = "The username can not be empty")
+
+    /**
+     * manager department
+     */
+    @NotBlank(message = "The department can not be empty")
     private String department;
 
 }

@@ -50,7 +50,7 @@ public class ManagerControllerTest {
     public void before() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         jsons = new ArrayList<>();
-        Manager manager = new Manager();
+        Account manager = new Account();
         manager.setName("Cady");
         manager.setPassword("123456");
         String jsonCorrect = JSON.toJSONString(manager);
