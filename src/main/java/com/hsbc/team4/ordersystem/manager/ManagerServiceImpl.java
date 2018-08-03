@@ -2,6 +2,8 @@ package com.hsbc.team4.ordersystem.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,7 +32,10 @@ public class ManagerServiceImpl implements IManagerService{
      */
     @Override
     public Manager findByName(String name) {
-        return iManagerRepository.findByName(name);
+        if (name!=null&&!"".equals(name)){
+            return iManagerRepository.findByName(name);
+        }
+        return null;
     }
 
     @Override
@@ -40,21 +45,28 @@ public class ManagerServiceImpl implements IManagerService{
 
     @Override
     public Manager addEntity(Manager manager) {
-        return null;
+        return iManagerRepository.save(manager);
     }
 
     @Override
     public int updateStatusById(String id, int status) {
+        if(id!=null&&!"".equals(id)){
+            return iManagerRepository.updateStatusById(id, status);
+        }
         return 0;
     }
 
     @Override
     public Manager updateEntity(Manager manager) {
+        if(manager.getId()!=null&&!"".equals(manager.getId())){
+            return iManagerRepository.save(manager);
+        }
         return null;
+
     }
 
     @Override
     public Manager findById(String id) {
-        return null;
+        return iManagerRepository.findByEntityId(id);
     }
 }

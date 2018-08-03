@@ -19,10 +19,16 @@ public class ManagerController {
 
     private IManagerService managerService;
 
+    private IAccountRepository accountRepository;
+
     @Autowired
-    public ManagerController(IManagerService managerService) {
+    public ManagerController(IManagerService managerService, IAccountRepository accountRepository) {
         this.managerService = managerService;
+        this.accountRepository = accountRepository;
     }
+
+
+
 
     /**
      * @Description check the manager's information when login
@@ -30,12 +36,12 @@ public class ManagerController {
      * @Param manager
      * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
      */
-    @RequestMapping("/login")
-    public ResponseResults checkLogin(@RequestBody Manager manager){
+    @PostMapping("/login")
+    public ResponseResults checkLogin(@RequestBody Account manager){
         if(manager.getName()!=null&&manager.getPassword()!=null&&!"".equals(manager.getName())&&!"".equals(manager.getPassword())){
-            Manager managerFind = managerService.findByName(manager.getName());
-            if(managerFind!=null&&manager.getPassword().equals(manager.getPassword())){
-                return ResponseResults.responseBySuccessMessage("pass");
+            Account account = accountRepository.findByName(manager.getName());
+            if(account!=null&&manager.getPassword().equals(account.getPassword())){
+                return ResponseResults.responseBySuccess("pass",managerService.findByName(account.getName()));
             }
         }
         return ResponseResults.responseByErrorMessage("again");
