@@ -1,6 +1,7 @@
 package com.hsbc.team4.ordersystem.products;
 
 import com.hsbc.team4.ordersystem.common.base.IBaseService;
+import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import com.hsbc.team4.ordersystem.products.Product;
 
 /**
@@ -12,4 +13,5 @@ import com.hsbc.team4.ordersystem.products.Product;
  * @Date : 2018/8/2
  */
 public interface IProductService extends IBaseService<Product> {
+      Product query(String id);
 }

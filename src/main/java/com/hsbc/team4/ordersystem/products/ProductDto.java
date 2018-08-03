@@ -21,10 +21,13 @@ public class ProductDto {
     @NotBlank(message = "The name can not be empty")
     private String name;
     @NotBlank(message = "The type can not be empty")
-    private String type;
+    private String description;
     @NotBlank(message = "The color can not be empty")
-    private String color;
+    private String pic;
     @NotNull(message = "The price can not be empty")
     private double price;
-
+    @NotBlank(message = "The color can not be empty")
+    private String standar;
+    @NotBlank(message = "The color can not be empty")
+    private String condidtion;
 }

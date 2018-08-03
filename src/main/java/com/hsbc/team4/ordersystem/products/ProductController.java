@@ -24,64 +24,81 @@ public class ProductController {
     }
 
     /**
-     * saveProduct
-     * @param productDto
-     * @return User
+     * @Author:yang
+     * @Description:saveProduct
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
      */
     @PostMapping("/")
-    public ResponseResults saveProduct(@RequestBody ProductDto productDto){
+    public ResponseResults saveProduct(@RequestBody ProductDto productDto) {
         BeanValidator.validateObject(productDto);
-        Product product=Product.adaptProduct(productDto);
-        return ResponseResults.responseBySuccess("ok",productService.addEntity(product));
+        Product product = Product.adaptProduct(productDto);
+        return ResponseResults.responseBySuccess("ok", productService.addEntity(product));
     }
 
     /**
-     * updateProduct
-     * @param productDto
-     * @return User
+     * @Author:yang
+     * @Description:updateProduct
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
      */
     @PutMapping("/")
-    public ResponseResults updateProduct(@RequestBody  ProductDto productDto){
+    public ResponseResults updateProduct(@RequestBody ProductDto productDto) {
         BeanValidator.validateObject(productDto);
-        Product product=Product.adaptProduct(productDto);
-        return ResponseResults.responseBySuccess("ok",productService.updateEntity(product));
+        Product product = Product.adaptProduct(productDto);
+        return ResponseResults.responseBySuccess("ok", productService.updateEntity(product));
     }
 
     /**
-     * deleteProductById
-     * @param id
-     * @return String
+     * @Author:yang
+     * @Description:deleteProductById
+     * @Param: id
+     * @return:
+     * @Date: 2018/8/3
      */
     @DeleteMapping("/{id}")
-    public ResponseResults deleteProductById(@PathVariable String  id){
-        return ResponseResults.responseBySuccess("ok",productService.updateStatusById(id,1));
+    public ResponseResults deleteProductById(@PathVariable String id) {
+        return ResponseResults.responseBySuccess("ok", productService.updateStatusById(id, 1));
     }
 
     /**
-     * queryProductById
-     * @param id
-     * @return User
+     * @Author:yang
+     * @Description:query product by id
+     * @Param: id
+     * @return:
+     * @Date: 2018/8/3
      */
     @GetMapping("/{id}")
-    public ResponseResults queryProductById(@PathVariable String id){
-        return ResponseResults.responseBySuccess("ok",productService.findById(id));
+    public ResponseResults queryProductById(@PathVariable String id) {
+        return ResponseResults.responseBySuccess("ok", productService.findById(id));
     }
 
     /**
-     * getProductList
-     * @param current
-     * @param pageSize
-     * @param status
-     * @return
+     * @Author:yang
+     * @Description:query product detail info
+     * @Param: the id of product
+     * @return:ResponseResults
+     * @Date: 2018/8/3
      */
-    @GetMapping("/{status}")
-    public ResponseResults getProductList(@RequestParam(value = "current",defaultValue = "0") int current,
-                                       @RequestParam(value = "current",defaultValue = "10") int pageSize,
-                                       @PathVariable int status){
-        return ResponseResults.responseBySuccess("ok",productService.findByStatus(current,pageSize,status));
+    @GetMapping("/query")
+    public ResponseResults query(@RequestParam String id) {
+        return ResponseResults.responseBySuccess("ok", productService.query(id));
     }
 
-
-
+    /**
+     * @Author:yang
+     * @Description:
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
+     */
+    @GetMapping("/{status}")
+    public ResponseResults getProductList(@RequestParam(value = "current", defaultValue = "0") int current,
+                                          @RequestParam(value = "current", defaultValue = "10") int pageSize,
+                                          @PathVariable int status) {
+        return ResponseResults.responseBySuccess("ok", productService.findByStatus(current, pageSize, status));
+    }
 
 }
