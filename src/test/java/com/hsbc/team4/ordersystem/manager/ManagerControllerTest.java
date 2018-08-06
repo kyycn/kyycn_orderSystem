@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 * ManagerController Tester.
 *
 * @author Cady
-* @since <pre>???? 2, 2018</pre>
+* @since <pre>8 2, 2018</pre>
 * @version 1.0
 */
 @RunWith(SpringRunner.class)

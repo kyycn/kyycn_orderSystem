@@ -1,9 +1,11 @@
 package com.hsbc.team4.ordersystem.manager;
 
+import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author:Cady
@@ -38,11 +40,13 @@ public class ManagerController {
      */
     @PostMapping("/login")
     public ResponseResults checkLogin(@RequestBody Account manager){
-        if(manager.getName()!=null&&manager.getPassword()!=null&&!"".equals(manager.getName())&&!"".equals(manager.getPassword())){
+        Map<String,String> validateMap = BeanValidator.validateObject(manager);
+        if (validateMap.isEmpty()){
             Account account = accountRepository.findByName(manager.getName());
             if(account!=null&&manager.getPassword().equals(account.getPassword())){
                 return ResponseResults.responseBySuccess("pass",managerService.findByName(account.getName()));
             }
+            return ResponseResults.responseByErrorMessage("error");
         }
         return ResponseResults.responseByErrorMessage("again");
     }
