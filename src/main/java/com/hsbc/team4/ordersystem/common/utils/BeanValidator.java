@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -19,14 +20,14 @@ import java.util.*;
  */
 @Slf4j
 public class BeanValidator {
-    private static javax.validation.ValidatorFactory ValidatorFactory= Validation.buildDefaultValidatorFactory();
+    private  javax.validation.ValidatorFactory validatorFactory= Validation.buildDefaultValidatorFactory();
 
     /**
      * get Validator
      * @return Validator
      */
-    private static Validator getValidator(){
-        return ValidatorFactory.getValidator();
+    private  Validator getValidator(){
+        return validatorFactory.getValidator();
     }
 
     /**
@@ -36,7 +37,7 @@ public class BeanValidator {
      * @param <T>
      * @return Map<String,String>
      */
-    private static <T> Map<String,String> validate(T t, Class... groups){
+    private  <T> Map<String,String> validate(T t, Class... groups){
         Validator validator=getValidator();
         Set validateResult=validator.validate(t,groups);
         if(validateResult.isEmpty()){
@@ -57,7 +58,7 @@ public class BeanValidator {
      * @param collection
      * @return Map<String,String>
      */
-    private static Map<String,String>  validateList(Collection<?> collection){
+    private  Map<String,String>  validateList(Collection<?> collection){
         Preconditions.checkNotNull(collection);
         Iterator iterator=collection.iterator();
         Map<String,String> errors;
@@ -77,7 +78,7 @@ public class BeanValidator {
      * @param objects
      * @return Map<String,String>
      */
-    public static Map<String,String> validateObject(Object first,Object... objects){
+    public  Map<String,String> validateObject(Object first,Object... objects){
         if(objects!=null&&objects.length>0){
             return validateList(Lists.asList(first,objects));
         }else {

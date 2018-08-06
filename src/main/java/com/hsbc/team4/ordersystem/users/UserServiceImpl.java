@@ -37,7 +37,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public int updateStatusById(String id, int status) {
-        return iUserRepository.updateStatusById(id,status);
+        return 0;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User findById(String id) {
-        return iUserRepository.findByEntityId(id);
+        return iUserRepository.findById(id).get();
     }
 
 
