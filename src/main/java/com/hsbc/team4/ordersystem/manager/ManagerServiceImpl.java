@@ -1,9 +1,8 @@
 package com.hsbc.team4.ordersystem.manager;
 
+import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,25 +16,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class ManagerServiceImpl implements IManagerService{
 
-    private IManagerRepository iManagerRepository;
+    private final IManagerRepository iManagerRepository;
+    private final IManagerAccountService accountService;
 
     @Autowired
-    public ManagerServiceImpl(IManagerRepository iManagerRepository) {
+    public ManagerServiceImpl(IManagerRepository iManagerRepository, IManagerAccountService accountService) {
         this.iManagerRepository = iManagerRepository;
+        this.accountService = accountService;
     }
 
-    /**
-     * @Description find manager by name through the repository
-     * @Date: 20:22 2018-08-02
-     * @Param name
-     * @return com.hsbc.team4.ordersystem.manager.Manager
-     */
+
     @Override
-    public Manager findByName(String name) {
-        if (name!=null&&!"".equals(name)){
-            return iManagerRepository.findByName(name);
-        }
-        return null;
+    public Manager findByWordNumber(String wordNumber) {
+        return iManagerRepository.findByWorkNumber(wordNumber);
     }
 
     @Override
@@ -45,7 +38,19 @@ public class ManagerServiceImpl implements IManagerService{
 
     @Override
     public Manager addEntity(Manager manager) {
-        return iManagerRepository.save(manager);
+        if (iManagerRepository.findByWorkNumber(manager.getWorkNumber())==null){
+            manager.setId(new UUIDFactory().getUUID());
+            manager.setStatus(1);
+            manager.setCreateTime(System.currentTimeMillis());
+            ManagerAccount managerAccount = new ManagerAccount();
+            managerAccount.setId(new UUIDFactory().getUUID());
+            managerAccount.setName(manager.getWorkNumber());
+            managerAccount.setPassword(manager.getWorkNumber());
+            managerAccount.setStatus(1);
+            accountService.addEntity(managerAccount);
+            return iManagerRepository.save(manager);
+        }
+        return null;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.hsbc.team4.ordersystem.manager;
 
 import com.hsbc.team4.ordersystem.common.base.IBaseRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author:Cady
@@ -10,13 +11,14 @@ import com.hsbc.team4.ordersystem.common.base.IBaseRepository;
  * @Description:
  * @Date date: 2018-08-03
  */
-public interface IAccountRepository extends IBaseRepository<Account,String> {
+@Repository
+public interface IManagerAccountRepository extends IBaseRepository<ManagerAccount,String> {
 
     /**
      * @Description //TODO
      * @Date: 12:44 2018-08-03
      * @Param name
-     * @return com.hsbc.team4.ordersystem.manager.Account
+     * @return com.hsbc.team4.ordersystem.manager.ManagerAccount
      */
-    Account findByName(String name);
+    ManagerAccount findByName(String name);
 }

@@ -20,16 +20,15 @@ import java.util.Map;
 public class ManagerController {
 
     private IManagerService managerService;
-
-    private IAccountRepository accountRepository;
+    private IManagerAccountService accountService;
+    private final ResponseResults responseResults;
 
     @Autowired
-    public ManagerController(IManagerService managerService, IAccountRepository accountRepository) {
+    public ManagerController(IManagerService managerService, IManagerAccountService accountService, ResponseResults responseResults) {
         this.managerService = managerService;
-        this.accountRepository = accountRepository;
+        this.accountService = accountService;
+        this.responseResults = responseResults;
     }
-
-
 
 
     /**
@@ -39,15 +38,15 @@ public class ManagerController {
      * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
      */
     @PostMapping("/login")
-    public ResponseResults checkLogin(@RequestBody Account manager){
-        Map<String,String> validateMap = BeanValidator.validateObject(manager);
+    public ResponseResults checkLogin(@RequestBody ManagerAccount manager){
+        Map<String,String> validateMap = new BeanValidator().validateObject(manager);
         if (validateMap.isEmpty()){
-            Account account = accountRepository.findByName(manager.getName());
-            if(account!=null&&manager.getPassword().equals(account.getPassword())){
-                return ResponseResults.responseBySuccess("pass",managerService.findByName(account.getName()));
+            ManagerAccount managerAccount = accountService.findByName(manager.getName());
+            if(managerAccount !=null&&manager.getPassword().equals(managerAccount.getPassword())){
+                return responseResults.responseBySuccess("pass",managerService.findByWordNumber(managerAccount.getName()));
             }
-            return ResponseResults.responseByErrorMessage("error");
+            return responseResults.responseByErrorMessage("error");
         }
-        return ResponseResults.responseByErrorMessage("again");
+        return responseResults.responseByErrorMessage("again");
     }
 }

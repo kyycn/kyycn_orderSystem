@@ -8,15 +8,8 @@ import com.hsbc.team4.ordersystem.common.base.IBaseService;
  * @Project: ordersystem
  * @Package: com.hsbc.team4.ordersystem.manager
  * @Description:
- * @Date date: 2018-08-02
+ * @Date date: 2018-08-06
  */
-public interface IManagerService extends IBaseService<Manager> {
-
-
-    /**
-     * findByWordNumber
-     * @param wordNumber
-     * @return
-     */
-    Manager findByWordNumber(String wordNumber);
+public interface IManagerAccountService extends IBaseService<ManagerAccount> {
+    ManagerAccount findByName(String name);
 }

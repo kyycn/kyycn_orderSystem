@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author:Cady
@@ -16,17 +17,30 @@ import javax.validation.constraints.NotBlank;
  * @Description:
  * @Date date: 2018-08-03
  */
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Account extends BaseEntity {
+public class ManagerAccount{
+    /**
+     * account id
+     */
     @Id
     private String id;
 
+    /**
+     * account name, the same as the manager's workNumber
+     */
     @NotBlank(message = "The account can not be empty")
     private String name;
 
+    /**
+     * account password
+     */
     @NotBlank(message = "The password can not be empty")
     private String password;
 
+    /**
+     * status
+     */
+    @NotNull(message = "The status can not be null")
+    private int status;
 }

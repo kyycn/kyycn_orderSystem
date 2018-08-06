@@ -13,11 +13,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface IManagerRepository extends IBaseRepository<Manager,String> {
+
     /**
-     * @Description find manager by name
-     * @Date: 20:16 2018-08-02
-     * @Param name
+     * @Description findByWorkNumber
+     * @Date: 23:07 2018-08-06
+     * @Param workNumber
      * @return com.hsbc.team4.ordersystem.manager.Manager
      */
-    Manager findByName(String name);
+    Manager findByWorkNumber(String workNumber);
 }
