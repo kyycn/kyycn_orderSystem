@@ -1,4 +1,4 @@
-package com.hsbc.team4.ordersystem.users;
+package com.hsbc.team4.ordersystem.roles;
 
 import com.hsbc.team4.ordersystem.common.base.BaseEntity;
 import lombok.Data;
@@ -7,25 +7,22 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import java.util.Map;
 
 /**
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.products.domain
+ * @Package : com.hsbc.team4.ordersystem.roles
  * @Description :
- * @Date : 2018/8/1
+ * @Date : 2018/8/2
  */
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class User  extends BaseEntity{
+public class Role extends BaseEntity{
     @Id
     private String id;
-    @NotBlank(message = "The username can not be empty")
-    private String username;
-    @NotBlank(message = "The password can not be empty")
-    private String password;
+    @NotBlank(message = " the roleName can not be Empty ")
+    private String roleName;
 
 }
