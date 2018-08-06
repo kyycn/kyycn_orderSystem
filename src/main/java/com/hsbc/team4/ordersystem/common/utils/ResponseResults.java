@@ -86,7 +86,7 @@ public class ResponseResults<T> implements Serializable {
      * @param <T>
      * @return ResponseResults
      */
-    public static <T> ResponseResults<T> responseBySuccessMessage(String msg){
+    public  <T> ResponseResults<T> responseBySuccessMessage(String msg){
         return new ResponseResults<T>(ResponseCode.SUCCESS.getCode(),msg);
     }
 

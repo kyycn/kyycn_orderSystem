@@ -1,26 +1,18 @@
 package com.hsbc.team4.ordersystem;
-import com.hsbc.team4.ordersystem.jwt.JwtAuthenticationTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * @author Kevin
- */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -28,47 +20,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${jwt.exceptUrl}")
     private String exceptUrl;
-    @Autowired
-    private  UserDetailsService userDetailsService;
 
-    /**
-     * verify username and password
-     * @param authenticationManagerBuilder
-     * @throws Exception
-     */
-    @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
-                // 设置UserDetailsService
-                .userDetailsService(userDetailsService)
-                // 使用BCrypt进行密码的hash
-                .passwordEncoder(passwordEncoder());
-    }
-
-    /**
-     * inject a PasswordEncoder bean
-     * @return PasswordEncoder
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    /**
-     * register a jwt filter
-     * @return AuthenticationManager
-     * @throws Exception
-     */
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-    @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationTokenFilter();
-    }
-
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
@@ -76,23 +32,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Authorization request
-     * @param httpSecurity httpSecurity
+     * 请求授权
+     * @param httpSecurity
      * @throws Exception
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity
-                //exclude the csrf
+                // 由于使用的是JWT，我们这里不需要csrf
                 .csrf().disable()
-                //exclude the session
+                // 基于token，所以不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                // all request must be verify
+                // 对所有的请求都认证
                 .authorizeRequests()
-                // neglect all request path with "/"
+                // 所有 / 的所有请求 都放行
                // .antMatchers("/").permitAll()
-                // all people have permit to request this resource
+                // 允许对于网站静态资源的无授权访问
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
@@ -103,20 +60,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js",
                         "/**/*.jpg",
                         "/**/*.png"
-                ).permitAll()
-                // allow anon-access none to get token
+                ).permitAll();
+                // 对于获取token的rest api要允许匿名访问
                 //.antMatchers(exceptUrl).permitAll()
-                // all request path with "/login" can be visit
-                .antMatchers(HttpMethod.POST, "/user/**","/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/user/**","/**").permitAll()
-                // Except for the above request ,Other requests can be visit
-                .anyRequest().authenticated();
-        // add JWT filter
-        httpSecurity
-                //the token verify must be before the password verify
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-        // Disable Caching
-        httpSecurity.headers().cacheControl();
+                // 所有 /login 的POST请求 都放行
+               // .antMatchers(HttpMethod.POST, "/login/**","/**").permitAll()
+                //.antMatchers(HttpMethod.GET, "/login/**","/**").permitAll()
+               // .anyRequest().authenticated();
 
     }
 

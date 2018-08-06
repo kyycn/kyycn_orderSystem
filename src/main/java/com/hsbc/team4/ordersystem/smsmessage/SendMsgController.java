@@ -1,6 +1,8 @@
 package com.hsbc.team4.ordersystem.smsmessage;
 
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +30,8 @@ public class SendMsgController {
      * @param id
      * @return String
      */
+    @ApiOperation(value = "deleteSendMsgById",notes = "deleteSendMsgById",httpMethod = "DELETE")
+    @ApiImplicitParam(name = "id",value = "id",dataType="String")
     @DeleteMapping("/{id}")
     public ResponseResults deleteSendMsgById(@PathVariable String  id){
         return responseResults.responseBySuccess("ok",iSendMsgService.updateStatusById(id,1));
@@ -38,8 +42,10 @@ public class SendMsgController {
      * @param id
      * @return Role
      */
+    @ApiOperation(value = "querySenderById",notes = "querySenderById",httpMethod = "GET")
+    @ApiImplicitParam(name = "id",value = "id",dataType="String")
     @GetMapping("/{id}")
-    public ResponseResults querySenderById(@PathVariable String id){
+    public ResponseResults querySendMsgById(@PathVariable String id){
         return responseResults.responseBySuccess("ok",iSendMsgService.findById(id));
     }
 
@@ -50,8 +56,9 @@ public class SendMsgController {
      * @param status
      * @return  ResponseResults
      */
+    @ApiOperation(value = "getSendMsgList",notes = "getSendMsgList",httpMethod = "GET")
     @GetMapping("/{status}")
-    public ResponseResults getSenderList(@RequestParam(value = "current",defaultValue = "0") int current,
+    public ResponseResults getSendMsgList(@RequestParam(value = "current",defaultValue = "0") int current,
                                          @RequestParam(value = "current",defaultValue = "10") int pageSize,
                                          @PathVariable int status){
         return responseResults.responseBySuccess("ok",iSendMsgService.findByStatus(current,pageSize,status));

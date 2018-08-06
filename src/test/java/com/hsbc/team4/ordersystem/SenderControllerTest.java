@@ -54,6 +54,7 @@ public class SenderControllerTest {
         sender.setDateType("json");
         sender.setPhone("15626283540");
         sender.setTemplateId("501257098");
+        sender.setTemplateType("login");
         String json= JSON.toJSONString(sender);
         if(!"".equals(json)){
             try {

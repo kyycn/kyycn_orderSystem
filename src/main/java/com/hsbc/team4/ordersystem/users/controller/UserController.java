@@ -42,12 +42,30 @@ public class UserController {
 
     @ApiOperation(value = "verify phone",notes = " pass a phone param",httpMethod = "GET")
     @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
-    @GetMapping("/{phone}")
+    @GetMapping("/verifyPhone/{phone}")
     public ResponseResults verifyPhone(@PathVariable String phone){
         User user=iUserService.findByPhone(phone);
         if(user!=null){
             return responseResults.responseBySuccess("The phone had been register");
         }
+        return responseResults.responseBySuccess("ok");
+    }
+
+    @ApiOperation(value = "verify email",notes = " pass a email param",httpMethod = "GET")
+    @ApiImplicitParam(name = "email",value = "email",dataType="String")
+    @GetMapping("/verifyEmail/{email}")
+    public ResponseResults verifyEmail(@PathVariable String email){
+        User user=iUserService.findByEail(email);
+        if(user!=null){
+            return responseResults.responseBySuccess("The email had been register");
+        }
+        return responseResults.responseBySuccess("ok");
+    }
+
+    @ApiOperation(value = "send email",notes = " pass a email param",httpMethod = "GET")
+    @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
+    @GetMapping("/sendEmail/{email}")
+    public ResponseResults sendEmail(@PathVariable String email){
         return responseResults.responseBySuccess("ok");
     }
 

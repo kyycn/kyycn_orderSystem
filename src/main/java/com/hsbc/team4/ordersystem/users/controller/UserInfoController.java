@@ -3,6 +3,8 @@ package com.hsbc.team4.ordersystem.users.controller;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import com.hsbc.team4.ordersystem.users.domain.UserInfo;
 import com.hsbc.team4.ordersystem.users.service.IUserInfoService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,20 +37,24 @@ public class UserInfoController {
     /**
      * updateUserInfo
      * @param userInfo
-     * @return account
+     * @return ResponseResults
      */
+    @ApiOperation(value = "updateUserInfo",notes = "updateUserInfo",httpMethod = "PUT")
+    @ApiImplicitParam(name = "userInfo",value = "userInfo",dataType="UserInfo")
     @PutMapping("/")
-    public ResponseResults updateRole(@RequestBody UserInfo userInfo){
+    public ResponseResults updateUserInfo(@RequestBody UserInfo userInfo){
         return responseResults.responseBySuccess("ok",iUserInfoService.addUserInfo(userInfo));
     }
 
     /**
-     * queryAccountById
+     * queryUserInfoById
      * @param id
-     * @return Role
+     * @return ResponseResults
      */
+    @ApiOperation(value = "queryUserInfoById",notes = "queryUserInfoById",httpMethod = "GET")
+    @ApiImplicitParam(name = "id",value = "id",dataType="String")
     @GetMapping("/{id}")
-    public ResponseResults queryAccountById(@PathVariable String id){
+    public ResponseResults queryUserInfoById(@PathVariable String id){
         return responseResults.responseBySuccess("ok",iUserInfoService.findById(id));
     }
 

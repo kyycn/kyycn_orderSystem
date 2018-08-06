@@ -45,7 +45,7 @@ public class RoleControllerTest {
     public void saveRole(){
         Role role=new Role();
         role.setId("20150612");
-        role.setRoleName("超级管理员");
+        role.setRoleName("SuperAdmin");
         role.setCreateTime(System.currentTimeMillis());
         String json= JSON.toJSONString(role);
         if(!"".equals(json)){

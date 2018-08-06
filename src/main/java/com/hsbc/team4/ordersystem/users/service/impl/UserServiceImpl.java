@@ -2,8 +2,6 @@ package com.hsbc.team4.ordersystem.users.service.impl;
 
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.PageableTools;
-import com.hsbc.team4.ordersystem.common.utils.ValidatorTools;
-import com.hsbc.team4.ordersystem.jwt.JwtTokenUtil;
 import com.hsbc.team4.ordersystem.smsmessage.ISendMsgService;
 import com.hsbc.team4.ordersystem.smsmessage.ISenderRepository;
 import com.hsbc.team4.ordersystem.smsmessage.SendMsg;
@@ -19,20 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -45,7 +33,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class UserServiceImpl implements IUserService,UserDetailsService {
+public class UserServiceImpl implements IUserService{
 
     private final IUserRepository iUserRepository;
     private final ISenderRepository iSenderRepository;
@@ -53,19 +41,15 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     private final ISendMsgService iSendMsgService;
     private final IUserInfoRepository iUserInfoRepository;
     private final IAccountRepository iAccountRepository;
-    private final JwtTokenUtil jwtTokenUtil;
-    private AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserServiceImpl(IUserRepository iUserRepository, ISenderRepository iSenderRepository, UUIDFactory uuidFactory, ISendMsgService iSendMsgService, IUserInfoRepository iUserInfoRepository, IAccountRepository iAccountRepository, JwtTokenUtil jwtTokenUtil, AuthenticationManager authenticationManager) {
+    public UserServiceImpl(IUserRepository iUserRepository, ISenderRepository iSenderRepository, UUIDFactory uuidFactory, ISendMsgService iSendMsgService, IUserInfoRepository iUserInfoRepository, IAccountRepository iAccountRepository) {
         this.iUserRepository = iUserRepository;
         this.iSenderRepository = iSenderRepository;
         this.uuidFactory = uuidFactory;
         this.iSendMsgService = iSendMsgService;
         this.iUserInfoRepository = iUserInfoRepository;
         this.iAccountRepository = iAccountRepository;
-        this.jwtTokenUtil = jwtTokenUtil;
-        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -91,26 +75,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 
     @Override
     public String login(String username, String password,HttpServletRequest request) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        UserDetails userDetails = this.loadUserByUsername(username);
-        if(!passwordEncoder.matches(password.trim(),userDetails.getPassword())){
-            return null;
-        }
-        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),password,userDetails.getAuthorities());
-        // Perform the security
-        upToken.setDetails(new WebAuthenticationDetails(request));
-        //对封装到UsernamePasswordAuthenticationToken中的用户名和密码进行校验
-        Authentication authentication = authenticationManager.authenticate(upToken);
-        if (!authentication.isAuthenticated())
-        {
-            log.error("The username or password errors");
-            throw new BadCredentialsException("The username or password errors");
-        }
-        HttpSession session = request.getSession();
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-        // load token
-        return jwtTokenUtil.generateToken(userDetails);
+      return "ok";
     }
 
     @Override
@@ -211,29 +176,4 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         return iUserRepository.findByEntityId(id);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user;
-        if(ValidatorTools.isUsername(s)){
-            user=this.findByPhone(s);
-            log.info("user:",user);
-        }else if(ValidatorTools.isEmail(s)){
-            user=this.findByEail(s);
-            log.info("user:",user);
-        }else if (ValidatorTools.isMobile(s)){
-            user=this.findByPhone(s);
-        }else {
-            throw new UsernameNotFoundException("The user not found");
-        }
-        if(user==null){
-            throw new UsernameNotFoundException("The user not found");
-        }
-        log.info("username:",user.getUsername());
-        log.info("password:",user.getPassword());
-        log.info("password:",user.getRoles().size());
-        log.info("role:",user.getRoles().get(0).getRoleName());
-        String token=jwtTokenUtil.generateToken(user);
-        log.info("token:",token);
-        return new User(user);
-    }
 }

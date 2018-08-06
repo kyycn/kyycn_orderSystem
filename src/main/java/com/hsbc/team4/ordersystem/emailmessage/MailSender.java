@@ -35,7 +35,6 @@ public class MailSender extends BaseEntity{
      * sander address
      */
     private String fromAddress;
-    private String toAddress;
     /**
      * mail username
      */
