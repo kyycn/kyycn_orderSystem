@@ -1,9 +1,13 @@
 package com.hsbc.team4.ordersystem.products;
 
+import com.hsbc.team4.ordersystem.common.adapt.BeanAdapter;
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,74 +19,88 @@ import org.springframework.web.bind.annotation.*;
  * @Date : 2018/8/2
  */
 @RestController
-@RequestMapping("/product")
+@RequestMapping("product")
+@Api(value = "product")
+@Slf4j
 public class ProductController {
     private final IProductService productService;
+    private final ResponseResults responseResults;
+    private final BeanValidator beanValidator;
+    private final BeanAdapter beanAdapter;
 
     @Autowired
-    public ProductController(IProductService productService) {
+    public ProductController(IProductService productService,ResponseResults responseResults,BeanValidator beanValidator,BeanAdapter beanAdapter) {
         this.productService = productService;
+        this.responseResults=responseResults;
+        this.beanValidator=beanValidator;
+        this.beanAdapter=beanAdapter;
+
     }
 
     /**
-     * @Author:yang
-     * @Description:saveProduct
-     * @Param:
-     * @return:
-     * @Date: 2018/8/3
+     * saveProduct
+     * @param productDto
+     * @return product
      */
+    @ApiOperation(value = "save product", httpMethod = "POST", notes = "save product", response = ResponseResults.class)
     @PostMapping("/")
-    public ResponseResults saveProduct(@RequestBody ProductDto productDto) {
-        BeanValidator.validateObject(productDto);
-        Product product = Product.adaptProduct(productDto);
-        return ResponseResults.responseBySuccess("ok", productService.addEntity(product));
+    public ResponseResults saveProduct(@ApiParam(required = true,name = "productDto",value = "productDto project") @RequestBody ProductDto productDto){
+        beanValidator.validateObject(productDto);
+        log.info("beanValidatorTest",beanValidator);
+        Product product= (Product) beanAdapter.dtoAdapter(productDto,new Product());
+        return responseResults.responseBySuccess("ok",productService.addEntity(product));
     }
 
     /**
-     * @Author:yang
-     * @Description:updateProduct
-     * @Param:
-     * @return:
-     * @Date: 2018/8/3
+     * updateProduct
+     * @param productDto
+     * @return Account
      */
+    @ApiOperation(value = "update product", httpMethod = "POST", notes = "update product", response = ResponseResults.class)
     @PutMapping("/")
-    public ResponseResults updateProduct(@RequestBody ProductDto productDto) {
-        BeanValidator.validateObject(productDto);
-        Product product = Product.adaptProduct(productDto);
-        return ResponseResults.responseBySuccess("ok", productService.updateEntity(product));
+    public ResponseResults updateProduct(@ApiParam(required = true,name = "productDto",value = "productDto project")@RequestBody  ProductDto productDto){
+        beanValidator.validateObject(productDto);
+        Product product=Product.adaptProduct(productDto);
+        return responseResults.responseBySuccess("ok",productService.updateEntity(product));
     }
 
     /**
-     * @Author:yang
-     * @Description:deleteProductById
-     * @Param: id
-     * @return:
-     * @Date: 2018/8/3
+     * deleteProductById
+     * @param id
+     * @return String
      */
+    @ApiOperation(value = "delete by Id", httpMethod = "DELETE", notes = "delete product by Id", response = ResponseResults.class)
     @DeleteMapping("/{id}")
-    public ResponseResults deleteProductById(@PathVariable String id) {
-        return ResponseResults.responseBySuccess("ok", productService.updateStatusById(id, 1));
+    public ResponseResults deleteProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String  id){
+        return responseResults.responseBySuccess("ok",productService.updateStatusById(id,1));
     }
 
     /**
-     * @Author:yang
-     * @Description:query product by id
-     * @Param: id
-     * @return:
-     * @Date: 2018/8/3
+     * queryProductById
+     * @param id
+     * @return Account
      */
+    @ApiOperation(value = "get by Id", httpMethod = "GET", notes = "get product by id", response = ResponseResults.class)
     @GetMapping("/{id}")
-    public ResponseResults queryProductById(@PathVariable String id) {
-        return ResponseResults.responseBySuccess("ok", productService.findById(id));
+    public ResponseResults queryProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String id){
+        return responseResults.responseBySuccess("ok",productService.findById(id));
     }
 
     /**
-     * @Author:yang
-     * @Description:query product detail info
-     * @Param: the id of product
-     * @return:ResponseResults
-     * @Date: 2018/8/3
+     * getProductList
+     * @param current
+     * @param pageSize
+     * @param status
+     * @return
      */
+    @ApiOperation(value = "status", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
+    @GetMapping("/{status}")
+    public ResponseResults getProductList(@RequestParam(value = "current",defaultValue = "0") int current,
+                                          @RequestParam(value = "current",defaultValue = "10") int pageSize,
+                                          @PathVariable int status){
+        return responseResults.responseBySuccess("ok",productService.findByStatus(current,pageSize,status));
+    }
+
     @GetMapping("/query")
     public ResponseResults query(@RequestParam String id) {
 //        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -93,26 +111,7 @@ public class ProductController {
 //        else{
 //            return ResponseResults.responseBySuccess("ok", productService.query(id));
 //        }
-        return ResponseResults.responseBySuccess("ok", productService.query(id));
-
+        return responseResults.responseBySuccess("ok", productService.query(id));
     }
 
-    /**
-     * @Author:yang
-     * @Description:
-     * @Param:
-     * @return:
-     * @Date: 2018/8/3
-     */
-    @GetMapping("/{status}")
-    public ResponseResults getProductList(@RequestParam(value = "current", defaultValue = "0") int current,
-                                          @RequestParam(value = "current", defaultValue = "10") int pageSize,
-                                          @PathVariable int status) {
-        return ResponseResults.responseBySuccess("ok", productService.findByStatus(current, pageSize, status));
     }
-
-    @RequestMapping("/hello")
-    public String sayHello(){
-        return "welcome to the world";
-    }
-}

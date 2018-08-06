@@ -51,8 +51,8 @@ public class ProductControllerTest {
  * @Date: 2018/8/3
  */
     @Test
-    public void saveProduct() {
-        ProductDto productDto = new ProductDto();
+    public void saveProduct(){
+        ProductDto productDto=new ProductDto();
         productDto.setId("20180802");
         productDto.setName("项链");
         productDto.setDescription("首饰");
