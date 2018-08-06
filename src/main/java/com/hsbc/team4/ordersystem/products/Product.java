@@ -26,15 +26,15 @@ public class Product extends BaseEntity{
     private String id;
     @NotBlank(message = "The name can not be empty")
     private String name;
-    @NotBlank(message = "The type can not be empty")
+    @NotBlank(message = "The description can not be empty")
     private String description;
-    @NotBlank(message = "The color can not be empty")
+    @NotBlank(message = "The pic can not be empty")
     private String pic;
     @NotNull(message = "The price can not be empty")
     private double price;
-    @NotBlank(message = "The color can not be empty")
+    @NotBlank(message = "The standar can not be empty")
     private String standar;
-    @NotBlank(message = "The color can not be empty")
+    @NotBlank(message = "The condidtion can not be empty")
     private String condidtion;
     /**
      * adapt to product

@@ -3,6 +3,7 @@ package com.hsbc.team4.ordersystem.products;
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date : 2018/8/2
  */
 @RestController
-@RequestMapping("product")
+@RequestMapping("/product")
 public class ProductController {
     private final IProductService productService;
 
@@ -84,7 +85,16 @@ public class ProductController {
      */
     @GetMapping("/query")
     public ResponseResults query(@RequestParam String id) {
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+//        if (SecurityContextHolder.getContext().getAuthentication().getName(). equals("anonymousUser"))
+//        {
+//            return null;
+//        }
+//        else{
+//            return ResponseResults.responseBySuccess("ok", productService.query(id));
+//        }
         return ResponseResults.responseBySuccess("ok", productService.query(id));
+
     }
 
     /**
@@ -101,4 +111,8 @@ public class ProductController {
         return ResponseResults.responseBySuccess("ok", productService.findByStatus(current, pageSize, status));
     }
 
+    @RequestMapping("/hello")
+    public String sayHello(){
+        return "welcome to the world";
+    }
 }

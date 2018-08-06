@@ -3,6 +3,7 @@ package com.hsbc.team4.ordersystem.users;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author : Kevin
@@ -69,5 +70,12 @@ public class UserController {
         return ResponseResults.responseBySuccess("ok",userService.findByStatus(current,pageSize,status));
     }
 
+    @GetMapping(value="/login")
+    public ModelAndView login(){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName("/login.html");
+        return mv;
+//        return "hello";
+    }
 
 }

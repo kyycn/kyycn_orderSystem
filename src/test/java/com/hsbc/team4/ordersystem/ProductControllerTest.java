@@ -13,6 +13,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +40,7 @@ public class ProductControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();  //构造MockMvc
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();  //构造MockMvc
 
     }
 /**
@@ -85,10 +91,31 @@ public class ProductControllerTest {
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
                     //.andExpect(status().isOk())   //判断接收到的状态是否是200
                     .andDo(print());  //打印内容
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @Test
+    public void testFormLoginSuccess() throws Exception {
+
+        // 测试登录成功
+        mockMvc
+                .perform(formLogin("/login").user("user").password("123"))
+                .andExpect(authenticated());
+    }
+
+    @Test
+    public void testFormLoginFail() throws Exception {
+        // 测试登录失败
+        mockMvc
+                .perform(formLogin("/login").user("user").password("1234"))
+                .andExpect(unauthenticated());
+    }
+
+    @Test
+    public void testLogoutFail() throws Exception {
+        // 测试退出登录
+        mockMvc.perform(logout("/logout")).andExpect(unauthenticated());
     }
 
     @Test
