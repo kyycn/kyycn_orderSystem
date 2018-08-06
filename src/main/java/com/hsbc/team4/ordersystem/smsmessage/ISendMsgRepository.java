@@ -1,4 +1,4 @@
-package com.hsbc.team4.ordersystem.users;
+package com.hsbc.team4.ordersystem.smsmessage;
 
 import com.hsbc.team4.ordersystem.common.base.IBaseRepository;
 import org.springframework.stereotype.Repository;
@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.users
+ * @Package : com.hsbc.team4.ordersystem.smsmessage
  * @Description :
- * @Date : 2018/8/3
+ * @Date : 2018/8/5
  */
 @Repository
-public interface IAccountRepository extends IBaseRepository<Account,String> {
+public interface ISendMsgRepository extends IBaseRepository<SendMsg,String>{
 }

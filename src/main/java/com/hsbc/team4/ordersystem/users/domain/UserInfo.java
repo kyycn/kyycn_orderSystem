@@ -1,6 +1,7 @@
-package com.hsbc.team4.ordersystem.users;
+package com.hsbc.team4.ordersystem.users.domain;
 
 import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
@@ -9,13 +10,13 @@ import javax.validation.constraints.NotBlank;
  * @author : Kevin
  * @version :
  * @Project : ordersystem
- * @Package : com.hsbc.team4.ordersystem.products.domain
+ * @Package : com.hsbc.team4.ordersystem.users
  * @Description :
- * @Date : 2018/8/1
+ * @Date : 2018/8/5
  */
 @Entity
 @Data
-public class User{
+public class UserInfo {
     @Id
     private String id;
     @NotBlank(message = "The username can not be empty")
@@ -36,7 +37,5 @@ public class User{
      * headURL
      */
     private String  headURL;
-
-
 
 }

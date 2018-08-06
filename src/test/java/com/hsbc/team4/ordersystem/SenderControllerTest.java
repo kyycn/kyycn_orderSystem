@@ -1,7 +1,8 @@
 package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
-import com.hsbc.team4.ordersystem.users.User;
+import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
+import com.hsbc.team4.ordersystem.smsmessage.Sender;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,13 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @Project : ordersystem
  * @Package : com.hsbc.team4.ordersystem
  * @Description :
- * @Date : 2018/8/1
+ * @Date : 2018/8/5
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserTest {
+public class SenderControllerTest {
     @Autowired
     private WebApplicationContext context;
+    @Autowired
+    private UUIDFactory uuidFactory;
     private MockMvc mockMvc;
 
     @Before
@@ -38,16 +41,23 @@ public class UserTest {
 
     }
 
+    /**
+     * saveSender
+     */
     @Test
-    public void saveUser(){
-        User user=new User();
-        user.setId("20150613");
-        user.setUsername("奇点");
-        user.setEmail("2235390423@qq.com");
-        String json= JSON.toJSONString(user);
+    public void saveSender(){
+        Sender sender=new Sender();
+        sender.setId("20180718");
+        sender.setBaseUrl("https://api.miaodiyun.com/20150822/industrySMS/sendSMS");
+        sender.setAccountId("74e7fa7a07ea405b8cfbb790e030cd1f");
+        sender.setAuthToken("0e88935*******ed5");
+        sender.setDateType("json");
+        sender.setPhone("15626283540");
+        sender.setTemplateId("501257098");
+        String json= JSON.toJSONString(sender);
         if(!"".equals(json)){
             try {
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/sender/")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -62,23 +72,14 @@ public class UserTest {
 
     }
 
+    /**
+     * querySenderId
+     */
     @Test
-    public void queryByUserId(){
-        String id="20150612";
+    public void querySenderId(){
+        String id="20180718";
         try {
-            mockMvc.perform(get("/user/"+id)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @Test
-    public void getUserList(){
-        try {
-            mockMvc.perform(get("/user")
+            mockMvc.perform(get("/sender/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -88,15 +89,38 @@ public class UserTest {
         }
     }
 
+    /**
+     * getSenderList
+     */
     @Test
-    public void updateUser() {
-        User user=new User();
-        user.setId("20150612");
-        user.setUsername("奇点");
-        user.setPhone("15626283540");
-        String json=JSON.toJSONString(user);
+    public void getSenderList(){
         try {
-            mockMvc.perform(put("/user")
+            mockMvc.perform(get("/sender/0")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * updateSender
+     */
+    @Test
+    public void updateSender() {
+        Sender sender=new Sender();
+        sender.setId(uuidFactory.getUUID());
+        sender.setBaseUrl("https://api.miaodiyun.com/20150822/industrySMS/sendSMS");
+        sender.setAccountId("74e7fa7a07ea405b8cfbb790e030cd1f");
+        sender.setAuthToken("0e88935*******ed5");
+        sender.setDateType("json");
+        sender.setPhone("15626283540");
+        sender.setTemplateId("501257098");
+        String json= JSON.toJSONString(sender);
+        try {
+            mockMvc.perform(put("/sender/")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(json)
                     .accept(MediaType.APPLICATION_JSON))
@@ -108,11 +132,14 @@ public class UserTest {
 
     }
 
+    /**
+     * deleteBySenderId
+     */
     @Test
-    public void deleteByUserId() {
-        String id="20150611";
+    public void deleteBySenderId() {
+        String id="20150612";
         try {
-            mockMvc.perform(delete("/user/"+id)
+            mockMvc.perform(delete("/sender/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -123,5 +150,6 @@ public class UserTest {
         }
 
     }
+
 
 }

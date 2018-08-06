@@ -1,6 +1,6 @@
 package com.hsbc.team4.ordersystem.jwt;
 
-import com.hsbc.team4.ordersystem.users.Account;
+import com.hsbc.team4.ordersystem.users.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -210,7 +210,7 @@ public class JwtTokenUtil implements Serializable {
      * @throws ParseException the parseException
      */
     Boolean validateToken(String token, UserDetails userDetails) throws ParseException {
-        Account user = (Account) userDetails;
+        User user = (User) userDetails;
         //获取用户名
         final String username = getUsernameFromToken(token);
         //获取创建时间

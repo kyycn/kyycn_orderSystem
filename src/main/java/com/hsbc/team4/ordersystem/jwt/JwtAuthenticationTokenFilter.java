@@ -1,9 +1,8 @@
+
 package com.hsbc.team4.ordersystem.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,7 +27,9 @@ import java.text.ParseException;
 @Component
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
+    @Autowired
     private  UserDetailsService userDetailsService;
+    @Autowired
     private  JwtTokenUtil jwtTokenUtil;
 
     @Value("${jwt.header}")
@@ -36,15 +37,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
-
-    public JwtAuthenticationTokenFilter(){
-
-    }
-    @Autowired
-    public JwtAuthenticationTokenFilter(UserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil) {
-        this.userDetailsService = userDetailsService;
-        this.jwtTokenUtil = jwtTokenUtil;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {

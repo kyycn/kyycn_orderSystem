@@ -1,9 +1,7 @@
 package com.hsbc.team4.ordersystem.roles;
 
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
-import com.hsbc.team4.ordersystem.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,10 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/role")
 public class RoleController {
     private final IRoleService iRoleService;
-
+    private final ResponseResults responseResults;
     @Autowired
-    public RoleController(IRoleService iRoleService) {
+    public RoleController(IRoleService iRoleService,ResponseResults responseResults) {
         this.iRoleService = iRoleService;
+        this.responseResults=responseResults;
     }
 
     /**
@@ -31,7 +30,7 @@ public class RoleController {
      */
     @PostMapping("/")
     public ResponseResults saveRole(@RequestBody Role role){
-        return ResponseResults.responseBySuccess("ok",iRoleService.addEntity(role));
+        return responseResults.responseBySuccess("ok",iRoleService.addEntity(role));
     }
 
     /**
@@ -41,7 +40,7 @@ public class RoleController {
      */
     @PutMapping("/")
     public ResponseResults updateRole(@RequestBody  Role  role){
-        return ResponseResults.responseBySuccess("ok",iRoleService.updateEntity(role));
+        return responseResults.responseBySuccess("ok",iRoleService.updateEntity(role));
     }
 
     /**
@@ -51,7 +50,7 @@ public class RoleController {
      */
     @DeleteMapping("/{id}")
     public ResponseResults deleteRoleById(@PathVariable String  id){
-        return ResponseResults.responseBySuccess("ok",iRoleService.updateStatusById(id,1));
+        return responseResults.responseBySuccess("ok",iRoleService.updateStatusById(id,1));
     }
 
     /**
@@ -61,14 +60,14 @@ public class RoleController {
      */
     @GetMapping("/{id}")
     public ResponseResults queryUserById(@PathVariable String id){
-        return ResponseResults.responseBySuccess("ok",iRoleService.findById(id));
+        return responseResults.responseBySuccess("ok",iRoleService.findById(id));
     }
 
     @GetMapping("/{status}")
     public ResponseResults getRoleList(@RequestParam(value = "current",defaultValue = "0") int current,
                                        @RequestParam(value = "current",defaultValue = "10") int pageSize,
                                        @PathVariable int status){
-        return ResponseResults.responseBySuccess("ok",iRoleService.findByStatus(current,pageSize,status));
+        return responseResults.responseBySuccess("ok",iRoleService.findByStatus(current,pageSize,status));
     }
 
 }

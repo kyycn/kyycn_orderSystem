@@ -1,4 +1,4 @@
-package com.hsbc.team4.ordersystem.users;
+package com.hsbc.team4.ordersystem.users.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hsbc.team4.ordersystem.common.base.BaseEntity;
@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Account extends BaseEntity implements UserDetails{
+public class User extends BaseEntity implements UserDetails{
     /**
      * The account id
      */
@@ -43,6 +44,14 @@ public class Account extends BaseEntity implements UserDetails{
     @NotBlank(message = "The username can not be empty")
     @ApiModelProperty(name = "username")
     private String username;
+
+    @NotBlank(message = "The phone can not be empty")
+    @ApiModelProperty(name = "phone")
+    private String phone;
+
+    @NotBlank(message = "The email can not be empty")
+    @ApiModelProperty(name = "email")
+    private String email;
     /**
      * password
      */
@@ -62,21 +71,26 @@ public class Account extends BaseEntity implements UserDetails{
     /**
      * expired
      */
+    @Column(name = "expired" ,columnDefinition = "Boolean default false")
     private Boolean expired;
     /**
      * lastLoginTime
      */
-    @NotBlank(message = "The lastLoginTime can not be empty")
+    @NotNull(message = "The lastLoginTime can not be empty")
     @ApiModelProperty(name = "lastLoginTime")
-    private String lastLoginTime;
+    private long lastLoginTime;
 
-    public Account(Account account){
-        if(account !=null){
-            this.setId(account.getId());
-            this.setUsername(account.getUsername());
-            this.setPassword(account.getPassword());
-            this.setRoles(account.getRoles());
-            this.setLocked(account.getExpired());
+    /**
+     * User
+     * @param user
+     */
+    public User(User user){
+        if(user !=null){
+            this.setId(user.getId());
+            this.setUsername(user.getUsername());
+            this.setPassword(user.getPassword());
+            this.setRoles(user.getRoles());
+            this.setLocked(user.getExpired());
         }
     }
 

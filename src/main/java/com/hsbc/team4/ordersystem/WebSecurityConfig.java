@@ -28,12 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${jwt.exceptUrl}")
     private String exceptUrl;
-    private final UserDetailsService userDetailsService;
-
     @Autowired
-    public WebSecurityConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    private  UserDetailsService userDetailsService;
 
     /**
      * verify username and password
@@ -111,8 +107,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // allow anon-access none to get token
                 //.antMatchers(exceptUrl).permitAll()
                 // all request path with "/login" can be visit
-                .antMatchers(HttpMethod.POST, "/login/**","/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/login/**","/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/user/**","/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/user/**","/**").permitAll()
                 // Except for the above request ,Other requests can be visit
                 .anyRequest().authenticated();
         // add JWT filter

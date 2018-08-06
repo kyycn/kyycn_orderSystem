@@ -26,6 +26,13 @@ public class ResponseResults<T> implements Serializable {
 
     /**
      * constructor
+     */
+    public ResponseResults(){
+
+    }
+
+    /**
+     * constructor
      * @param status
      */
     private ResponseResults(int status){
@@ -69,7 +76,7 @@ public class ResponseResults<T> implements Serializable {
      * @param <T>
      * @return ResponseResults
      */
-    public static <T> ResponseResults<T> responseBySuccess(){
+    public  <T> ResponseResults<T> responseBySuccess(){
         return new ResponseResults<T>(ResponseCode.SUCCESS.getCode());
     }
 
@@ -89,7 +96,7 @@ public class ResponseResults<T> implements Serializable {
      * @param <T>
      * @return ResponseResults
      */
-    public static <T> ResponseResults<T> responseBySuccess(T result){
+    public  <T> ResponseResults<T> responseBySuccess(T result){
         return new ResponseResults<T>(ResponseCode.SUCCESS.getCode(),result);
     }
 
@@ -100,8 +107,12 @@ public class ResponseResults<T> implements Serializable {
      * @param <T>
      * @return ResponseResults
      */
-    public static <T> ResponseResults<T> responseBySuccess(String msg, T data){
+    public  <T> ResponseResults<T> responseBySuccess(String msg, T data){
         return new ResponseResults<>(ResponseCode.SUCCESS.getCode(), msg, data);
+    }
+
+    public  <T> ResponseResults<T> responseBySuccess(String msg){
+        return new ResponseResults<>(ResponseCode.SUCCESS.getCode(), msg);
     }
 
     /**
@@ -109,7 +120,7 @@ public class ResponseResults<T> implements Serializable {
      * @param <T>
      * @return ResponseResults
      */
-    public static <T> ResponseResults<T> responseByError(){
+    public  <T> ResponseResults<T> responseByError(){
         return new ResponseResults<T>(ResponseCode.ERROR.getCode(),ResponseCode.ERROR.getDesc());
     }
 
@@ -119,7 +130,7 @@ public class ResponseResults<T> implements Serializable {
      * @param <T>
      * @return ResponseResults
      */
-    public static <T> ResponseResults<T> responseByErrorMessage(String errorMessage){
+    public  <T> ResponseResults<T> responseByErrorMessage(String errorMessage){
         return new ResponseResults<T>(ResponseCode.ERROR.getCode(),errorMessage);
     }
 
@@ -130,7 +141,7 @@ public class ResponseResults<T> implements Serializable {
      * @param <T>
      * @return ResponseResults
      */
-    public static <T> ResponseResults<T> responseByErrorCodeMessage(int errorCode, String errorMessage){
+    public  <T> ResponseResults<T> responseByErrorCodeMessage(int errorCode, String errorMessage){
         return new ResponseResults<T>(errorCode,errorMessage);
     }
 

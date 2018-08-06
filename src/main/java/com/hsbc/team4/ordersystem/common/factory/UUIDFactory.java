@@ -15,7 +15,7 @@ public class UUIDFactory {
      * getUUID
      * @return uuid
      */
-    public static String getUUID(){
+    public  String getUUID(){
         return UUID.randomUUID().toString().replace("-","")+System.currentTimeMillis();
     }
 }

@@ -1,17 +1,22 @@
 package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
+import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.roles.Role;
-import org.junit.Before;
+import com.hsbc.team4.ordersystem.users.controller.UserController;
+import com.hsbc.team4.ordersystem.users.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -26,31 +31,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @Date : 2018/8/3
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class RoleControllerTest {
+@WebMvcTest(UserController.class)
+public class UserControllerTest {
+
     @Autowired
     private WebApplicationContext context;
+
+    @Autowired
     private MockMvc mockMvc;
 
-    @Before
-    public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    @Autowired
+    private UUIDFactory uuidFactory;
 
-    }
+//    @Before
+//    public void setUp() throws Exception {
+//        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();  //构造MockMvc
+//    }
 
-    /**
-     * saveRole
-     */
     @Test
-    public void saveRole(){
+    public void saveUser(){
+        BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
+        User user =new User();
+        user.setId("20180803");
+        user.setUsername("kevin");
+        user.setPassword(bCryptPasswordEncoder.encode("123456"));
+        user.setLocked(false);
         Role role=new Role();
-        role.setId("20150612");
-        role.setRoleName("超级管理员");
-        role.setCreateTime(System.currentTimeMillis());
-        String json= JSON.toJSONString(role);
+        role.setRoleName("普通用户");
+        role.setId(uuidFactory.getUUID());
+        List<Role> roles=new ArrayList<>();
+        roles.add(role);
+        user.setRoles(roles);
+        String json= JSON.toJSONString(user);
         if(!"".equals(json)){
             try {
-                mockMvc.perform(post("/role/")
+                mockMvc.perform(post("/user/")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -65,14 +80,23 @@ public class RoleControllerTest {
 
     }
 
-    /**
-     * queryRoleId
-     */
     @Test
-    public void queryByRoleId(){
-        String id="20150612";
+    public void queryByUserId(){
+        String id="20180803";
         try {
-            mockMvc.perform(get("/role/"+id)
+            mockMvc.perform(get("/account/"+id)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void getAccountList(){
+        try {
+            mockMvc.perform(get("/account/0")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -82,33 +106,23 @@ public class RoleControllerTest {
         }
     }
 
-    /**
-     * getRoleList
-     */
     @Test
-    public void getRoleList(){
-        try {
-            mockMvc.perform(get("/role/0")
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * updateRole
-     */
-    @Test
-    public void updateRole() {
+    public void updateUser() {
+        BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
+        User user =new User();
+        user.setId("20180803");
+        user.setUsername("crx");
+        user.setPassword(bCryptPasswordEncoder.encode("123456"));
+        user.setLocked(false);
         Role role=new Role();
-        role.setId("20150612");
-        role.setRoleName("普通管理员");
-        String json=JSON.toJSONString(role);
+        role.setRoleName("管理员");
+        role.setId(uuidFactory.getUUID());
+        List<Role> roles=new ArrayList<>();
+        roles.add(role);
+        user.setRoles(roles);
+        String json= JSON.toJSONString(user);
         try {
-            mockMvc.perform(put("/role/")
+            mockMvc.perform(put("/user")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(json)
                     .accept(MediaType.APPLICATION_JSON))
@@ -120,14 +134,11 @@ public class RoleControllerTest {
 
     }
 
-    /**
-     * deleteByRoleId
-     */
     @Test
-    public void deleteByRoleId() {
-        String id="20150612";
+    public void deleteByUserId() {
+        String id="20180803";
         try {
-            mockMvc.perform(delete("/role/"+id)
+            mockMvc.perform(delete("/account/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
