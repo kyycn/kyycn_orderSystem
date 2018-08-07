@@ -17,13 +17,15 @@ import javax.validation.constraints.NotNull;
  * @Description:
  * @Date date: 2018-08-03
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class ManagerAccount{
+public class ManagerAccount extends BaseEntity{
     /**
      * account id
      */
     @Id
+
     private String id;
 
     /**

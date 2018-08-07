@@ -2,6 +2,9 @@ package com.hsbc.team4.ordersystem.manager;
 
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/manager")
+@Api(value = "manager")
 public class ManagerController {
 
     private IManagerService managerService;
@@ -37,8 +41,9 @@ public class ManagerController {
      * @Param manager
      * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
      */
+    @ApiOperation(value = "checkLogin",notes = "check manager login",httpMethod = "POST")
     @PostMapping("/login")
-    public ResponseResults checkLogin(@RequestBody ManagerAccount manager){
+    public ResponseResults checkLogin(@ApiParam(required = true,name = "manager",value = "manager name and password")@RequestBody ManagerAccount manager){
         Map<String,String> validateMap = new BeanValidator().validateObject(manager);
         if (validateMap.isEmpty()){
             ManagerAccount managerAccount = accountService.findByName(manager.getName());
@@ -48,5 +53,15 @@ public class ManagerController {
             return responseResults.responseByErrorMessage("error");
         }
         return responseResults.responseByErrorMessage("again");
+    }
+
+    @ApiOperation(value = "managerInfoUpdate",notes = "update own message",httpMethod = "POST")
+    @PostMapping("/update")
+    public ResponseResults managerInfoUpdate(@ApiParam(required = true,name = "manager",value = "update manager message")@RequestBody Manager manager){
+        Manager reManager = managerService.updateEntity(manager);
+        if (reManager==null){
+            return responseResults.responseByErrorMessage("error");
+        }
+        return responseResults.responseBySuccess("success", reManager);
     }
 }

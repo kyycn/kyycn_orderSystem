@@ -19,7 +19,6 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -50,8 +49,8 @@ public class ManagerControllerTest {
     public void before() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
         jsons = new ArrayList<>();
-        Account manager = new Account();
-        manager.setName("Cady");
+        ManagerAccount manager = new ManagerAccount();
+        manager.setName("666");
         manager.setPassword("123456");
         String jsonCorrect = JSON.toJSONString(manager);
         jsons.add(jsonCorrect);

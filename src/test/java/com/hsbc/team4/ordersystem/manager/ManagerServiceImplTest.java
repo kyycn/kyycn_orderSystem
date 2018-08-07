@@ -32,15 +32,6 @@ public class ManagerServiceImplTest {
     public void after() throws Exception {
     }
 
-    /**
-    *
-    * Method: findByName(String name)
-    *
-    */
-    @Test
-    public void testFindByName() throws Exception {
-        System.out.println(managerService.findByName("Cady"));
-    }
 
     /**
     *

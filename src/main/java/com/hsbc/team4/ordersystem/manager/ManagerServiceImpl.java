@@ -1,6 +1,7 @@
 package com.hsbc.team4.ordersystem.manager;
 
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
+import com.hsbc.team4.ordersystem.common.utils.ValidatorTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,21 @@ import org.springframework.stereotype.Service;
 public class ManagerServiceImpl implements IManagerService{
 
     private final IManagerRepository iManagerRepository;
-    private final IManagerAccountService accountService;
+    private final IManagerAccountService managerAccountService;
 
     @Autowired
-    public ManagerServiceImpl(IManagerRepository iManagerRepository, IManagerAccountService accountService) {
+    public ManagerServiceImpl(IManagerRepository iManagerRepository, IManagerAccountService managerAccountService) {
         this.iManagerRepository = iManagerRepository;
-        this.accountService = accountService;
+        this.managerAccountService = managerAccountService;
     }
 
 
     @Override
     public Manager findByWordNumber(String wordNumber) {
-        return iManagerRepository.findByWorkNumber(wordNumber);
+        if (ValidatorTools.isUsername(wordNumber)){
+            return iManagerRepository.findByWorkNumber(wordNumber);
+        }
+        return null;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class ManagerServiceImpl implements IManagerService{
             managerAccount.setName(manager.getWorkNumber());
             managerAccount.setPassword(manager.getWorkNumber());
             managerAccount.setStatus(1);
-            accountService.addEntity(managerAccount);
+            managerAccountService.addEntity(managerAccount);
             return iManagerRepository.save(manager);
         }
         return null;
@@ -55,10 +59,7 @@ public class ManagerServiceImpl implements IManagerService{
 
     @Override
     public int updateStatusById(String id, int status) {
-        if(id!=null&&!"".equals(id)){
             return iManagerRepository.updateStatusById(id, status);
-        }
-        return 0;
     }
 
     @Override
@@ -67,7 +68,6 @@ public class ManagerServiceImpl implements IManagerService{
             return iManagerRepository.save(manager);
         }
         return null;
-
     }
 
     @Override
