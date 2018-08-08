@@ -143,4 +143,17 @@ public class ProductControllerTest {
         }
 
     }
+    @Test
+    public void getProductListByVagueType(){
+        String type="day";
+        try{
+            mockMvc.perform(get("/product/vagueQueryByType/0/"+type)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))    //接收的类型
+                    .andExpect(status().isOk())     //判断接收到的状态是否为200
+                    .andDo(print());    //打印内容
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

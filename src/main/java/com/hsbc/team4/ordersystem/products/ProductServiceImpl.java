@@ -58,4 +58,10 @@ public class ProductServiceImpl implements IProductService {
         Pageable pageable=PageableTools.addTimeSortForDescAndPage(current,pageSize);
         return productRepository.findByName(status,name,pageable);
     }
+
+    @Override
+    public Page<Product> findByVagueType(int current, int pageSize, int status, String type) {
+        Pageable pageable=PageableTools.basicPage(current,pageSize);
+        return productRepository.findByVagueType(status,type,pageable);
+    }
 }

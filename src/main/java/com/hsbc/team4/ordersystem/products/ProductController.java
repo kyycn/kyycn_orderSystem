@@ -101,12 +101,19 @@ public class ProductController {
                                        @PathVariable int status){
         return responseResults.responseBySuccess("ok",productService.findByStatus(current,pageSize,status));
     }
-    @ApiOperation(value = "status",httpMethod = "GET",notes = "get productListByType",response = ResponseResults.class)
+    @ApiOperation(value = "ByType",httpMethod = "GET",notes = "get productListByType",response = ResponseResults.class)
     @GetMapping("/queryType/{status}/{name}")
     public ResponseResults getProductListByType(@RequestParam(value = "current",defaultValue = "0") int current,
                                                 @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                                                 @PathVariable int status,@PathVariable String name){
         return responseResults.responseBySuccess("ok",productService.findByName(current,pageSize,status,name));
+    }
+    @ApiOperation(value = "ByVagueType",httpMethod ="GET",notes = "get productListByVagueType",response = ResponseResults.class)
+    @GetMapping("/vagueQueryByType/{status}/{type}")
+    public ResponseResults getProductListByVagueType(@RequestParam(value = "current",defaultValue = "0") int current,
+                                                     @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                                                     @PathVariable int status,@PathVariable String type){
+        return responseResults.responseBySuccess("ok",productService.findByVagueType(current,pageSize,status,type));
     }
 
 

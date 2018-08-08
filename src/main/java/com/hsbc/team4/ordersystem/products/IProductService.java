@@ -15,4 +15,5 @@ import org.springframework.data.domain.Page;
 public interface IProductService extends IBaseService<Product> {
 
     Page<Product> findByName(int current, int pageSize, int status, String name);
+    Page<Product> findByVagueType(int current,int pageSize,int status,String type);
 }
