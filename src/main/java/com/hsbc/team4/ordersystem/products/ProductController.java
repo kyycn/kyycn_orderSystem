@@ -1,5 +1,6 @@
 package com.hsbc.team4.ordersystem.products;
 
+import com.alibaba.fastjson.JSON;
 import com.hsbc.team4.ordersystem.common.adapt.BeanAdapter;
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
@@ -43,7 +44,7 @@ public class ProductController {
      * @return product
      */
     @ApiOperation(value = "save product", httpMethod = "POST", notes = "save product", response = ResponseResults.class)
-    @PostMapping("/")
+    @PostMapping("/save")
     public ResponseResults saveProduct(@ApiParam(required = true,name = "productDto",value = "productDto project") @RequestBody ProductDto productDto){
         beanValidator.validateObject(productDto);
         log.info("beanValidatorTest",beanValidator);
@@ -56,8 +57,8 @@ public class ProductController {
      * @param productDto
      * @return Account
      */
-    @ApiOperation(value = "update product", httpMethod = "POST", notes = "update product", response = ResponseResults.class)
-    @PutMapping("/")
+    @ApiOperation(value = "update product", httpMethod = "POST",notes= "update product", response = ResponseResults.class)
+    @PutMapping("/update")
     public ResponseResults updateProduct(@ApiParam(required = true,name = "productDto",value = "productDto project")@RequestBody  ProductDto productDto){
         beanValidator.validateObject(productDto);
         Product product=Product.adaptProduct(productDto);
@@ -81,7 +82,7 @@ public class ProductController {
      * @return Account
      */
     @ApiOperation(value = "get by Id", httpMethod = "GET", notes = "get product by id", response = ResponseResults.class)
-    @GetMapping("/{id}")
+    @GetMapping("/productId/{id}")
     public ResponseResults queryProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String id){
         return responseResults.responseBySuccess("ok",productService.findById(id));
     }
@@ -100,5 +101,13 @@ public class ProductController {
                                        @PathVariable int status){
         return responseResults.responseBySuccess("ok",productService.findByStatus(current,pageSize,status));
     }
+    @ApiOperation(value = "status",httpMethod = "GET",notes = "get productListByType",response = ResponseResults.class)
+    @GetMapping("/queryType/{status}/{name}")
+    public ResponseResults getProductListByType(@RequestParam(value = "current",defaultValue = "0") int current,
+                                                @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                                                @PathVariable int status,@PathVariable String name){
+        return responseResults.responseBySuccess("ok",productService.findByName(current,pageSize,status,name));
+    }
+
 
 }

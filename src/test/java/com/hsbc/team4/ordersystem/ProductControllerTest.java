@@ -41,15 +41,16 @@ public class ProductControllerTest {
     @Test
     public void saveProduct(){
         ProductDto productDto=new ProductDto();
-        productDto.setId("20180805");
-        productDto.setName("项链");
-        productDto.setType("首饰");
-        productDto.setColor("黑色");
-        productDto.setPrice(100);
+        productDto.setId("20180803");
+        productDto.setProductName("credit card purchase");
+        productDto.setProductPrice(3000);
+        productDto.setProductDescription("a good product");
+        productDto.setProductIcon("gold.jpg");
+        productDto.setProductType("week in search");
         String json= JSON.toJSONString(productDto);
         if(!"".equals(json)){
             try {
-                mockMvc.perform(post("/product/")
+                mockMvc.perform(post("/product/save")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))  //接收的类型
@@ -66,9 +67,9 @@ public class ProductControllerTest {
 
     @Test
     public void queryByProductId(){
-        String id="20180802";
+        String id="20180801";
         try {
-            mockMvc.perform(get("/product/"+id)
+            mockMvc.perform(get("/product/productId/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
                     .andExpect(status().isOk())   //判断接收到的状态是否是200
@@ -93,14 +94,15 @@ public class ProductControllerTest {
     @Test
     public void updateProduct() {
         ProductDto productDto=new ProductDto();
-        productDto.setId("20180802");
-        productDto.setName("平板");
-        productDto.setType("电子产品");
-        productDto.setColor("白色");
-        productDto.setPrice(100);
+        productDto.setId("20180803");
+        productDto.setProductName("credit card purchase");
+        productDto.setProductPrice(3000);
+        productDto.setProductDescription("a good product");
+        productDto.setProductIcon("credit.jpg");
+        productDto.setProductType("month in search");
         String json=JSON.toJSONString(productDto);
         try {
-            mockMvc.perform(put("/product/")
+            mockMvc.perform(put("/product/update")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(json)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
@@ -114,7 +116,7 @@ public class ProductControllerTest {
 
     @Test
     public void deleteByUserId() {
-        String id="20180802";
+        String id="20180801";
         try {
             mockMvc.perform(delete("/product/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -122,6 +124,20 @@ public class ProductControllerTest {
                     .andExpect(status().isOk())   //判断接收到的状态是否是200
                     .andDo(print());  //打印内容
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    @Test
+    public void getProductListByType(){
+        String name="day in search";
+        try {
+            mockMvc.perform(get("/product/queryType/0/"+name)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))  //接收的类型
+                    .andExpect(status().isOk())   //判断接收到的状态是否是200
+                    .andDo(print());  //打印内容
         } catch (Exception e) {
             e.printStackTrace();
         }

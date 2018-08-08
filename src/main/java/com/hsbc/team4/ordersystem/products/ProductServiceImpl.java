@@ -52,4 +52,10 @@ public class ProductServiceImpl implements IProductService {
     public Product findById(String id) {
         return productRepository.findByEntityId(id);
     }
+
+    @Override
+    public Page<Product> findByName(int current, int pageSize, int status, String name) {
+        Pageable pageable=PageableTools.addTimeSortForDescAndPage(current,pageSize);
+        return productRepository.findByName(status,name,pageable);
+    }
 }
