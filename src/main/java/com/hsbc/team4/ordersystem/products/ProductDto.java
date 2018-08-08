@@ -18,16 +18,16 @@ import javax.validation.constraints.NotNull;
 public class ProductDto {
     @Id
     private String id;
-    @NotBlank(message = "The name can not be empty")
-    private String name;
-    @NotBlank(message = "The type can not be empty")
-    private String description;
-    @NotBlank(message = "The color can not be empty")
-    private String pic;
-    @NotNull(message = "The price can not be empty")
-    private double price;
-    @NotBlank(message = "The color can not be empty")
-    private String standar;
-    @NotBlank(message = "The color can not be empty")
+    @NotBlank(message = "The productName can not be empty")
+    private String productName;
+    @NotBlank(message = "The productDescription can not be empty")
+    private String productDescription;
+    @NotBlank(message = "The productIcon can not be empty")
+    private String productIcon;
+    @NotNull(message = "The productPrice can not be empty")
+    private double productPrice;
+    @NotBlank(message = "The condidtion can not be empty")
     private String condidtion;
+    @NotBlank(message = "The standar can not be empty")
+    private String standar;
 }

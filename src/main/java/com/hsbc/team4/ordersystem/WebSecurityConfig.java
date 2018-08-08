@@ -1,9 +1,12 @@
 package com.hsbc.team4.ordersystem;
 
+import com.hsbc.team4.ordersystem.security.MyPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -69,6 +72,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                // .anyRequest().authenticated();
 
     }
-
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//              .inMemoryAuthentication()
+//              .passwordEncoder(new MyPasswordEncoder())
+//            .withUser("user").password("123").roles("USER");
+//
+//    }
 
 }

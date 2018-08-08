@@ -1,6 +1,7 @@
 package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
+import com.hsbc.team4.ordersystem.products.Product;
 import com.hsbc.team4.ordersystem.products.ProductDto;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,21 +44,24 @@ public class ProductControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();  //构造MockMvc
 
     }
-/**
- * @Author:yang
- * @Description:
- * @Param: 
- * @return:
- * @Date: 2018/8/3
- */
+
+    /**
+     * @Author:yang
+     * @Description:
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
+     */
     @Test
-    public void saveProduct(){
-        ProductDto productDto=new ProductDto();
+    public void saveProduct() {
+        ProductDto productDto = new ProductDto();
         productDto.setId("20180802");
-        productDto.setName("项链");
-        productDto.setDescription("首饰");
-        productDto.setPic("黑色");
-        productDto.setPrice(100);
+        productDto.setProductName("汇丰生活信用卡");
+        productDto.setProductDescription("汇丰银行国内首发汇丰生活信用卡，其包含一张人民币银联白金卡和一张美元MasterCard白金卡\"");
+        productDto.setProductIcon("life-card.jpg");
+        productDto.setProductPrice(300);
+        productDto.setCondidtion("主卡申请人需年满18周岁，境内居民申请需月薪达人民币4,000元或以上，境外居民申请需月薪达人民币10,000元或以上。附属卡申请人须年满16周岁。 ");
+        productDto.setStandar("汇丰生活信用卡主卡年费人民币300元，内含多项专属权益。首年激活卡片后免收首年年费，刷卡满6次可免次年年费。附属卡免收年费。");
         String json = JSON.toJSONString(productDto);
         if (!"".equals(json)) {
             try {
@@ -75,13 +79,14 @@ public class ProductControllerTest {
         }
 
     }
-/**
- * @Author:yang
- * @Description:test product info query
- * @Param: 
- * @return:
- * @Date: 2018/8/3
- */
+
+    /**
+     * @Author:yang
+     * @Description:test product info query
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
+     */
     @Test
     public void query() {
         String id = "20180802";
@@ -95,6 +100,7 @@ public class ProductControllerTest {
             e.printStackTrace();
         }
     }
+
     @Test
     public void testFormLoginSuccess() throws Exception {
 
@@ -142,10 +148,10 @@ public class ProductControllerTest {
     public void updateProduct() {
         ProductDto productDto = new ProductDto();
         productDto.setId("20180802");
-        productDto.setName("平板");
-        productDto.setDescription("电子产品");
-        productDto.setPic("白色");
-        productDto.setPrice(100);
+        productDto.setProductName("平板");
+        productDto.setProductDescription("电子产品");
+        productDto.setProductIcon("life-card.jpg");
+        productDto.setProductPrice(300);
         String json = JSON.toJSONString(productDto);
         try {
             mockMvc.perform(put("/product/")
@@ -183,3 +189,5 @@ public class ProductControllerTest {
 
     }
 }
+
+// mapper

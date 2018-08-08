@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date : 2018/8/2
  */
 @RestController
-@RequestMapping("product")
+@RequestMapping("/product")
 @Api(value = "product")
 @Slf4j
 public class ProductController {
@@ -70,7 +70,7 @@ public class ProductController {
      * @return String
      */
     @ApiOperation(value = "delete by Id", httpMethod = "DELETE", notes = "delete product by Id", response = ResponseResults.class)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/del/{id}")
     public ResponseResults deleteProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String  id){
         return responseResults.responseBySuccess("ok",productService.updateStatusById(id,1));
     }
@@ -81,7 +81,7 @@ public class ProductController {
      * @return Account
      */
     @ApiOperation(value = "get by Id", httpMethod = "GET", notes = "get product by id", response = ResponseResults.class)
-    @GetMapping("/{id}")
+    @GetMapping("/query/{id}")
     public ResponseResults queryProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String id){
         return responseResults.responseBySuccess("ok",productService.findById(id));
     }
@@ -97,7 +97,7 @@ public class ProductController {
     @GetMapping("/{status}")
     public ResponseResults getProductList(@RequestParam(value = "current",defaultValue = "0") int current,
                                           @RequestParam(value = "current",defaultValue = "10") int pageSize,
-                                          @PathVariable int status){
+                                          @PathVariable("status") int status){
         return responseResults.responseBySuccess("ok",productService.findByStatus(current,pageSize,status));
     }
 

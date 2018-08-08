@@ -5,14 +5,17 @@ import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.roles.Role;
 import com.hsbc.team4.ordersystem.users.controller.UserController;
 import com.hsbc.team4.ordersystem.users.domain.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
@@ -31,22 +34,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @Date : 2018/8/3
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserController.class)
+@SpringBootTest
 public class UserControllerTest {
 
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private UUIDFactory uuidFactory;
 
-//    @Before
-//    public void setUp() throws Exception {
-//        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();  //构造MockMvc
-//    }
+    @Before
+    public void setUp() throws Exception {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();  //构造MockMvc
+    }
 
     @Test
     public void saveUser(){

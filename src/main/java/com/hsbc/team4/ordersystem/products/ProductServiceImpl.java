@@ -104,14 +104,15 @@ public class ProductServiceImpl implements IProductService {
      */
     @Override
     public Product query(String id) {
-        Product product = new Product();
-        product.setId(id);
-        product.setName("汇丰生活信用卡");
-        product.setDescription("汇丰银行国内首发汇丰生活信用卡，其包含一张人民币银联白金卡和一张美元MasterCard白金卡");
-        product.setPic("life-card.jpg");
-        product.setPrice(300);
-        product.setStandar("汇丰生活信用卡主卡年费人民币300元，内含多项专属权益。首年激活卡片后免收首年年费，刷卡满6次可免次年年费。附属卡免收年费。");
-        product.setCondidtion("主卡申请人需年满18周岁，境内居民申请需月薪达人民币4,000元或以上，境外居民申请需月薪达人民币10,000元或以上。附属卡申请人须年满16周岁。 ");
-        return product;
+//        Product product = new Product();
+//        product.setId(id);
+//        product.setProductName("汇丰生活信用卡");
+//        product.setProductDescription("汇丰银行国内首发汇丰生活信用卡，其包含一张人民币银联白金卡和一张美元MasterCard白金卡");
+//        product.setProductIcon("life-card.jpg");
+//        product.setProductPrice(300);
+//        product.setStandar("汇丰生活信用卡主卡年费人民币300元，内含多项专属权益。首年激活卡片后免收首年年费，刷卡满6次可免次年年费。附属卡免收年费。");
+//        product.setCondidtion("主卡申请人需年满18周岁，境内居民申请需月薪达人民币4,000元或以上，境外居民申请需月薪达人民币10,000元或以上。附属卡申请人须年满16周岁。 ");
+//        return product;
+        return productRepository.findByEntityId(id);
     }
 }
