@@ -61,7 +61,7 @@ public class SendMsgServiceImpl implements ISendMsgService{
     @Override
     public  String execute(Sender sender, SendMsg sendMsg) {
         String tmpSmsContent = null;
-        String code= ToolUtils.getRandomString(6);
+        String code= ToolUtils.getRandomInt(6);
         try{
             tmpSmsContent = URLEncoder.encode(sender.getTemplateId(), "UTF-8");
         }catch(Exception e){
@@ -79,7 +79,6 @@ public class SendMsgServiceImpl implements ISendMsgService{
         stringBuilder.append(",");
         stringBuilder.append(sendMsg.getExpirationTime());
         stringBuilder.append("&templateid=");
-        stringBuilder.append(tmpSmsContent);
         stringBuilder.append(tmpSmsContent);
         stringBuilder.append(HttpUtil.createCommonParam(sender));
 

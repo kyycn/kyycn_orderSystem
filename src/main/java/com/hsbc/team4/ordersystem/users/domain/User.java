@@ -1,6 +1,5 @@
 package com.hsbc.team4.ordersystem.users.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hsbc.team4.ordersystem.common.base.BaseEntity;
 import com.hsbc.team4.ordersystem.roles.Role;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,11 +40,9 @@ public class User extends BaseEntity{
     @ApiModelProperty(name = "username")
     private String username;
 
-    @NotBlank(message = "The phone can not be empty")
     @ApiModelProperty(name = "phone")
     private String phone;
 
-    @NotBlank(message = "The email can not be empty")
     @ApiModelProperty(name = "email")
     private String email;
     /**
@@ -52,11 +50,10 @@ public class User extends BaseEntity{
      */
     @NotBlank(message = "The password can not be empty")
     @ApiModelProperty(name = "password")
-    @JsonIgnore
     private String password;
     @NotEmpty(message = "the roles can not be empty")
     @ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.LAZY)
-    private List<Role> roles;
+    private List<Role> roles=new ArrayList<>();
     /**
      * locked
      */
@@ -67,7 +64,7 @@ public class User extends BaseEntity{
      * expired
      */
     @Column(name = "expired" ,columnDefinition = "Boolean default false")
-    private Boolean expired;
+    private Boolean expired=false;
     /**
      * lastLoginTime
      */

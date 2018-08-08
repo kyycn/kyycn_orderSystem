@@ -2,6 +2,8 @@ package com.hsbc.team4.ordersystem.users.service.impl;
 
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.PageableTools;
+import com.hsbc.team4.ordersystem.roles.IRoleRepository;
+import com.hsbc.team4.ordersystem.roles.Role;
 import com.hsbc.team4.ordersystem.smsmessage.ISendMsgService;
 import com.hsbc.team4.ordersystem.smsmessage.ISenderRepository;
 import com.hsbc.team4.ordersystem.smsmessage.SendMsg;
@@ -21,6 +23,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,15 +46,17 @@ public class UserServiceImpl implements IUserService{
     private final ISendMsgService iSendMsgService;
     private final IUserInfoRepository iUserInfoRepository;
     private final IAccountRepository iAccountRepository;
+    private final IRoleRepository iRoleRepository;
 
     @Autowired
-    public UserServiceImpl(IUserRepository iUserRepository, ISenderRepository iSenderRepository, UUIDFactory uuidFactory, ISendMsgService iSendMsgService, IUserInfoRepository iUserInfoRepository, IAccountRepository iAccountRepository) {
+    public UserServiceImpl(IUserRepository iUserRepository, ISenderRepository iSenderRepository, UUIDFactory uuidFactory, ISendMsgService iSendMsgService, IUserInfoRepository iUserInfoRepository, IAccountRepository iAccountRepository, IRoleRepository iRoleRepository) {
         this.iUserRepository = iUserRepository;
         this.iSenderRepository = iSenderRepository;
         this.uuidFactory = uuidFactory;
         this.iSendMsgService = iSendMsgService;
         this.iUserInfoRepository = iUserInfoRepository;
         this.iAccountRepository = iAccountRepository;
+        this.iRoleRepository = iRoleRepository;
     }
 
     @Override
@@ -57,6 +64,13 @@ public class UserServiceImpl implements IUserService{
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setId(uuidFactory.getUUID());
         user.setPassword(encoder.encode(user.getPassword()));
+        Role role=new Role();
+        role.setId(uuidFactory.getUUID());
+        role.setRoleName("user");
+        List<Role> roles=new ArrayList<>();
+        roles.add(role);
+        List<Role> roleList=iRoleRepository.saveAll(roles);
+        user.setRoles(roleList);
         User user1=addEntity(user);
         if(user1!=null){
             UserInfo userInfo=new UserInfo();
@@ -68,6 +82,10 @@ public class UserServiceImpl implements IUserService{
             Account account=new Account();
             account.setId(uuidFactory.getUUID());
             account.setUsername(user.getUsername());
+            account.setRealName(user.getUsername());
+            account.setTradePassword(user.getPassword());
+            account.setUsableBalance(new BigDecimal(0.00));
+            account.setFreezeBalance(new BigDecimal(0.00));
             iAccountRepository.save(account);
         }
         return user1;
@@ -86,9 +104,9 @@ public class UserServiceImpl implements IUserService{
     @Override
     public SendMsg sendMessage(Map<String, String> map) {
         SendMsg sendMsg;
+        String phone=map.get("phone");
         String msgType=map.get("msgType");
         String bizType=map.get("bizType");
-        String phone=map.get("phone");
         if("SMS".equals(msgType)){
             sendMsg=sendSMS(phone,msgType,bizType);
         }else {
@@ -120,18 +138,18 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public String verifyCode(String msgId, String code) {
+    public String checkVerifyCode(Map<String,String> map) {
         BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
-        SendMsg sendMsg=iSendMsgService.findById(msgId);
+        SendMsg sendMsg=iSendMsgService.findById(map.get("msgId"));
         long time=sendMsg.getCreateTime()+Long.parseLong(sendMsg.getExpirationTime())*60*1000;
         if(System.currentTimeMillis()<=time){
-            if(bCryptPasswordEncoder.matches(code,sendMsg.getCode())){
-                return "you enter the code is correct";
+            if(bCryptPasswordEncoder.matches(map.get("verifyCode"),sendMsg.getCode())){
+                return "you enter the verifyCode is correct";
             }
-            return "you enter the code is not correct";
+            return "you enter the code is verifyCode correct";
         }
 
-        return "The verify was expired";
+        return "The verifyCode was expired";
     }
 
     @Override
@@ -140,13 +158,28 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public User findByEail(String email) {
+    public User findByEmail(String email) {
         return iUserRepository.findByEmail(email);
     }
 
     @Override
     public User findByUsername(String userName) {
         return iUserRepository.findByUsername(userName);
+    }
+
+    @Override
+    public String updatePassword(Map<String,String> map) {
+        String id=map.get("id");
+        String oldPassword=map.get("oldPassword");
+        String newPassword=map.get("newPassword");
+        User user=iUserRepository.findByIdAndPassword(id,oldPassword);
+        if(user!=null){
+            int row = iUserRepository.updatePassword(id, newPassword);
+            if(row>0){
+                return "ok";
+            }
+        }
+        return "The original password is not correct";
     }
 
 
@@ -175,5 +208,6 @@ public class UserServiceImpl implements IUserService{
     public User findById(String id) {
         return iUserRepository.findByEntityId(id);
     }
+
 
 }

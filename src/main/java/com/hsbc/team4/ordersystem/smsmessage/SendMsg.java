@@ -1,5 +1,6 @@
 package com.hsbc.team4.ordersystem.smsmessage;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class SendMsg {
 	@ApiModelProperty(value = "sender")
 	private String sender;
 	@ApiModelProperty(value = "code")
+	@JsonIgnore
 	private String code;
 	@ApiModelProperty(value = "createTime")
 	private long createTime;

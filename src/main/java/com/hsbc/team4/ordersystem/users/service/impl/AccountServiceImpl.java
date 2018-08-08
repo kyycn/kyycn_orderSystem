@@ -1,8 +1,9 @@
 package com.hsbc.team4.ordersystem.users.service.impl;
 
 import com.hsbc.team4.ordersystem.users.domain.Account;
+import com.hsbc.team4.ordersystem.users.repository.IAccountRepository;
 import com.hsbc.team4.ordersystem.users.service.IAccountService;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,28 +17,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountServiceImpl implements IAccountService {
 
-    @Override
-    public Page<Account> findByStatus(int current, int pageSize, int status) {
-        return null;
+    private final IAccountRepository iAccountRepository;
+
+    @Autowired
+    public AccountServiceImpl(IAccountRepository iAccountRepository) {
+        this.iAccountRepository = iAccountRepository;
     }
 
     @Override
-    public Account addEntity(Account account) {
-        return null;
+    public Account addAccount(Account account) {
+        return iAccountRepository.save(account);
     }
 
     @Override
     public int updateStatusById(String id, int status) {
-        return 0;
+        return iAccountRepository.updateStatusById(id,status);
     }
 
     @Override
-    public Account updateEntity(Account account) {
-        return null;
+    public Account updateAccount(Account account) {
+        return iAccountRepository.saveAndFlush(account);
     }
 
     @Override
-    public Account findById(String id) {
-        return null;
+    public Account findByUsername(String username) {
+        return iAccountRepository.findByUsername(username);
     }
 }

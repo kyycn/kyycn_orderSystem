@@ -64,12 +64,11 @@ public interface IUserService extends IBaseService<User>{
     SendMsg sendVoice(String phone,String msgType,String bizType);
 
     /**
-     * verifyCode
-     * @param msgId
-     * @param code
-     * @return  String
+     * ckeckVerifyCode
+     * @param map
+     * @return String
      */
-    String verifyCode(String msgId,String code);
+    String checkVerifyCode(Map<String,String> map);
 
     /**
      *  findByPhone
@@ -83,7 +82,7 @@ public interface IUserService extends IBaseService<User>{
      * @param email
      * @return User
      */
-    User findByEail(String email);
+    User findByEmail(String email);
 
     /**
      *  findByUsername
@@ -91,5 +90,13 @@ public interface IUserService extends IBaseService<User>{
      * @return User
      */
     User findByUsername(String userName);
+
+    /**
+     * updatePassword
+     * massage
+     * @param map
+     * @return  massage
+     */
+    String updatePassword(Map<String,String> map);
 
 }

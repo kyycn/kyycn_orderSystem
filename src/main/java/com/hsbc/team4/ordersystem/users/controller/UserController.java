@@ -1,7 +1,6 @@
 package com.hsbc.team4.ordersystem.users.controller;
 
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
-import com.hsbc.team4.ordersystem.smsmessage.ISendMsgService;
 import com.hsbc.team4.ordersystem.smsmessage.SendMsg;
 import com.hsbc.team4.ordersystem.users.domain.User;
 import com.hsbc.team4.ordersystem.users.service.IUserService;
@@ -18,10 +17,10 @@ import java.util.Map;
 
 /**
  * @author : Kevin
- * @version :
+ * @version : 1.0
  * @Project : ordersystem
  * @Package : com.hsbc.team4.ordersystem.products.controller
- * @Description :
+ * @Description : The is a UserController
  * @Date : 2018/8/1
  */
 @RestController
@@ -29,21 +28,23 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     private final IUserService iUserService;
-    private final ISendMsgService iSendMsgService;
     private final ResponseResults responseResults;
 
     @Autowired
-    public UserController(IUserService iUserService, ISendMsgService iSendMsgService, ResponseResults responseResults) {
+    public UserController(IUserService iUserService,ResponseResults responseResults) {
         this.iUserService = iUserService;
-        this.iSendMsgService = iSendMsgService;
         this.responseResults = responseResults;
     }
 
-
-    @ApiOperation(value = "verify phone",notes = " pass a phone param",httpMethod = "GET")
+    /**
+     *  phone
+     * @param phone  phone
+     * @return ResponseResults
+     */
+    @ApiOperation(value = "verify phone",notes = " pass a phone param",httpMethod = "GET",response = ResponseResults.class)
     @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
-    @GetMapping("/verifyPhone/{phone}")
-    public ResponseResults verifyPhone(@PathVariable String phone){
+    @GetMapping("/verifyPhone")
+    public ResponseResults verifyPhone(@RequestParam String phone){
         User user=iUserService.findByPhone(phone);
         if(user!=null){
             return responseResults.responseBySuccess("The phone had been register");
@@ -51,30 +52,12 @@ public class UserController {
         return responseResults.responseBySuccess("ok");
     }
 
-    @ApiOperation(value = "verify email",notes = " pass a email param",httpMethod = "GET")
-    @ApiImplicitParam(name = "email",value = "email",dataType="String")
-    @GetMapping("/verifyEmail/{email}")
-    public ResponseResults verifyEmail(@PathVariable String email){
-        User user=iUserService.findByEail(email);
-        if(user!=null){
-            return responseResults.responseBySuccess("The email had been register");
-        }
-        return responseResults.responseBySuccess("ok");
-    }
-
-    @ApiOperation(value = "send email",notes = " pass a email param",httpMethod = "GET")
-    @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
-    @GetMapping("/sendEmail/{email}")
-    public ResponseResults sendEmail(@PathVariable String email){
-        return responseResults.responseBySuccess("ok");
-    }
-
     /**
      * sendMessage
-     * @param map
-     * @return
+     * @param map The map is must including phone,msgType and bizType
+     * @return ResponseResults
      */
-    @ApiOperation(value = "sends verify message",notes = " pass a map",httpMethod = "POST")
+    @ApiOperation(value = "sends verify message",notes = " pass a map",httpMethod = "POST",response = ResponseResults.class)
     @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
     @PostMapping("/sendMessage")
     public ResponseResults sendMessage(@RequestBody Map<String,String> map){
@@ -86,30 +69,64 @@ public class UserController {
     }
 
     /**
-     * submit verify code
-     * @param verifyCode  verifyCode
-     * @return String
+     *  verifyEmail
+     * @param email  email
+     * @return ResponseResults
      */
-    @ApiOperation(value = "submit verify message",notes = " pass a msgId and verifyCode",httpMethod = "POST")
-    @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
-    @GetMapping("/{msgId}/{verifyCode}")
-    public ResponseResults submitVerifyCode(@PathVariable String msgId,@PathVariable String verifyCode){
-        return responseResults.responseBySuccess(iUserService.verifyCode(msgId,verifyCode));
+    @ApiOperation(value = "verify email",notes = " pass a email param",httpMethod = "GET",response = ResponseResults.class)
+    @ApiImplicitParam(name = "email",value = "email",dataType="String")
+    @GetMapping("/verifyEmail")
+    public ResponseResults verifyEmail(@RequestParam String email){
+        User user=iUserService.findByEmail(email);
+        if(user!=null){
+            return responseResults.responseBySuccess("The email had been register");
+        }
+        return responseResults.responseBySuccess("ok");
     }
 
     /**
-     * register
-     * @param user
-     * @return String
+     *  sendEmail
+     * @param email  email
+     * @return ResponseResults
      */
-    @ApiOperation(value = "register",notes = "pass username and password",httpMethod = "POST")
+    @ApiOperation(value = "send email",notes = " pass a email param",httpMethod = "GET",response = ResponseResults.class)
+    @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
+    @GetMapping("/sendEmail/{email}")
+    public ResponseResults sendEmail(@PathVariable String email){
+        return responseResults.responseBySuccess("ok");
+    }
+
+    /**
+     *  checkVerifyCode
+     * @param map The map must be including msgId And verifyCode
+     * @return  ResponseResults
+     */
+    @ApiOperation(value = "submit verify message",notes = " pass a msgId and verifyCode",httpMethod = "POST",response = ResponseResults.class)
+    @ApiImplicitParam(name = "map",value = "map",dataType="Map")
+    @GetMapping("/checkVerifyCode")
+    public ResponseResults checkVerifyCode(@RequestBody Map<String,String> map){
+        return responseResults.responseBySuccess(iUserService.checkVerifyCode(map));
+    }
+
+    /**
+     *  ResponseResults
+     * @param user
+     * @return ResponseResults
+     */
+    @ApiOperation(value = "register",notes = "pass username and password",httpMethod = "POST",response = ResponseResults.class)
     @ApiImplicitParam(name = "user",value = "The user message",dataType="User")
     @PostMapping("/register")
     public ResponseResults register(@RequestBody User user){
         return  responseResults.responseBySuccess("保存成功",iUserService.register(user));
     }
 
-    @ApiOperation(value = "login",notes = "pass username and password",httpMethod = "POST")
+    /**
+     * login
+     * @param user
+     * @param request
+     * @return ResponseResults
+     */
+    @ApiOperation(value = "login",notes = "pass username and password",httpMethod = "POST",response = ResponseResults.class)
     @ApiImplicitParam(name = "user",value = "The user message",dataType="String")
     @PostMapping("/login")
     public ResponseResults login(@ApiParam(required = true,name = "user",value = "login user") @RequestBody User user, HttpServletRequest request){
@@ -132,12 +149,51 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "refresh",notes = "pass the oldToken",httpMethod = "POST")
+    @ApiOperation(value = "refresh",notes = "pass the oldToken",httpMethod = "POST",response = ResponseResults.class)
     @ApiImplicitParam(name = "oldToken",value = "The oldToken message",dataType="String")
     @PostMapping("/")
     public String refresh(String oldToken){
         return "ok";
     }
+
+    @ApiOperation(value = "updatePassword",notes = "pass the oldPassword And newPassword",httpMethod = "POST",response = ResponseResults.class)
+    @ApiImplicitParam(name = "map",value = "map must be include id,oldPassword,newPassword",dataType="Map")
+    @PostMapping("/updatePassword")
+    public ResponseResults updatePassword(@RequestBody Map<String,String> map){
+        return responseResults.responseBySuccess(iUserService.updatePassword(map));
+    }
+
+    /**
+     *  queryUserById
+     * @param id the user id
+     * @return ResponseResults
+     */
+    @ApiOperation(value = "queryUserById",notes = "the param is a UserId",httpMethod = "GET",response = ResponseResults.class)
+    @ApiImplicitParam(name = "id",value = "the user id",dataType="String")
+    @GetMapping("/{id}")
+    public ResponseResults queryUserById(@PathVariable String id){
+        User user=iUserService.findById(id);
+        if(user!=null){
+            return responseResults.responseBySuccess("ok",user);
+        }
+        return responseResults.responseBySuccess();
+    }
+
+    @ApiOperation(value = "updateUser",notes = "the param is a User object",httpMethod = "PUT",response = ResponseResults.class)
+    @ApiImplicitParam(name = "user",value = "the user object",dataType="User")
+    @PutMapping("/")
+    public ResponseResults updateUser(@RequestBody User user){
+        User user1=iUserService.updateEntity(user);
+        if(user1!=null){
+            return responseResults.responseBySuccess("ok",user);
+        }
+        return responseResults.responseByErrorMessage("update Failure");
+    }
+
+
+
+
+
 
 
 
