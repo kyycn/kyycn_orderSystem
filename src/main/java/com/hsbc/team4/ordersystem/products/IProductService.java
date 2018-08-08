@@ -14,6 +14,33 @@ import org.springframework.data.domain.Page;
  */
 public interface IProductService extends IBaseService<Product> {
 
-    Page<Product> findByName(int current, int pageSize, int status, String name);
-    Page<Product> findByVagueType(int current,int pageSize,int status,String type);
+    /**
+     * 根据产品类型查询理财产品，分页展示
+     * @param current
+     * @param pageSize
+     * @param status
+     * @param productType
+     * @return Product
+     */
+    Page<Product> findByProductType(int current, int pageSize, int status, String productType);
+
+    /**
+     * 模糊查询（产品类型）
+     * @param current
+     * @param pageSize
+     * @param status
+     * @param productType
+     * @return Product
+     */
+    Page<Product> findByProductTypeContains(int current,int pageSize,int status,String productType);
+
+    /**
+     * 模糊查询（产品名称）
+     * @param current
+     * @param pageSize
+     * @param status
+     * @param productName
+     * @return Product
+     */
+    Page<Product> findByProductNameContains(int current,int pageSize,int status,String productName);
 }

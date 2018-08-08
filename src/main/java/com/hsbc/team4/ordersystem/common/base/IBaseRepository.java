@@ -46,23 +46,7 @@ public interface IBaseRepository<T,ID extends Serializable> extends JpaRepositor
     @Transactional
     int updateStatusById(String id, int status);
 
-    /**
-     * 通过name查询,分页展示信息
-     * @param name
-     * @return Page<T>
-     */
-    @Query(value = "select * from #{#entityName} t where t.status=? and t.productType=?",nativeQuery = true)
-    Page<T> findByName(int status, String name, Pageable pageable);
 
-    /**
-     * 模糊查询
-     * @param status
-     * @param type
-     * @param pageable
-     * @return Page<T>
-     */
-    @Query(value = "select * from #{#entityName} t where t.status=? and t.productType like 'day%'",nativeQuery = true)
-    Page<T> findByVagueType(int status,String type,Pageable pageable);
 
 
 }

@@ -176,4 +176,14 @@ public class UserServiceImpl implements IUserService{
         return iUserRepository.findByEntityId(id);
     }
 
+    /**
+     * 根据产品类型名称分页获取数据
+     * 通过name查询
+     *
+     * @param current
+     * @param pageSize
+     * @param status
+     * @param name
+     * @return Page<T>
+     */
 }

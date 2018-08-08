@@ -46,4 +46,5 @@ public class IUserInfoServiceImpl implements IUserInfoService{
     public UserInfo updateUserInfo(UserInfo userInfo) {
         return iUserInfoRepository.saveAndFlush(userInfo);
     }
+
 }

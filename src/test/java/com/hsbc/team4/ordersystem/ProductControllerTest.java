@@ -41,7 +41,6 @@ public class ProductControllerTest {
     @Test
     public void saveProduct(){
         ProductDto productDto=new ProductDto();
-        productDto.setId("20180803");
         productDto.setProductName("credit card purchase");
         productDto.setProductPrice(3000);
         productDto.setProductDescription("a good product");
@@ -67,7 +66,7 @@ public class ProductControllerTest {
 
     @Test
     public void queryByProductId(){
-        String id="20180801";
+        String id="a09f32895d87437ea8324de090c5e49f1533706523174";
         try {
             mockMvc.perform(get("/product/productId/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -94,7 +93,7 @@ public class ProductControllerTest {
     @Test
     public void updateProduct() {
         ProductDto productDto=new ProductDto();
-        productDto.setId("20180803");
+        productDto.setId("a09f32895d87437ea8324de090c5e49f1533706523174");
         productDto.setProductName("credit card purchase");
         productDto.setProductPrice(3000);
         productDto.setProductDescription("a good product");
@@ -115,8 +114,8 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void deleteByUserId() {
-        String id="20180801";
+    public void deleteByProductId() {
+        String id="a09f32895d87437ea8324de090c5e49f1533706523174";
         try {
             mockMvc.perform(delete("/product/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -130,10 +129,10 @@ public class ProductControllerTest {
 
     }
     @Test
-    public void getProductListByType(){
-        String name="day in search";
+    public void queryByProductType(){
+        String productName="day in search";
         try {
-            mockMvc.perform(get("/product/queryType/0/"+name)
+            mockMvc.perform(get("/product/queryByProductType/0/"+productName)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
                     .andExpect(status().isOk())   //判断接收到的状态是否是200
@@ -144,10 +143,10 @@ public class ProductControllerTest {
 
     }
     @Test
-    public void getProductListByVagueType(){
-        String type="day";
+    public void queryByProductTypeContains(){
+        String productType="day";
         try{
-            mockMvc.perform(get("/product/vagueQueryByType/0/"+type)
+            mockMvc.perform(get("/product/queryByProductTypeContains/0/"+productType)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))    //接收的类型
                     .andExpect(status().isOk())     //判断接收到的状态是否为200
@@ -155,5 +154,19 @@ public class ProductControllerTest {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    @Test
+    public void queryByProductNameContains(){
+        String productName="credit";
+        try{
+            mockMvc.perform(get("/product/queryByProductNameContains/0/"+productName)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))    //接收的类型
+                    .andExpect(status().isOk())     //判断接收到的状态是否为200
+                    .andDo(print());    //打印内容
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
