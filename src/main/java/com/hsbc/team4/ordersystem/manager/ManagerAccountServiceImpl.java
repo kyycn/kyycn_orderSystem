@@ -40,7 +40,10 @@ public class ManagerAccountServiceImpl implements IManagerAccountService {
 
     @Override
     public ManagerAccount updateEntity(ManagerAccount managerAccount) {
-        return managerAccountRepository.save(managerAccount);
+        if (ValidatorTools.isPassword(managerAccount.getPassword())){
+            return managerAccountRepository.save(managerAccount);
+        }
+        return null;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.hsbc.team4.ordersystem.manager;
 
 import com.alibaba.fastjson.JSON;
+import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -133,5 +134,17 @@ public class SuperAdminControllerTest {
                 .andDo(print());
     }
 
-
+    @Test
+    public void testResetPassword() throws Exception {
+        Map<String, String> map = new HashMap<>();
+        map.put("old", "rootpwd");
+        map.put("new", "1234567");
+        String json = JSON.toJSONString(map);
+        mockMvc.perform(post("/super/reset")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }

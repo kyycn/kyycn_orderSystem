@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @author:Cady
  * @version:
@@ -81,5 +83,20 @@ public class SuperAdminController {
             return responseResults.responseBySuccess(reManager);
         }
         return responseResults.responseByError();
+    }
+
+    @ApiOperation(value = "resetPassword",notes = "reset root's password",httpMethod = "POST")
+    @PostMapping("/reset")
+    public ResponseResults resetPassword(@ApiParam(required = true, name = "pwd",value = "the old password and the new password")@RequestBody Map<String, Object> pwd){
+        ManagerAccount rootManager = managerAccountService.findByName(SUPER_NAME);
+        System.out.println(rootManager.getPassword());
+        System.out.println(pwd.get("old"));
+        if (rootManager!=null&&rootManager.getPassword().equals(pwd.get("old"))){
+            rootManager.setPassword(pwd.get("new").toString());
+            System.out.println(pwd.get("new").toString());
+            managerAccountService.updateEntity(rootManager);
+            return responseResults.responseBySuccess("reset password success");
+        }
+        return responseResults.responseByErrorMessage("fail to reset password");
     }
 }
