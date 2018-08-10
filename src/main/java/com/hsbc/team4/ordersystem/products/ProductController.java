@@ -61,7 +61,6 @@ public class ProductController {
     /**
      * updateProduct
      * @param productDto
-     * @return product
      */
     @ApiOperation(value = "update product", httpMethod = "POST",notes= "update product", response = ResponseResults.class)
     @PutMapping("/update")
@@ -90,7 +89,6 @@ public class ProductController {
     /**
      * queryProductById
      * @param id
-     * @return product
      */
     @ApiOperation(value = "get by Id", httpMethod = "GET", notes = "get product by id", response = ResponseResults.class)
     @GetMapping("/productId/{id}")
