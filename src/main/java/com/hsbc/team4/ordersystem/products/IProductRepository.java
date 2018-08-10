@@ -48,4 +48,13 @@ public interface IProductRepository extends IBaseRepository<Product,String> {
             "where p.status=?1 and p.productName like CONCAT('%',?2,'%')",nativeQuery = true)
     Page<Product> findByProductNameContains(int status,String productName,Pageable pageable);
 
+    /**
+     * 理财产品按照产品价格降序排序
+     * @param status
+     * @param pageable
+     * @return
+     */
+    @Query(value = "select * from Product p where p.status=? order by p.productPrice desc",nativeQuery = true)
+    Page<Product> orderByProductPrice(int status,Pageable pageable);
+
 }

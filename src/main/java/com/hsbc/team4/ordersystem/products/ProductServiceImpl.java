@@ -71,4 +71,9 @@ public class ProductServiceImpl implements IProductService {
         return productRepository.findByProductNameContains(status,productName,pageable);
     }
 
+    @Override
+    public Page<Product> orderByProductPrice(int current, int pageSize, int status) {
+        Pageable pageable=PageableTools.basicPage(current,pageSize);
+        return productRepository.orderByProductPrice(status,pageable);
+    }
 }

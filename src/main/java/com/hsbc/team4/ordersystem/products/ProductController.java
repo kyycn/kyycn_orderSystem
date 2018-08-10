@@ -121,7 +121,7 @@ public class ProductController {
      * @param productType
      * @return product
      */
-    @ApiOperation(value = "get by productType",httpMethod = "GET",notes = "get productListByType",response = ResponseResults.class)
+    @ApiOperation(value = "get by productType",httpMethod = "GET",notes = "get productList",response = ResponseResults.class)
     @GetMapping("/queryByProductType/{status}/{productType}")
     public ResponseResults queryByProductType(@RequestParam(value = "current",defaultValue = "0") int current,
                                                 @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
@@ -137,7 +137,7 @@ public class ProductController {
      * @param productType
      * @return product
      */
-    @ApiOperation(value = "queryByProductTypeContains",httpMethod ="GET",notes = "get productListByVagueType",response = ResponseResults.class)
+    @ApiOperation(value = "queryByProductTypeContains",httpMethod ="GET",notes = "get productList",response = ResponseResults.class)
     @GetMapping("/queryByProductTypeContains/{status}/{productType}")
     public ResponseResults queryByProductTypeContains(@RequestParam(value = "current",defaultValue = "0") int current,
                                                      @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
@@ -153,7 +153,7 @@ public class ProductController {
      * @param productName
      * @return product
      */
-    @ApiOperation(value = "queryByProductNameContains",httpMethod ="GET",notes = "get productListByVagueType",response = ResponseResults.class)
+    @ApiOperation(value = "queryByProductNameContains",httpMethod ="GET",notes = "get productList",response = ResponseResults.class)
     @GetMapping("/queryByProductNameContains/{status}/{productName}")
     public ResponseResults queryByProductNameContains(@RequestParam(value = "current",defaultValue = "0") int current,
                                                      @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
@@ -161,6 +161,20 @@ public class ProductController {
         return responseResults.responseBySuccess("ok",productService.findByProductNameContains(current,pageSize,status,productName));
     }
 
+    /**
+     * orderByProdcutPrice desc
+     * @param current
+     * @param pageSize
+     * @param status
+     * @return product
+     */
+    @ApiOperation(value = "orderByProductPrice",httpMethod = "GET",notes = "get productList",response = ResponseResults.class)
+    @GetMapping("/orderByProductPrice/{status}")
+    public ResponseResults orderByProductPrice(@RequestParam(value = "current",defaultValue = "0") int current,
+                                               @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                                               @PathVariable int status){
+        return responseResults.responseBySuccess("ok",productService.orderByProductPrice(current,pageSize,status));
+    }
 
 
 }

@@ -43,4 +43,13 @@ public interface IProductService extends IBaseService<Product> {
      * @return Product
      */
     Page<Product> findByProductNameContains(int current,int pageSize,int status,String productName);
+
+    /**
+     * orderByProductPrice desc
+     * @param current
+     * @param pageSize
+     * @param status
+     * @return
+     */
+    Page<Product> orderByProductPrice(int current,int pageSize,int status);
 }

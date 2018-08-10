@@ -2,6 +2,7 @@ package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
 import com.hsbc.team4.ordersystem.products.ProductDto;
+import io.swagger.annotations.ApiOperation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -168,5 +169,19 @@ public class ProductControllerTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void orderByProductPrice(){
+        try{
+            mockMvc.perform(get("/product/orderByProductPrice/0")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))    //接收的类型
+                    .andExpect(status().isOk())     //判断接收到的状态是否为200
+                    .andDo(print());    //打印内容
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
