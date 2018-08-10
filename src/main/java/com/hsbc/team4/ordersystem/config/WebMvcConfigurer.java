@@ -17,7 +17,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-
 import javax.servlet.MultipartConfigElement;
 import java.nio.charset.Charset;
 import java.util.ArrayList;

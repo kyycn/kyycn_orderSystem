@@ -47,6 +47,7 @@ public class ProductControllerTest {
         productDto.setProductDescription("a good product");
         productDto.setProductIcon("gold.jpg");
         productDto.setProductType("week in search");
+        productDto.setId("210180605");
         String json= JSON.toJSONString(productDto);
         if(!"".equals(json)){
             try {
