@@ -48,4 +48,10 @@ public class RoleServiceImpl implements IRoleService{
     public Role findById(String id) {
         return iRoleRepository.findByEntityId(id);
     }
+
+    @Override
+    public Page<Role> findRoleLikeRoleName(String roleName, int status, int current, int pageSize) {
+        Pageable pageable=PageableTools.addTimeSortForDescAndPage(current,pageSize);
+        return iRoleRepository.findByRoleNameContainsAndStatus(roleName,status,pageable);
+    }
 }

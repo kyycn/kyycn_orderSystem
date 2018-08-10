@@ -49,12 +49,14 @@ public class SenderControllerTest {
         Sender sender=new Sender();
         sender.setId("20180718");
         sender.setBaseUrl("https://api.miaodiyun.com/20150822/industrySMS/sendSMS");
-        sender.setAccountId("74e7fa7a07ea405b8cfbb790e030cd1f");
-        sender.setAuthToken("0e88935*******ed5");
+        sender.setAccountId("e5a5cf58d15b4dd5857f7049ac398392");
+        sender.setAuthToken("a0f9d9d9801d4787b377fb34503ab9b1");
         sender.setDateType("json");
-        sender.setPhone("15626283540");
-        sender.setTemplateId("501257098");
+        sender.setPhone("13612246284");
+        sender.setTemplateId("505418437");
         sender.setTemplateType("login");
+        sender.setCreateTime(System.currentTimeMillis());
+        sender.setUpdateTime(System.currentTimeMillis());
         String json= JSON.toJSONString(sender);
         if(!"".equals(json)){
             try {
@@ -112,7 +114,6 @@ public class SenderControllerTest {
     @Test
     public void updateSender() {
         Sender sender=new Sender();
-        sender.setId(uuidFactory.getUUID());
         sender.setBaseUrl("https://api.miaodiyun.com/20150822/industrySMS/sendSMS");
         sender.setAccountId("74e7fa7a07ea405b8cfbb790e030cd1f");
         sender.setAuthToken("0e88935*******ed5");
