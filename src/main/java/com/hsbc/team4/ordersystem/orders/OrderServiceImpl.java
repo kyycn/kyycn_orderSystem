@@ -1,10 +1,11 @@
 package com.hsbc.team4.ordersystem.orders;
-
-
+import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
+import com.hsbc.team4.ordersystem.common.utils.PageableTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.hsbc.team4.ordersystem.orders.Order;
+import java.util.List;
 
 /**
  * @Description: OrderService implementation.
@@ -16,17 +17,18 @@ import com.hsbc.team4.ordersystem.orders.Order;
  */
 @Service
 public class OrderServiceImpl implements IOrderService {
-
-    private final IOrderRepository orderRepository;
-
+    private IOrderRepository orderRepository;
+    private UUIDFactory uuidFactory;
     @Autowired
-    public OrderServiceImpl(IOrderRepository orderRepository) {
+    public OrderServiceImpl(IOrderRepository orderRepository,UUIDFactory uuidFactory) {
+        this.uuidFactory = uuidFactory;
         this.orderRepository = orderRepository;
     }
 
     @Override
-    public Page<Order> findByStatus(int current, int pageSize, int status) {
-        return null;
+    public Page<Orders> findByStatus(int current, int pageSize, int status) {
+        Pageable pageable= PageableTools.addTimeSortForDescAndPage(current,pageSize);
+        return orderRepository.findByStatus(status,pageable);
     }
 
     /**
@@ -37,22 +39,46 @@ public class OrderServiceImpl implements IOrderService {
      * @Date: 2018/8/3
      */
     @Override
-    public Order addEntity(Order order) {
+    public Orders addEntity(Orders order) {
+        order.setId(uuidFactory.getUUID());
+        order.setCreateTime(System.currentTimeMillis());
+        Double totalFree = order.getPrice()*order.getProductCount();
+        order.setTotalFree(totalFree);
+        order.setOrderStatus(1);
         return orderRepository.save(order);
     }
 
     @Override
     public int updateStatusById(String id, int status) {
-        return 0;
+        return orderRepository.updateStatusById(id,status);
     }
 
     @Override
-    public Order updateEntity(Order order) {
-        return null;
+    public Orders updateEntity(Orders order) {
+        return orderRepository.saveAndFlush(order);
     }
 
     @Override
-    public Order findById(String id) {
-        return null;
+    public Orders findById(String id) {
+        return orderRepository.findByEntityId(id);
+    }
+
+    @Override
+    public Page<Orders> findByOrderStatus(int current, int pageSize, int orderStatus) {
+        Pageable pageable= PageableTools.addTimeSortForDescAndPage(current,pageSize);
+        return orderRepository.findByOrderStatus(orderStatus,pageable);
+    }
+
+    @Override
+    public List<Orders> addOrdersList(List<Orders> orderList) {
+        for (Orders order : orderList) {
+            order.setId(uuidFactory.getUUID());
+            order.setCreateTime(System.currentTimeMillis());
+            Double totalFree = order.getPrice()*order.getProductCount();
+            order.setTotalFree(totalFree);
+            order.setOrderStatus(1);
+            order.setStatus(1);
+        }
+        return orderRepository.saveAll(orderList);
     }
 }

@@ -4,7 +4,7 @@ import lombok.Data;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import com.hsbc.team4.ordersystem.orders.Order;
+
 
 /**
  * @Description:
@@ -17,10 +17,16 @@ import com.hsbc.team4.ordersystem.orders.Order;
 @Data
 public class OrderDto {
     @Id
-    private String orderId;
-    @NotBlank(message = "The products can not be empty")
+    private String id;
+    @NotBlank(message = "The userId can not be empty")
+    private String userId;
+    @NotBlank(message = "The productId can not be empty")
     private String productId;
     @NotNull(message = "The productCount can not be empty")
     private Integer productCount;
-
+    @NotNull(message = "The orderStatus can not be empty")
+    private Integer orderStatus;
+    @NotNull(message = "The price can not be empty")
+    private Double price;
+    private Double totalFree;
 }

@@ -1,5 +1,6 @@
-package com.hsbc.team4.ordersystem;
+package com.hsbc.team4.ordersystem.orders;
 
+import com.hsbc.team4.ordersystem.common.adapt.BeanAdapter;
 import com.hsbc.team4.ordersystem.orders.IOrderRepository;
 import com.hsbc.team4.ordersystem.orders.Orders;
 import org.junit.Assert;
@@ -22,6 +23,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class OrderRepositoryTest {
     @Autowired
     private IOrderRepository orderRepository;
+    @Autowired
+    private BeanAdapter beanAdapter;
 
     @Test
     public void addEntity(){
@@ -31,7 +34,11 @@ public class OrderRepositoryTest {
         order.setProductCount(10);
         order.setUserId("100000");
         order.setProductId("111123");
+        order.setPrice(12.1);
+        order.setTotalFree(order.getPrice()*order.getProductCount());
         Orders order1 = orderRepository.save(order);
+        OrderDto dto = (OrderDto) beanAdapter.daoAdapter(order1, new OrderDto());
+        System.out.println(dto);
         Assert.assertNotEquals(null,order1);
     }
 }
