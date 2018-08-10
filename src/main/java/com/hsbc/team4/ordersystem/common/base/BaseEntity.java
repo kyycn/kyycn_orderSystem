@@ -18,19 +18,19 @@ public class BaseEntity {
     /**
      * create ID
      */
-    private String createId;
+    private String createUsername;
     /**
      * create time
      */
-    private long createTime;
+    private long createTime=System.currentTimeMillis();
     /**
      * update ID
      */
-    private String updateId;
+    private String updateUsername;
     /**
      * update time
      */
-    private long updateTime;
+    private long updateTime=System.currentTimeMillis();
     /**
      * status（0：可用，1：软删除，2：永久删除)
      */

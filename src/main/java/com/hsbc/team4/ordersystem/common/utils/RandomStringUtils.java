@@ -10,7 +10,7 @@ import java.util.Random;
  * @Description :
  * @Date : 2018/8/5
  */
-public class ToolUtils {
+public class RandomStringUtils {
 
     /**
      * getRandomString

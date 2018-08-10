@@ -179,11 +179,16 @@ public class UserControllerTest {
      *  verifyCode
      */
     @Test
-    public void verifyCode() {
+    public void checkVerifyCode() {
+        Map<String,String> map=new HashMap<>();
         String msgId = "7d41744adf874b3db66a6287c969ae7d1533611958718";
-        String code = "550636";
+        String verifyCode = "550636";
+        map.put("msgId",msgId);
+        map.put("verifyCode",verifyCode);
+        String json=JSON.toJSONString(map);
         try {
-            mockMvc.perform(get("/user/" + msgId + "/" + code)
+            mockMvc.perform(get("/user/checkVerifyCode")
+                    .content(json)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())

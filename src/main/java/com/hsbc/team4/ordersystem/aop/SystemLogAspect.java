@@ -1,5 +1,6 @@
 package com.hsbc.team4.ordersystem.aop;
 
+import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.LoggerUtil;
 import com.hsbc.team4.ordersystem.log.ILogService;
 import com.hsbc.team4.ordersystem.log.Log;
@@ -31,13 +32,16 @@ public class SystemLogAspect {
 
     private final ILogService iLogService;
     private final LoggerUtil loggerUtil;
+    private final UUIDFactory uuidFactory;
+
     @Autowired
-    public SystemLogAspect(ILogService iLogService, LoggerUtil loggerUtil) {
+    public SystemLogAspect(ILogService iLogService, LoggerUtil loggerUtil, UUIDFactory uuidFactory) {
         this.iLogService = iLogService;
         this.loggerUtil = loggerUtil;
+        this.uuidFactory = uuidFactory;
     }
 
-    @Pointcut("execution(* com.hsbc.team4.ordersystem.*.*Controller..*(..))")
+    @Pointcut("execution(* com.hsbc.team4.ordersystem..*Controller..*(..))")
     public void controllerAspect() {
     }
 
@@ -61,11 +65,12 @@ public class SystemLogAspect {
             try {
                 log.info("=====start=====");
                 log.info("method :" + joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
-                log.info("method  description :" + getControllerMethodDescription(joinPoint));
+                //log.info("method  description :" + getControllerMethodDescription(joinPoint));
                 log.info("operator :" + logger.getOperateName());
                 log.info("operate IP:" + logger.getOperateIP());
                 log.info("operate params:" + params);
-                logger.setOperationDescribe(getControllerMethodDescription(joinPoint));
+                logger.setId(uuidFactory.getUUID());
+                //logger.setOperationDescribe(getControllerMethodDescription(joinPoint));
                 this.iLogService.insertLog(logger);
                 System.out.println("=====end=====");
             } catch (Exception var7) {

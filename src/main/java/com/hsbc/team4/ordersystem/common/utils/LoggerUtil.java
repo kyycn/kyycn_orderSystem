@@ -1,6 +1,8 @@
 package com.hsbc.team4.ordersystem.common.utils;
 
 import com.hsbc.team4.ordersystem.log.Log;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,22 +23,20 @@ public class LoggerUtil {
      * @return Log
      */
     public  Log getLog(HttpServletRequest request) {
-        /*
          Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user==null){
-            return new Log();
-        }
-        Log log = new Log();
-        if (user instanceof UserDetails) {
-            log.setOperateName(((UserDetails)user).getUsername());
-        } else {
-            log.setOperateName(user.toString());
-        }
-        */
-        Log log = new Log();
+         Log log = new Log();
         log.setOperateType(request.getMethod());
         log.setOperateIP(getClientIp(request));
         log.setOperateTime(System.currentTimeMillis());
+        if(user==null){
+            return log;
+        }else {
+            if (user instanceof UserDetails) {
+                log.setOperateName(((UserDetails)user).getUsername());
+            } else {
+                log.setOperateName(user.toString());
+            }
+        }
         return log;
     }
 

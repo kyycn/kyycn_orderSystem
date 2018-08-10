@@ -1,5 +1,7 @@
 package com.hsbc.team4.ordersystem.common.utils;
 
+import com.hsbc.team4.ordersystem.common.enums.ResponseCode;
+
 import java.io.Serializable;
 
 /**
@@ -95,6 +97,14 @@ public class ResponseResults<T> implements Serializable {
      */
     public  <T> ResponseResults<T> responseBySuccess(T result){
         return new ResponseResults<T>(ResponseCode.SUCCESS.getCode(),result);
+    }
+    /**
+     * @param result
+     * @param <T>
+     * @return ResponseResults
+     */
+    public  <T> ResponseResults<T> responseByErrors(T result){
+        return new ResponseResults<T>(ResponseCode.ERROR.getCode(),result);
     }
 
     /**

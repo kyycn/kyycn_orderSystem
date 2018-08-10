@@ -3,15 +3,18 @@ package com.hsbc.team4.ordersystem.common.utils;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author chenRenXun
- * @date 2018/4/26 0026
+ * @author : Kevin
+ * @version :
+ * @Project : ordersystem
+ * @Package : com.hsbc.team4.ordersystem.common.utils
+ * @Description :
+ * @Date : 2018/8/9
  */
 public class ValidatorTools {
     /**
      * 正则表达式：验证用户名
      */
-    public static final String REGEX_USERNAME = "^[a-zA-Z0-9\u4e00-\u9fa5]\\w{6,17}$";
+    public static final String REGEX_USERNAME = "^[a-zA-Z0-9\u4e00-\u9fa5]\\w{4,17}$";
 
     /**
      * 正则表达式：验证密码
@@ -50,7 +53,6 @@ public class ValidatorTools {
 
     /**
      * 校验用户名
-     *
      * @param username
      * @return 校验通过返回true，否则返回false
      */

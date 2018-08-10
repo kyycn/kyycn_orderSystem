@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class Role extends BaseEntity{
     @Id
+    @NotBlank(message = " the roleName can not be Blank ")
     private String id;
     @NotBlank(message = " the roleName can not be Empty ")
     private String roleName;

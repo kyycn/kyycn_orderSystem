@@ -2,7 +2,7 @@ package com.hsbc.team4.ordersystem.smsmessage;
 
 import com.hsbc.team4.ordersystem.common.utils.HttpUtil;
 import com.hsbc.team4.ordersystem.common.utils.PageableTools;
-import com.hsbc.team4.ordersystem.common.utils.ToolUtils;
+import com.hsbc.team4.ordersystem.common.utils.RandomStringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -61,7 +61,7 @@ public class SendMsgServiceImpl implements ISendMsgService{
     @Override
     public  String execute(Sender sender, SendMsg sendMsg) {
         String tmpSmsContent = null;
-        String code= ToolUtils.getRandomInt(6);
+        String code= RandomStringUtils.getRandomInt(6);
         try{
             tmpSmsContent = URLEncoder.encode(sender.getTemplateId(), "UTF-8");
         }catch(Exception e){

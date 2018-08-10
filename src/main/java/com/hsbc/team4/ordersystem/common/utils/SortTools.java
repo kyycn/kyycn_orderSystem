@@ -3,7 +3,12 @@ package com.hsbc.team4.ordersystem.common.utils;
 import org.springframework.data.domain.Sort;
 
 /**
- * 排序工具类
+ * @author:Kevin
+ * @version:
+ * @Project: permission_manage
+ * @Package: com.hsbc.dev.teamo4.sms.common.utils.data
+ * @Description: BeanValidator
+ * @Date date: 2018/7/28
  */
 public class SortTools {
     /**

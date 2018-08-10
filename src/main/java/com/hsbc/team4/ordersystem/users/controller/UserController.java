@@ -1,5 +1,6 @@
 package com.hsbc.team4.ordersystem.users.controller;
 
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import com.hsbc.team4.ordersystem.smsmessage.SendMsg;
 import com.hsbc.team4.ordersystem.users.domain.User;
@@ -11,7 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,13 +35,14 @@ import java.util.Map;
 public class UserController {
     private final IUserService iUserService;
     private final ResponseResults responseResults;
+    private final DefaultKaptcha defaultKaptcha;
 
     @Autowired
-    public UserController(IUserService iUserService,ResponseResults responseResults) {
+    public UserController(IUserService iUserService, ResponseResults responseResults, DefaultKaptcha defaultKaptcha) {
         this.iUserService = iUserService;
         this.responseResults = responseResults;
+        this.defaultKaptcha = defaultKaptcha;
     }
-
     /**
      *  phone
      * @param phone  phone
@@ -43,8 +50,8 @@ public class UserController {
      */
     @ApiOperation(value = "verify phone",notes = " pass a phone param",httpMethod = "GET",response = ResponseResults.class)
     @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
-    @GetMapping("/verifyPhone")
-    public ResponseResults verifyPhone(@RequestParam String phone){
+    @GetMapping("/verifyPhone/{phone}")
+    public ResponseResults verifyPhone(@PathVariable String phone){
         User user=iUserService.findByPhone(phone);
         if(user!=null){
             return responseResults.responseBySuccess("The phone had been register");
@@ -61,6 +68,7 @@ public class UserController {
     @ApiImplicitParam(name = "phone",value = "phone",dataType="String")
     @PostMapping("/sendMessage")
     public ResponseResults sendMessage(@RequestBody Map<String,String> map){
+
         SendMsg sendMsg=iUserService.sendMessage(map);
         if(sendMsg!=null){
             return responseResults.responseBySuccess("ok",sendMsg);
@@ -75,8 +83,8 @@ public class UserController {
      */
     @ApiOperation(value = "verify email",notes = " pass a email param",httpMethod = "GET",response = ResponseResults.class)
     @ApiImplicitParam(name = "email",value = "email",dataType="String")
-    @GetMapping("/verifyEmail")
-    public ResponseResults verifyEmail(@RequestParam String email){
+    @GetMapping("/verifyEmail/{email}")
+    public ResponseResults verifyEmail(@PathVariable String email){
         User user=iUserService.findByEmail(email);
         if(user!=null){
             return responseResults.responseBySuccess("The email had been register");
@@ -108,6 +116,45 @@ public class UserController {
         return responseResults.responseBySuccess(iUserService.checkVerifyCode(map));
     }
 
+    @ApiOperation(value = "get defaultVerify", httpMethod = "GET", notes = "get defaultVerify", response = ResponseResults.class)
+    @GetMapping("/imageVerifyCode ")
+    public void imageVerifyCode(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) throws Exception{
+        byte[] captchaChallengeAsJpeg;
+        ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
+        try {
+            //create verifyCode and save to session
+            String createText = defaultKaptcha.createText();
+            httpServletRequest.getSession().setAttribute("verifyCode", createText);
+            BufferedImage challenge = defaultKaptcha.createImage(createText);
+            ImageIO.write(challenge, "jpg", jpegOutputStream);
+        } catch (IllegalArgumentException e) {
+            httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
+        httpServletResponse.setHeader("Cache-Control", "no-store");
+        httpServletResponse.setHeader("Pragma", "no-cache");
+        httpServletResponse.setDateHeader("Expires", 0);
+        httpServletResponse.setContentType("image/jpeg");
+        ServletOutputStream responseOutputStream =
+                httpServletResponse.getOutputStream();
+        responseOutputStream.write(captchaChallengeAsJpeg);
+        responseOutputStream.flush();
+        responseOutputStream.close();
+    }
+
+    @ApiOperation(value = "verify the imageVerifyCode", httpMethod = "POST", notes = "verify the imageVerifyCode", response = ResponseResults.class)
+    @PostMapping("/imageVerify/{verifyCode}")
+    public ResponseResults verifyCode(HttpServletRequest httpServletRequest,@PathVariable String  verifyCode){
+        String captchaId = (String) httpServletRequest.getSession().getAttribute("verifyCode");
+        log.info("Session  verifyCode "+captchaId+" form verifyCode "+verifyCode);
+        if (!captchaId.equals(verifyCode)) {
+            return  responseResults.responseByErrorMessage("The verifyCode is not correct");
+        } else {
+            return responseResults.responseBySuccess("ok");
+        }
+    }
+
     /**
      *  ResponseResults
      * @param user
@@ -127,7 +174,7 @@ public class UserController {
      * @return ResponseResults
      */
     @ApiOperation(value = "login",notes = "pass username and password",httpMethod = "POST",response = ResponseResults.class)
-    @ApiImplicitParam(name = "user",value = "The user message",dataType="String")
+    @ApiImplicitParam(name = "user",value = "The user message",dataType="User")
     @PostMapping("/login")
     public ResponseResults login(@ApiParam(required = true,name = "user",value = "login user") @RequestBody User user, HttpServletRequest request){
         try {
