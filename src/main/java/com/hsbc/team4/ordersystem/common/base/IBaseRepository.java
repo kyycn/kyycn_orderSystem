@@ -11,16 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
+
 /**
- *
- * @author chenRenXun
- * @date 2018/4/18 0018
- * 扩展JPA接口
+ * @author : Kevin
+ * @version :
+ * @Project : ordersystem
+ * @Package : com.hsbc.team4.ordersystem.common.base
+ * @Description :
+ * @Date : 2018/8/1
  */
 @NoRepositoryBean
 public interface IBaseRepository<T,ID extends Serializable> extends JpaRepository<T,ID> {
     /**
-     * 通过Id查询
+     * findByEntityId
      * @param id entity ID
      * @return T
      */
@@ -28,17 +31,17 @@ public interface IBaseRepository<T,ID extends Serializable> extends JpaRepositor
     T findByEntityId(String id) ;
 
     /**
-     * 分页信息
-     * @param status 状态
-     * @param pageable 分页信息
+     * findByStatus
+     * @param status
+     * @param pageable
      * @return Page<T>
      */
     Page<T> findByStatus(int status, Pageable pageable);
 
     /**
-     * 软删除
-     * @param id 实体ID
-     * @param status 状态
+     * updateStatusById
+     * @param id
+     * @param status
      * @return int
      */
     @Query(value = "update #{#entityName} t set t.status=?2 where t.id=?1",nativeQuery=true)

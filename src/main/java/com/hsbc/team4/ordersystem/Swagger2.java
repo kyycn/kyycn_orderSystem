@@ -14,6 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * API文档配置
  * @author Kevin
  */
+/** http://localhost:8090/swagger-ui.html **/
 @Configuration
 @EnableSwagger2
 public class Swagger2 {
@@ -30,9 +31,9 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("E-learning API在线文档")
+                .title("hsbc  API在线文档")
                 .description("Spring Boot中使用Swagger2构建RESTful APIs")
-                .termsOfServiceUrl("http://localhost:9090/")
+                .termsOfServiceUrl("http://localhost:8090/")
                 .version("1.0")
                 .build();
     }

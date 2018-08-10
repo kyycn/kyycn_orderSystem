@@ -1,17 +1,19 @@
 package com.hsbc.team4.ordersystem.users.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hsbc.team4.ordersystem.common.base.BaseEntity;
 import com.hsbc.team4.ordersystem.roles.Role;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,7 +28,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class User extends BaseEntity{
+public class User extends BaseEntity implements UserDetails{
     /**
      * The account id
      */
@@ -40,11 +42,9 @@ public class User extends BaseEntity{
     @ApiModelProperty(name = "username")
     private String username;
 
-    @NotBlank(message = "The phone can not be empty")
     @ApiModelProperty(name = "phone")
     private String phone;
 
-    @NotBlank(message = "The email can not be empty")
     @ApiModelProperty(name = "email")
     private String email;
     /**
@@ -52,11 +52,10 @@ public class User extends BaseEntity{
      */
     @NotBlank(message = "The password can not be empty")
     @ApiModelProperty(name = "password")
-    @JsonIgnore
     private String password;
-    @NotEmpty(message = "the roles can not be empty")
+
     @ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.LAZY)
-    private List<Role> roles;
+    private List<Role> roles=new ArrayList<>();
     /**
      * locked
      */
@@ -67,11 +66,10 @@ public class User extends BaseEntity{
      * expired
      */
     @Column(name = "expired" ,columnDefinition = "Boolean default false")
-    private Boolean expired;
+    private Boolean expired=false;
     /**
      * lastLoginTime
      */
-    @NotNull(message = "The lastLoginTime can not be empty")
     @ApiModelProperty(name = "lastLoginTime")
     private long lastLoginTime;
 
@@ -90,4 +88,48 @@ public class User extends BaseEntity{
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> auths = new ArrayList<>();
+        List<Role> roles = this.getRoles();
+        for (Role role : roles) {
+            auths.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
+        return auths;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", locked=" + locked +
+                ", expired=" + expired +
+                ", lastLoginTime=" + lastLoginTime +
+                '}';
+    }
 }
