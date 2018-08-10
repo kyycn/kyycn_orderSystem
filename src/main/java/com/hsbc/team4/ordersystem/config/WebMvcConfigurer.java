@@ -6,6 +6,7 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.hsbc.team4.ordersystem.common.adapt.BeanAdapter;
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
+import com.hsbc.team4.ordersystem.common.utils.LoggerUtil;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -102,7 +103,11 @@ public class WebMvcConfigurer implements org.springframework.web.servlet.config.
     @Bean
     public BeanAdapter beanAdapter(){
         return new BeanAdapter();
-
     }
+    @Bean
+    public LoggerUtil loggerUtil(){
+        return new LoggerUtil();
+    }
+
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author : Kevin
- * @version :
+ * @version : 1.0
  * @Project : ordersystem
  * @Package : com.hsbc.team4.ordersystem.users
  * @Description :
@@ -30,26 +30,34 @@ public class AccountController {
     }
     /**
      * updateAccount
-     * @param account
+     * @param account the account object
      * @return account
      */
-    @ApiOperation(value = "updateAccount",notes = "updateAccount",httpMethod = "PUT")
+    @ApiOperation(value = "updateAccount",notes = "the param is a account object",httpMethod = "PUT",response = ResponseResults.class)
     @ApiImplicitParam(name = "account",value = "account",dataType="Account")
     @PutMapping("/")
     public ResponseResults updateAccount(@RequestBody Account account){
-        return responseResults.responseBySuccess("ok",iAccountService.updateEntity(account));
+        Account account1=iAccountService.updateAccount(account);
+        if(account1!=null){
+            return responseResults.responseBySuccess("ok",account);
+        }
+        return responseResults.responseByErrorMessage("update Failure ");
     }
 
     /**
-     * queryAccountById
-     * @param id
+     * queryAccountByUsername
+     * @param username
      * @return ResponseResults
      */
     @ApiOperation(value = "queryAccountById",notes = "queryAccountById",httpMethod = "GET")
     @ApiImplicitParam(name = "id",value = "id",dataType="String")
-    @GetMapping("/{id}")
-    public ResponseResults queryAccountById(@PathVariable String id){
-        return responseResults.responseBySuccess("ok",iAccountService.findById(id));
+    @GetMapping("/{username}")
+    public ResponseResults queryAccountByUsername(@PathVariable String username){
+        Account account=iAccountService.findByUsername(username);
+        if(account!=null){
+            return responseResults.responseBySuccess("ok",account);
+        }
+        return responseResults.responseByErrorMessage("overtime,please refresh again");
     }
 
 }

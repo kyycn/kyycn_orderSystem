@@ -1,13 +1,15 @@
 package com.hsbc.team4.ordersystem.common.utils;
 
+import com.hsbc.team4.ordersystem.common.enums.ResponseCode;
+
 import java.io.Serializable;
 
 /**
- * @author:Kevin
- * @version:
- * @Project: permission_manage
- * @Package: com.hsbc.dev.teamo4.sms.common.fields
- * @Description:
+ * @author : Kevin
+ * @version :
+ * @Project : permission_manage
+ * @Package : com.hsbc.dev.teamo4.sms.common.fields
+ * @Description :
  * @Date date: 2018/7/26
  */
 public class ResponseResults<T> implements Serializable {
@@ -64,15 +66,13 @@ public class ResponseResults<T> implements Serializable {
     }
 
     /**
-     * 使之不在json序列化结果当中
-     * @return
+     * @return boolean
      */
     public boolean isSuccess(){
         return this.status == ResponseCode.SUCCESS.getCode();
     }
 
     /**
-     * 请求成功，只返回状态
      * @param <T>
      * @return ResponseResults
      */
@@ -81,7 +81,7 @@ public class ResponseResults<T> implements Serializable {
     }
 
     /**
-     * 返回成功的信息和状态
+     * return msg and code
      * @param msg
      * @param <T>
      * @return ResponseResults
@@ -91,7 +91,6 @@ public class ResponseResults<T> implements Serializable {
     }
 
     /**
-     * 返回状态和结果集
      * @param result
      * @param <T>
      * @return ResponseResults
@@ -99,9 +98,16 @@ public class ResponseResults<T> implements Serializable {
     public  <T> ResponseResults<T> responseBySuccess(T result){
         return new ResponseResults<T>(ResponseCode.SUCCESS.getCode(),result);
     }
+    /**
+     * @param result
+     * @param <T>
+     * @return ResponseResults
+     */
+    public  <T> ResponseResults<T> responseByErrors(T result){
+        return new ResponseResults<T>(ResponseCode.ERROR.getCode(),result);
+    }
 
     /**
-     * 返回成功的状态、信息和结果集
      * @param msg
      * @param data
      * @param <T>
@@ -116,7 +122,6 @@ public class ResponseResults<T> implements Serializable {
     }
 
     /**
-     * 返回失败
      * @param <T>
      * @return ResponseResults
      */
@@ -125,7 +130,6 @@ public class ResponseResults<T> implements Serializable {
     }
 
     /**
-     * 返回失败的状态和信息
      * @param errorMessage
      * @param <T>
      * @return ResponseResults
@@ -135,7 +139,6 @@ public class ResponseResults<T> implements Serializable {
     }
 
     /**
-     * 返回失败的状态和错误信息
      * @param errorCode
      * @param errorMessage
      * @param <T>
