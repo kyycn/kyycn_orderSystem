@@ -78,7 +78,6 @@ public class SuperAdminControllerTest {
         manager.setName("superadd");
         manager.setWorkNumber("85245");
         manager.setDepartment("dev");
-        manager.setCreateId("1");
         String json = JSON.toJSONString(manager);
         mockMvc.perform(post("/super/add")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
