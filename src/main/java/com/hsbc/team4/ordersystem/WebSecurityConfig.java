@@ -72,13 +72,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                // .anyRequest().authenticated();
 
     }
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//              .inMemoryAuthentication()
-//              .passwordEncoder(new MyPasswordEncoder())
-//            .withUser("user").password("123").roles("USER");
-//
-//    }
 
 }
