@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 /**
- * 分页工具类
+ * PageableTools
  * @author Kevin
  */
 public class PageableTools {

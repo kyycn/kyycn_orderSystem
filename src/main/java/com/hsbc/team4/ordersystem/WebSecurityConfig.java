@@ -1,11 +1,11 @@
 package com.hsbc.team4.ordersystem;
-
-import com.hsbc.team4.ordersystem.security.MyPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import com.hsbc.team4.ordersystem.jwt.JwtAuthenticationTokenFilter;
+import com.hsbc.team4.ordersystem.properties.JwtProperties;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,26 +13,62 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * @author Kevin
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${jwt.exceptUrl}")
-    private String exceptUrl;
+    private final JwtProperties jwtProperties;
+    private final UserDetailsService userDetailsService;
+
+    @Autowired
+    public WebSecurityConfig(JwtProperties jwtProperties, UserDetailsService userDetailsService) {
+        this.jwtProperties = jwtProperties;
+        this.userDetailsService = userDetailsService;
+    }
+    @Autowired
+    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder
+                // set UserDetailsService
+                .userDetailsService(userDetailsService)
+                // use BCrypt
+                .passwordEncoder(passwordEncoder());
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    /**
+     * rregister the token Filter
+     * return
+     * @throws Exception
+     */
+    @Bean
+    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+        return new JwtAuthenticationTokenFilter();
+    }
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/resource/**", "/image/**", "/css/**", "/js/**", "/fonts/**", "/excel/**", "/pictures/**", "/excel-templates", "static/**", "classpath:/META-INF/resources", "/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-resources/configuration/ui", "/swagger-ui.html");
+                .antMatchers("/resource/**", "/image/**", "/css/**", "/js/**", "/fonts/**", "/excel/**", "/pictures/**", "/excel-templates", "static/**", "classpath:/META-INF/resources", "/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-resources/configuration/ui");
     }
+
 
     /**
      * 请求授权
@@ -41,18 +77,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-
         httpSecurity
-                // 由于使用的是JWT，我们这里不需要csrf
                 .csrf().disable()
-                // 基于token，所以不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                // 对所有的请求都认证
                 .authorizeRequests()
-                // 所有 / 的所有请求 都放行
-               // .antMatchers("/").permitAll()
-                // 允许对于网站静态资源的无授权访问
+               .antMatchers("/").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
@@ -63,14 +93,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js",
                         "/**/*.jpg",
                         "/**/*.png"
-                ).permitAll();
-                // 对于获取token的rest api要允许匿名访问
-                //.antMatchers(exceptUrl).permitAll()
-                // 所有 /login 的POST请求 都放行
-               // .antMatchers(HttpMethod.POST, "/login/**","/**").permitAll()
-                //.antMatchers(HttpMethod.GET, "/login/**","/**").permitAll()
-               // .anyRequest().authenticated();
+                ) .permitAll();
+               // .antMatchers(jwtProperties.getExceptUrl()).permitAll()
+                //.antMatchers("/user/**").permitAll()
+                //.antMatchers(HttpMethod.GET, "/user/**").permitAll()
+                //.anyRequest().authenticated();
 
+
+        // add JWT filter
+        httpSecurity
+                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        // ban the cache
+        httpSecurity.headers().cacheControl();
     }
 
 }

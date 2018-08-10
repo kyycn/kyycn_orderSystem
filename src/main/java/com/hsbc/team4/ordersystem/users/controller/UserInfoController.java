@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/userInfo")
 public class UserInfoController {
 
-    @Autowired
     private final IUserInfoService iUserInfoService;
     private final ResponseResults responseResults;
 
@@ -29,7 +28,8 @@ public class UserInfoController {
      * @param iUserInfoService
      * @param responseResults
      */
-    public UserInfoController(IUserInfoService iUserInfoService, ResponseResults responseResults) {
+    @Autowired
+    public UserInfoController(ResponseResults responseResults, IUserInfoService iUserInfoService) {
         this.iUserInfoService = iUserInfoService;
         this.responseResults = responseResults;
     }
@@ -39,23 +39,27 @@ public class UserInfoController {
      * @param userInfo
      * @return ResponseResults
      */
-    @ApiOperation(value = "updateUserInfo",notes = "updateUserInfo",httpMethod = "PUT")
+    @ApiOperation(value = "updateUserInfo",notes = "the param is a UserInfo object",httpMethod = "PUT",response = ResponseResults.class)
     @ApiImplicitParam(name = "userInfo",value = "userInfo",dataType="UserInfo")
     @PutMapping("/")
     public ResponseResults updateUserInfo(@RequestBody UserInfo userInfo){
-        return responseResults.responseBySuccess("ok",iUserInfoService.addUserInfo(userInfo));
+        UserInfo userInfo1=iUserInfoService.addUserInfo(userInfo);
+        if(userInfo!=null){
+            return responseResults.responseBySuccess("ok",userInfo1);
+        }
+        return responseResults.responseByErrorMessage("overtime please refresh again");
     }
 
     /**
-     * queryUserInfoById
-     * @param id
-     * @return ResponseResults
+     *  queryUserInfoUsername
+     * @param username
+     * @return  ResponseResults
      */
-    @ApiOperation(value = "queryUserInfoById",notes = "queryUserInfoById",httpMethod = "GET")
-    @ApiImplicitParam(name = "id",value = "id",dataType="String")
-    @GetMapping("/{id}")
-    public ResponseResults queryUserInfoById(@PathVariable String id){
-        return responseResults.responseBySuccess("ok",iUserInfoService.findById(id));
+    @ApiOperation(value = "queryUserInfoUsername",notes = "the param is a username",httpMethod = "GET",response = ResponseResults.class)
+    @ApiImplicitParam(name = "username",value = "username",dataType="String")
+    @GetMapping("/{username}")
+    public ResponseResults queryUserInfoUsername(@PathVariable String username){
+        return responseResults.responseBySuccess("ok",iUserInfoService.findByUsername(username));
     }
 
 }

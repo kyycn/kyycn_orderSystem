@@ -44,8 +44,8 @@ public class RoleControllerTest {
     @Test
     public void saveRole(){
         Role role=new Role();
-        role.setId("20150612");
-        role.setRoleName("SuperAdmin");
+        role.setId("20150613");
+        role.setRoleName("admin");
         role.setCreateTime(System.currentTimeMillis());
         String json= JSON.toJSONString(role);
         if(!"".equals(json)){
@@ -56,7 +56,6 @@ public class RoleControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andDo(print());
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -70,7 +69,7 @@ public class RoleControllerTest {
      */
     @Test
     public void queryByRoleId(){
-        String id="20150612";
+        String id="2015062";
         try {
             mockMvc.perform(get("/role/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -105,7 +104,7 @@ public class RoleControllerTest {
     public void updateRole() {
         Role role=new Role();
         role.setId("20150612");
-        role.setRoleName("普通管理员");
+        role.setRoleName("admin");
         String json=JSON.toJSONString(role);
         try {
             mockMvc.perform(put("/role/")

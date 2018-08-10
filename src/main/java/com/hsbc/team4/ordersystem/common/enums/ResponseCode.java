@@ -1,4 +1,4 @@
-package com.hsbc.team4.ordersystem.common.utils;
+package com.hsbc.team4.ordersystem.common.enums;
 
 /**
  * @author:Kevin
@@ -9,6 +9,11 @@ package com.hsbc.team4.ordersystem.common.utils;
  * @Date date: 2018/7/26
  */
 public enum  ResponseCode {
+    /**
+     * SUCCESS
+     */
+    NOTLOGIN(1000,"NOTLOGIN"),
+    NOTPERMISE(1001," NOPERMISSION"),
     SUCCESS(0,"SUCCESS"),
     ERROR(1,"ERROR");
 

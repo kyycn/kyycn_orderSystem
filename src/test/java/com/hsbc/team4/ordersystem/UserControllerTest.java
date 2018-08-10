@@ -1,25 +1,22 @@
 package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
-import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
-import com.hsbc.team4.ordersystem.roles.Role;
-import com.hsbc.team4.ordersystem.users.controller.UserController;
 import com.hsbc.team4.ordersystem.users.domain.User;
+import com.hsbc.team4.ordersystem.users.repository.IUserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,31 +39,28 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private UUIDFactory uuidFactory;
+    private IUserRepository iUserRepository;
 
     @Before
     public void setUp() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();  //构造MockMvc
     }
 
+    /**
+     * saveUser
+     */
     @Test
     public void saveUser(){
-        BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
         User user =new User();
-        user.setId("20180803");
         user.setUsername("kevin");
-        user.setPassword(bCryptPasswordEncoder.encode("123456"));
+        user.setPassword("123456");
+        user.setEmail("2235390423@qq.com");
         user.setLocked(false);
-        Role role=new Role();
-        role.setRoleName("普通用户");
-        role.setId(uuidFactory.getUUID());
-        List<Role> roles=new ArrayList<>();
-        roles.add(role);
-        user.setRoles(roles);
+        user.setExpired(false);
         String json= JSON.toJSONString(user);
         if(!"".equals(json)){
             try {
-                mockMvc.perform(post("/user/")
+                mockMvc.perform(post("/user/register")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -81,23 +75,14 @@ public class UserControllerTest {
 
     }
 
+    /**
+     * queryByUserId
+     */
     @Test
     public void queryByUserId(){
-        String id="20180803";
+        String id="10b9067db41e4790ad10830d4b87f53d1533636076984";
         try {
-            mockMvc.perform(get("/account/"+id)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andDo(print());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @Test
-    public void getAccountList(){
-        try {
-            mockMvc.perform(get("/account/0")
+            mockMvc.perform(get("/user/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -107,23 +92,17 @@ public class UserControllerTest {
         }
     }
 
+    /**
+     *  updateUser
+     */
     @Test
     public void updateUser() {
-        BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
-        User user =new User();
-        user.setId("20180803");
+        String id="10b9067db41e4790ad10830d4b87f53d1533636076984";
+        User user=iUserRepository.findByEntityId(id);
         user.setUsername("crx");
-        user.setPassword(bCryptPasswordEncoder.encode("123456"));
-        user.setLocked(false);
-        Role role=new Role();
-        role.setRoleName("管理员");
-        role.setId(uuidFactory.getUUID());
-        List<Role> roles=new ArrayList<>();
-        roles.add(role);
-        user.setRoles(roles);
         String json= JSON.toJSONString(user);
         try {
-            mockMvc.perform(put("/user")
+            mockMvc.perform(put("/user/")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(json)
                     .accept(MediaType.APPLICATION_JSON))
@@ -135,11 +114,19 @@ public class UserControllerTest {
 
     }
 
+    /**
+     * sendSMS
+     */
     @Test
-    public void deleteByUserId() {
-        String id="20180803";
+    public void sendSMS() {
+        Map<String,String> map=new HashMap<>();
+        map.put("phone","15626283540");
+        map.put("msgType","SMS");
+        map.put("bizType","login");
+        String json= JSON.toJSONString(map);
         try {
-            mockMvc.perform(delete("/account/"+id)
+            mockMvc.perform(post("/user/sendMessage/")
+                    .content(json)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -150,5 +137,69 @@ public class UserControllerTest {
         }
 
     }
+
+    /**
+     *  verifyPhone
+     */
+    @Test
+    public void verifyPhone() {
+        String phone = "15626283540";
+        try {
+            mockMvc.perform(get("/user/verifyPhone")
+                    .param("phone",phone)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  verifyEmail
+     */
+    @Test
+    public void verifyEmail() {
+        String email = "2235390423@qq.com";
+        try {
+            mockMvc.perform(get("/user/verifyEmail")
+                    .param("email",email)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  verifyCode
+     */
+    @Test
+    public void checkVerifyCode() {
+        Map<String,String> map=new HashMap<>();
+        String msgId = "7d41744adf874b3db66a6287c969ae7d1533611958718";
+        String verifyCode = "550636";
+        map.put("msgId",msgId);
+        map.put("verifyCode",verifyCode);
+        String json=JSON.toJSONString(map);
+        try {
+            mockMvc.perform(get("/user/checkVerifyCode")
+                    .content(json)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
