@@ -12,4 +12,5 @@ import com.hsbc.team4.ordersystem.products.Product;
  * @Date : 2018/8/2
  */
 public interface IProductService extends IBaseService<Product> {
+
 }

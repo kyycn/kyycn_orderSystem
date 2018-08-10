@@ -41,7 +41,7 @@ public class ProductControllerTest {
     @Test
     public void saveProduct(){
         ProductDto productDto=new ProductDto();
-        productDto.setId("20180805");
+        productDto.setId("210180605");
         productDto.setName("项链");
         productDto.setType("首饰");
         productDto.setColor("黑色");
