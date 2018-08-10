@@ -30,4 +30,6 @@ public class ProductDto {
     private String condidtion;
     @NotBlank(message = "The standar can not be empty")
     private String standar;
+    @NotBlank(message = "The Type can not be empty")
+    private String Type;
 }
