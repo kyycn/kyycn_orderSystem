@@ -1,6 +1,7 @@
 package com.hsbc.team4.ordersystem.products;
 
 import com.hsbc.team4.ordersystem.common.base.IBaseService;
+import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import com.hsbc.team4.ordersystem.products.Product;
 import org.springframework.data.domain.Page;
 
@@ -52,4 +53,5 @@ public interface IProductService extends IBaseService<Product> {
      * @return
      */
     Page<Product> orderByProductPrice(int current,int pageSize,int status);
+      Product query(String id);
 }

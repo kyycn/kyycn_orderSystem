@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date : 2018/8/2
  */
 @RestController
-@RequestMapping("product")
+@RequestMapping("/product")
 @Api(value = "product")
 @Slf4j
 public class ProductController {
@@ -81,7 +81,7 @@ public class ProductController {
      * @return product
      */
     @ApiOperation(value = "delete by Id", httpMethod = "DELETE", notes = "delete product by Id", response = ResponseResults.class)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/del/{id}")
     public ResponseResults deleteProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String  id){
         return responseResults.responseBySuccess("ok",productService.updateStatusById(id,1));
     }
@@ -91,7 +91,7 @@ public class ProductController {
      * @param id
      */
     @ApiOperation(value = "get by Id", httpMethod = "GET", notes = "get product by id", response = ResponseResults.class)
-    @GetMapping("/productId/{id}")
+    @GetMapping("/query/{id}")
     public ResponseResults queryProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String id){
         return responseResults.responseBySuccess("ok",productService.findById(id));
     }
@@ -106,8 +106,8 @@ public class ProductController {
     @ApiOperation(value = "status", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
     @GetMapping("/{status}")
     public ResponseResults getProductList(@RequestParam(value = "current",defaultValue = "0") int current,
-                                       @RequestParam(value = "current",defaultValue = "10") int pageSize,
-                                       @PathVariable int status){
+                                          @RequestParam(value = "current",defaultValue = "10") int pageSize,
+                                          @PathVariable("status") int status){
         return responseResults.responseBySuccess("ok",productService.findByStatus(current,pageSize,status));
     }
 
@@ -175,4 +175,18 @@ public class ProductController {
     }
 
 
-}
+
+    @GetMapping("/query")
+    public ResponseResults query(@RequestParam String id) {
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+//        if (SecurityContextHolder.getContext().getAuthentication().getName(). equals("anonymousUser"))
+//        {
+//            return null;
+//        }
+//        else{
+//            return ResponseResults.responseBySuccess("ok", productService.query(id));
+//        }
+        return responseResults.responseBySuccess("ok", productService.query(id));
+    }
+
+    }
