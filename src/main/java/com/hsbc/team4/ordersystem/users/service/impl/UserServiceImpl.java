@@ -246,6 +246,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     }
 
 
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user;
@@ -266,4 +267,5 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         System.out.println(token);
         return new User(user);
     }
+
 }

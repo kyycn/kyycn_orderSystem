@@ -1,5 +1,6 @@
 package com.hsbc.team4.ordersystem.common.base;
 
+import com.hsbc.team4.ordersystem.products.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

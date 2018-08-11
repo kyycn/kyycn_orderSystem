@@ -24,15 +24,21 @@ import javax.validation.constraints.NotNull;
 public class Product extends BaseEntity{
     @Id
     private String id;
-    @NotBlank(message = "The name can not be empty")
-    private String name;
-    @NotBlank(message = "The type can not be empty")
-    private String type;
-    @NotBlank(message = "The color can not be empty")
-    private String color;
-    @NotNull(message = "The price can not be empty")
-    private double price;
-
+    @NotBlank(message = "The productName can not be empty")
+    private String productName;
+    @NotNull(message = "The productPrice can not be empty")
+    private double productPrice;
+    @NotBlank(message = "The productDescription can not be empty")
+    private String productDescription;
+    @NotBlank(message = "the productIcon cannot be empty")
+    private String productIcon;
+    @NotBlank(message = "The productType can not be empty")
+    private String productType;
+    private String condidtion;
+    @NotBlank(message = "The standar can not be empty")
+    private String standar;
+    @NotBlank(message = "The Type can not be empty")
+    private String Type;
     /**
      * adapt to product
      * @param productDto

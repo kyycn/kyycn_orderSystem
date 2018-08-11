@@ -1,7 +1,9 @@
 package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
+import com.hsbc.team4.ordersystem.products.Product;
 import com.hsbc.team4.ordersystem.products.ProductDto;
+import io.swagger.annotations.ApiOperation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,22 +40,44 @@ public class ProductControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();  //构造MockMvc
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();  //构造MockMvc
 
     }
 
+    /**
+     * @Author:yang
+     * @Description:
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
+     */
     @Test
+<<<<<<< HEAD
     public void saveProduct(){
         ProductDto productDto=new ProductDto();
-        productDto.setId("20180805");
-        productDto.setName("项链");
-        productDto.setType("首饰");
-        productDto.setColor("黑色");
-        productDto.setPrice(100);
+        productDto.setProductName("credit card purchase");
+        productDto.setProductPrice(3000);
+        productDto.setProductDescription("a good product");
+        productDto.setProductIcon("gold.jpg");
+        productDto.setProductType("week in search");
+        productDto.setId("210180605");
         String json= JSON.toJSONString(productDto);
         if(!"".equals(json)){
+=======
+    public void saveProduct() {
+        ProductDto productDto = new ProductDto();
+        productDto.setId("20180802");
+        productDto.setProductName("汇丰生活信用卡");
+        productDto.setProductDescription("汇丰银行国内首发汇丰生活信用卡，其包含一张人民币银联白金卡和一张美元MasterCard白金卡\"");
+        productDto.setProductIcon("life-card.jpg");
+        productDto.setProductPrice(300);
+        productDto.setCondidtion("主卡申请人需年满18周岁，境内居民申请需月薪达人民币4,000元或以上，境外居民申请需月薪达人民币10,000元或以上。附属卡申请人须年满16周岁。 ");
+        productDto.setStandar("汇丰生活信用卡主卡年费人民币300元，内含多项专属权益。首年激活卡片后免收首年年费，刷卡满6次可免次年年费。附属卡免收年费。");
+        String json = JSON.toJSONString(productDto);
+        if (!"".equals(json)) {
+>>>>>>> wendy
             try {
-                mockMvc.perform(post("/product/")
+                mockMvc.perform(post("/product/save")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))  //接收的类型
@@ -64,26 +92,28 @@ public class ProductControllerTest {
 
     }
 
+    /**
+     * @Author:yang
+     * @Description:test product info query
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
+     */
     @Test
+<<<<<<< HEAD
     public void queryByProductId(){
-        String id="20180802";
+        String id="a09f32895d87437ea8324de090c5e49f1533706523174";
         try {
-            mockMvc.perform(get("/product/"+id)
+            mockMvc.perform(get("/product/productId/"+id)
+=======
+    public void query() {
+        String id = "20180802";
+        try {
+            mockMvc.perform(get("/product/query?id=" + id)
+>>>>>>> wendy
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
-                    .andExpect(status().isOk())   //判断接收到的状态是否是200
-                    .andDo(print());  //打印内容
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @Test
-    public void getProductList(){
-        try {
-            mockMvc.perform(get("/product/0")
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .accept(MediaType.APPLICATION_JSON))  //接收的类型
-                    .andExpect(status().isOk())   //判断接收到的状态是否是200
+                    //.andExpect(status().isOk())   //判断接收到的状态是否是200
                     .andDo(print());  //打印内容
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,16 +121,70 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void updateProduct() {
-        ProductDto productDto=new ProductDto();
-        productDto.setId("20180802");
-        productDto.setName("平板");
-        productDto.setType("电子产品");
-        productDto.setColor("白色");
-        productDto.setPrice(100);
-        String json=JSON.toJSONString(productDto);
+    public void testFormLoginSuccess() throws Exception {
+
+        // 测试登录成功
+        mockMvc
+                .perform(formLogin("/login").user("user").password("123"))
+                .andExpect(authenticated());
+    }
+
+    @Test
+    public void testFormLoginFail() throws Exception {
+        // 测试登录失败
+        mockMvc
+                .perform(formLogin("/login").user("user").password("1234"))
+                .andExpect(unauthenticated());
+    }
+
+    @Test
+    public void testLogoutFail() throws Exception {
+        // 测试退出登录
+        mockMvc.perform(logout("/logout")).andExpect(unauthenticated());
+    }
+
+    @Test
+    public void getProductList() {
         try {
-            mockMvc.perform(put("/product/")
+            mockMvc.perform(get("/product/0")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))  //接收的类型
+                    //    .andExpect(status().isOk())   //判断接收到的状态是否是200
+                    .andDo(print());  //打印内容
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @Author:yang
+     * @Description:
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
+     */
+    @Test
+    public void updateProduct() {
+<<<<<<< HEAD
+        ProductDto productDto=new ProductDto();
+        productDto.setId("a09f32895d87437ea8324de090c5e49f1533706523174");
+        productDto.setProductName("credit card purchase");
+        productDto.setProductPrice(3000);
+        productDto.setProductDescription("a good product");
+        productDto.setProductIcon("credit.jpg");
+        productDto.setProductType("month in search");
+        String json=JSON.toJSONString(productDto);
+=======
+        ProductDto productDto = new ProductDto();
+        productDto.setId("20180802");
+        productDto.setProductName("平板");
+        productDto.setProductDescription("电子产品");
+        productDto.setProductIcon("life-card.jpg");
+        productDto.setProductPrice(300);
+        String json = JSON.toJSONString(productDto);
+>>>>>>> wendy
+        try {
+            mockMvc.perform(put("/product/update")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(json)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
@@ -112,11 +196,23 @@ public class ProductControllerTest {
 
     }
 
+    /**
+     * @Author:yang
+     * @Description:
+     * @Param:
+     * @return:
+     * @Date: 2018/8/3
+     */
     @Test
+<<<<<<< HEAD
+    public void deleteByProductId() {
+        String id="a09f32895d87437ea8324de090c5e49f1533706523174";
+=======
     public void deleteByUserId() {
-        String id="20180802";
+        String id = "20180802";
+>>>>>>> wendy
         try {
-            mockMvc.perform(delete("/product/"+id)
+            mockMvc.perform(delete("/product/" + id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
                     .andExpect(status().isOk())   //判断接收到的状态是否是200
@@ -127,4 +223,61 @@ public class ProductControllerTest {
         }
 
     }
+    @Test
+    public void queryByProductType(){
+        String productName="day in search";
+        try {
+            mockMvc.perform(get("/product/queryByProductType/0/"+productName)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))  //接收的类型
+                    .andExpect(status().isOk())   //判断接收到的状态是否是200
+                    .andDo(print());  //打印内容
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    @Test
+    public void queryByProductTypeContains(){
+        String productType="day";
+        try{
+            mockMvc.perform(get("/product/queryByProductTypeContains/0/"+productType)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))    //接收的类型
+                    .andExpect(status().isOk())     //判断接收到的状态是否为200
+                    .andDo(print());    //打印内容
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void queryByProductNameContains(){
+        String productName="credit";
+        try{
+            mockMvc.perform(get("/product/queryByProductNameContains/0/"+productName)
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))    //接收的类型
+                    .andExpect(status().isOk())     //判断接收到的状态是否为200
+                    .andDo(print());    //打印内容
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void orderByProductPrice(){
+        try{
+            mockMvc.perform(get("/product/orderByProductPrice/0")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))    //接收的类型
+                    .andExpect(status().isOk())     //判断接收到的状态是否为200
+                    .andDo(print());    //打印内容
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
+
+// mapper
