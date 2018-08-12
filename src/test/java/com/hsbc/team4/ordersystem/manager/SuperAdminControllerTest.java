@@ -94,7 +94,7 @@ public class SuperAdminControllerTest {
     */
     @Test
     public void testDisableManager() throws Exception {
-        mockMvc.perform(post("/super/delete/1")
+        mockMvc.perform(post("/super/delete/2/0")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
