@@ -82,7 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-               .antMatchers("/").permitAll()
+               .antMatchers("/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
@@ -92,13 +92,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js",
                         "/**/*.jpg",
+                        "/swagger-ui.html",
                         "/**/*.png"
                 ) .permitAll();
                // .antMatchers(jwtProperties.getExceptUrl()).permitAll()
                 //.antMatchers("/user/**").permitAll()
                 //.antMatchers(HttpMethod.GET, "/user/**").permitAll()
                 //.anyRequest().authenticated();
-
 
         // add JWT filter
         httpSecurity
