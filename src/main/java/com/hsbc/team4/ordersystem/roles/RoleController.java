@@ -54,6 +54,7 @@ public class RoleController {
     public ResponseResults saveRole(@RequestBody Role role){
         User user=global.getUserByToken();
         role.setId(uuidFactory.getUUID());
+        role.setRoleName("ROLE_"+role.getRoleName());
         role.setCreateUsername(user.getUsername());
         role.setUpdateUsername(user.getUsername());
         Map<String,String> map= beanValidator.validateObject(role);
