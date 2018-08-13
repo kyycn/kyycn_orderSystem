@@ -9,7 +9,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author : Kevin
@@ -48,7 +53,10 @@ public class ProductController {
     @PostMapping("/save")
     public ResponseResults saveProduct(@ApiParam(required = true,name = "productDto",value = "productDto project") @RequestBody ProductDto productDto){
         productDto.setId(uuidFactory.getUUID());
-        beanValidator.validateObject(productDto);
+        Map<String,String> map=beanValidator.validateObject(productDto);
+        if(CollectionUtils.isEmpty(map)){
+            return responseResults.responseByErrors(map);
+        }
         log.info("beanValidatorTest",beanValidator);
         Product product= (Product) beanAdapter.dtoAdapter(productDto,new Product());
         Product product1=productService.addEntity(product);
@@ -65,7 +73,11 @@ public class ProductController {
     @ApiOperation(value = "update product", httpMethod = "POST",notes= "update product", response = ResponseResults.class)
     @PutMapping("/update")
     public ResponseResults updateProduct(@ApiParam(required = true,name = "productDto",value = "productDto project")@RequestBody  ProductDto productDto){
-        beanValidator.validateObject(productDto);
+
+        Map<String,String> map= beanValidator.validateObject(productDto);
+        if(CollectionUtils.isEmpty(map)){
+            return responseResults.responseByErrors(map);
+        }
         log.info("beanValidator test",beanValidator);
         Product product=(Product) beanAdapter.dtoAdapter(productDto,new Product());
         Product product1=productService.updateEntity(product);
@@ -83,7 +95,12 @@ public class ProductController {
     @ApiOperation(value = "delete by Id", httpMethod = "DELETE", notes = "delete product by Id", response = ResponseResults.class)
     @DeleteMapping("/{id}")
     public ResponseResults deleteProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String  id){
-        return responseResults.responseBySuccess("ok",productService.updateStatusById(id,1));
+
+        int row=productService.updateStatusById(id,1);
+        if(row>0){
+            return responseResults.responseBySuccess("ok");
+        }
+        return responseResults.responseByErrorMessage("failure delete,please try again!");
     }
 
     /**
@@ -93,7 +110,11 @@ public class ProductController {
     @ApiOperation(value = "get by Id", httpMethod = "GET", notes = "get product by id", response = ResponseResults.class)
     @GetMapping("/productId/{id}")
     public ResponseResults queryProductById(@ApiParam(required = true,name = "id",value = "the product id")@PathVariable String id){
-        return responseResults.responseBySuccess("ok",productService.findById(id));
+        Product product=productService.findById(id);
+        if(product!=null){
+            return responseResults.responseBySuccess("ok",product);
+        }
+        return responseResults.responseByErrorMessage("failure query,please checkout your id!");
     }
 
     /**
@@ -108,7 +129,14 @@ public class ProductController {
     public ResponseResults getProductList(@RequestParam(value = "current",defaultValue = "0") int current,
                                        @RequestParam(value = "current",defaultValue = "10") int pageSize,
                                        @PathVariable int status){
-        return responseResults.responseBySuccess("ok",productService.findByStatus(current,pageSize,status));
+        if(StringUtils.isEmpty(status)){
+            return responseResults.responseByErrorMessage("the status is empty");
+        }
+        Page<Product> products=productService.findByStatus(current,pageSize,status);
+        if(products!=null){
+            return responseResults.responseBySuccess("ok",products);
+        }
+        return responseResults.responseByErrorMessage("get productList is failed!");
     }
 
     /**
