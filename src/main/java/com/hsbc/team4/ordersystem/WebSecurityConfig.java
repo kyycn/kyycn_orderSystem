@@ -1,11 +1,10 @@
 package com.hsbc.team4.ordersystem;
-
-import com.hsbc.team4.ordersystem.jwt.JwtAuthenticationTokenFilter;
-import com.hsbc.team4.ordersystem.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import com.hsbc.team4.ordersystem.jwt.JwtAuthenticationTokenFilter;
+import com.hsbc.team4.ordersystem.properties.JwtProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -83,7 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-               .antMatchers("/").permitAll()
+               .antMatchers("/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
@@ -93,6 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js",
                         "/**/*.jpg",
+                        "/swagger-ui.html",
                         "/**/*.png"
                 ) .permitAll();
                // .antMatchers(jwtProperties.getExceptUrl()).permitAll()
@@ -100,13 +100,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers(HttpMethod.GET, "/user/**").permitAll()
                 //.anyRequest().authenticated();
 
-
         // add JWT filter
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         // ban the cache
         httpSecurity.headers().cacheControl();
     }
-
 
 }

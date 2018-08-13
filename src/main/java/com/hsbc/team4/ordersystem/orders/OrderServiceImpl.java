@@ -25,6 +25,13 @@ public class OrderServiceImpl implements IOrderService {
         this.orderRepository = orderRepository;
     }
 
+    /**
+     * @Description: find Order By Status.
+     * @Param: [current, pageSize, status]
+     * @return: org.springframework.data.domain.Page<com.hsbc.team4.ordersystem.orders.Orders>
+     * @Author: Young
+     * @Date: 2018/8/12
+     */
     @Override
     public Page<Orders> findByStatus(int current, int pageSize, int status) {
         Pageable pageable= PageableTools.addTimeSortForDescAndPage(current,pageSize);
@@ -48,27 +55,62 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.save(order);
     }
 
+    /**
+     * @Description: Update the order status by id.
+     * @Param: [id, status]
+     * @return: int
+     * @Author: Young
+     * @Date: 2018/8/12
+     */
     @Override
     public int updateStatusById(String id, int status) {
         return orderRepository.updateStatusById(id,status);
     }
 
+    /**
+     * @Description: Update the order.
+     * @Param: [order]
+     * @return: com.hsbc.team4.ordersystem.orders.Orders
+     * @Author: Young
+     * @Date: 2018/8/12
+     */
     @Override
     public Orders updateEntity(Orders order) {
         return orderRepository.saveAndFlush(order);
     }
 
+    /**
+     * @Description: Find the order by id.
+     * @Param: [id]
+     * @return: com.hsbc.team4.ordersystem.orders.Orders
+     * @Author: Young
+     * @Date: 2018/8/12
+     */
     @Override
     public Orders findById(String id) {
         return orderRepository.findByEntityId(id);
     }
 
+    /**
+     * @Description: Get order list by order status.
+     * @Param: [current, pageSize, orderStatus]
+     * @return: org.springframework.data.domain.Page<com.hsbc.team4.ordersystem.orders.Orders>
+     * @Author: Young
+     * @Date: 2018/8/12
+     */
     @Override
     public Page<Orders> findByOrderStatus(int current, int pageSize, int orderStatus) {
         Pageable pageable= PageableTools.addTimeSortForDescAndPage(current,pageSize);
         return orderRepository.findByOrderStatus(orderStatus,pageable);
     }
 
+    /**
+     * @Description: Bulk add orders.
+     * @Param: [orderList]
+     * @return: java.util.List<com.hsbc.team4.ordersystem.orders.Orders>
+     * @Author: Young
+     * @Date: 2018/8/12
+     */
     @Override
     public List<Orders> addOrdersList(List<Orders> orderList) {
         for (Orders order : orderList) {

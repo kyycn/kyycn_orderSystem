@@ -34,6 +34,22 @@ public class Product extends BaseEntity{
     private String productIcon;
     @NotBlank(message = "The productType can not be empty")
     private String productType;
+    private String condidtion;
+    @NotBlank(message = "The standar can not be empty")
+    private String standar;
+    @NotBlank(message = "The Type can not be empty")
+    private String Type;
+    /**
+     * adapt to product
+     * @param productDto
+     * @return
+     */
+    public static Product adaptProduct(ProductDto productDto){
+        Product product=new Product();
+        BeanUtils.copyProperties(productDto,product);
+        return product;
+    }
+
 
 
 }

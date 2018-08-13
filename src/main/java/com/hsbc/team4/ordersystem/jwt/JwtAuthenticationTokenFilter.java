@@ -1,6 +1,7 @@
 
 package com.hsbc.team4.ordersystem.jwt;
 
+import com.hsbc.team4.ordersystem.exception.UserNotLoginException;
 import com.hsbc.team4.ordersystem.properties.JwtProperties;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        log.info("chain :",chain.toString());
         log.info("start Authentication:",request.getRequestURI());
         //get tokenHeader
         log.info(jwtProperties.getHeader());
@@ -86,6 +88,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }
         }else {
             log.warn("not find the tokenHead :",jwtProperties.getTokenHead());
+            //throw new UserNotLoginException("you are not sign in ");
         }
         chain.doFilter(request, response);
     }

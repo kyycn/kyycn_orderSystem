@@ -1,5 +1,7 @@
 package com.hsbc.team4.ordersystem.roles;
 
+import com.hsbc.team4.ordersystem.aop.annotations.HasLogin;
+import com.hsbc.team4.ordersystem.aop.annotations.ValidateFiled;
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.Global;
@@ -48,9 +50,11 @@ public class RoleController {
     @ApiOperation(value = "saveRole",notes = "the param is a Role object",httpMethod = "POST",response = ResponseResults.class)
     @ApiImplicitParam(name = "role",value = "role",dataType="Role")
     @PostMapping()
+    @HasLogin(message = "you must be login")
     public ResponseResults saveRole(@RequestBody Role role){
         User user=global.getUserByToken();
         role.setId(uuidFactory.getUUID());
+        role.setRoleName("ROLE_"+role.getRoleName());
         role.setCreateUsername(user.getUsername());
         role.setUpdateUsername(user.getUsername());
         Map<String,String> map= beanValidator.validateObject(role);
@@ -71,6 +75,7 @@ public class RoleController {
      */
     @ApiOperation(value = "updateRole",notes = "the param is a Role object",httpMethod = "PUT",response = ResponseResults.class)
     @ApiImplicitParam(name = "role",value = "role",dataType="Role")
+    @HasLogin(message = "you must be login")
     @PutMapping
     public ResponseResults updateRole(@RequestBody  Role  role){
         User user=global.getUserByToken();
@@ -94,8 +99,9 @@ public class RoleController {
      */
     @ApiOperation(value = "deleteRoleById",notes = "the param is a id ",httpMethod = "DELETE",response = ResponseResults.class)
     @ApiImplicitParam(name = "id",value = "id",dataType="String")
-    @DeleteMapping("/{id}")
-    public ResponseResults deleteRoleById(@PathVariable String  id){
+    @ValidateFiled(index = 0,notNull = true,message = "id is not be empty")
+    @DeleteMapping()
+    public ResponseResults deleteRoleById( String  id){
         int row =iRoleService.updateStatusById(id,1);
         if(row>0){
             return responseResults.responseBySuccess("ok");

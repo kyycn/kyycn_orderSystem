@@ -1,10 +1,9 @@
-package com.hsbc.team4.ordersystem.aop;
+package com.hsbc.team4.ordersystem.aop.annotations;
 
 import java.lang.annotation.*;
 
 /**
- * 类SysLog的功能描述:
- * 系统日志注解
+ * log
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

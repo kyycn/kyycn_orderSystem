@@ -14,19 +14,19 @@ import java.util.List;
  */
 public interface IOrderService extends IBaseService<Orders>{
      /**
-      * @Description: 根据订单的支付状态分页获取订单数据。
-      * @Param: current 当前页。
-      * @Param: pageSize 每页显示的数据。
-      * @Param: orderStatus 订单支付状态。
+      * @Description: Get order data according to the payment status page of the order.
+      * @Param: current: The current page.
+      * @Param: pageSize: Data displayed per page.
+      * @Param: orderStatus: Order payment status.
       * @return: org.springframework.data.domain.Page<com.hsbc.team4.ordersystem.orders.Orders>
       * @Author: Young
       * @Date: 2018/8/8
       */
      Page<Orders> findByOrderStatus(int current, int pageSize, int orderStatus);
     /**
-    * @Description:  批量添加订单。
-    * @Param:  orderList 订单列表。
-    * @return:  添加成功的订单列表。
+    * @Description:  Bulk add orders.
+    * @Param:  orderList: List of orders to add.
+    * @return: List of orders added successfully.
     * @Author: Young
     * @Date: 2018/8/8 
     */

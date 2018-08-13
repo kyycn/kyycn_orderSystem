@@ -16,8 +16,8 @@ import org.springframework.stereotype.Repository;
 public interface IOrderRepository extends IBaseRepository<Orders,String>{
     
     /**
-    * @Description: 根据订单的支付状态查询分页数据。
-    * @Param: orderStatus 订单支付状态。
+    * @Description: Query the paging data according to the payment status of the order.
+    * @Param: orderStatus: Order payment status.
     * @Author: Young
     * @Date: 2018/8/9 
     */
