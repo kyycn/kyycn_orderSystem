@@ -3,6 +3,7 @@ package com.hsbc.team4.ordersystem.aop;
 import com.google.common.collect.Lists;
 import com.hsbc.team4.ordersystem.aop.annotations.ValidateFiled;
 import com.hsbc.team4.ordersystem.aop.annotations.ValidateGroup;
+import com.hsbc.team4.ordersystem.common.utils.ReflectUtils;
 import com.hsbc.team4.ordersystem.exception.ValidateFiledException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -11,7 +12,6 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -43,18 +43,20 @@ public class ValidateAspect {
         Object[] args= joinPoint.getArgs();
         Object target= joinPoint.getTarget();
         String methodName= joinPoint.getSignature().getName();
-        Method method= getMethodByClassAndName(target.getClass(), methodName);
-        ValidateGroup validateGroup = (ValidateGroup)getAnnotationByMethod(method ,ValidateGroup.class );
+        Method method= ReflectUtils.getMethodByClassAndName(target.getClass(), methodName);
+        ValidateGroup validateGroup = (ValidateGroup)ReflectUtils.getAnnotationByMethod(method ,ValidateGroup.class );
         if(validateGroup!=null){
             Map<String,Object> map= validateFiled(Lists.newArrayList(validateGroup.fileds()) , args);
             if(!CollectionUtils.isEmpty(map)){
                 throw new ValidateFiledException("The params validate failure,please check you params",map);
             }
         }else {
-            ValidateFiled validateFiled = (ValidateFiled)getAnnotationByMethod(method ,ValidateFiled.class );
-            Map<String,Object> map= validateFiled(Lists.newArrayList(validateFiled) , args);
-            if(!CollectionUtils.isEmpty(map)){
-                throw new ValidateFiledException("The params validate failure,please check you params",map);
+            ValidateFiled validateFiled = (ValidateFiled)ReflectUtils.getAnnotationByMethod(method ,ValidateFiled.class );
+            if(validateFiled!=null){
+                Map<String,Object> map= validateFiled(Lists.newArrayList(validateFiled) , args);
+                if(!CollectionUtils.isEmpty(map)){
+                    throw new ValidateFiledException("The params validate failure,please check you params",map);
+                }
             }
         }
 
@@ -71,7 +73,7 @@ public class ValidateAspect {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public Map<String,Object> validateFiled(List<ValidateFiled> valiedatefiles , Object[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    private Map<String,Object> validateFiled(List<ValidateFiled> valiedatefiles, Object[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Map<String,Object> errors=new HashMap<>();
         for (ValidateFiled validateFiled : valiedatefiles) {
             Object object=args[validateFiled.index()];
@@ -119,39 +121,6 @@ public class ValidateAspect {
         }
         return errors;
     }
-
-    /**
-     * getAnnotationByMethod
-     * @param method
-     * @param annoClass
-     * @return
-     */
-    public Annotation getAnnotationByMethod(Method method , Class annoClass){
-        Annotation all[] = method.getAnnotations();
-        for (Annotation annotation : all) {
-            if (annotation.annotationType() == annoClass) {
-                return annotation;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * getMethodByClassAndName
-     * @param c
-     * @param methodName
-     * @return
-     */
-    public Method getMethodByClassAndName(Class c , String methodName){
-        Method[] methods = c.getDeclaredMethods();
-        for (Method method : methods) {
-            if(method.getName().equals(methodName)){
-                return method ;
-            }
-        }
-        return null;
-    }
-
 
 
 }

@@ -59,6 +59,12 @@ public class ManagerController {
         return responseResults.responseByErrorMessage("again");
     }
 
+    /**
+     * @Description update self information
+     * @Date: 14:57 2018-08-13
+     * @Param manager
+     * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
+     */
     @ApiOperation(value = "managerInfoUpdate",notes = "update own message",httpMethod = "POST")
     @PostMapping("/update")
     public ResponseResults managerInfoUpdate(@ApiParam(required = true,name = "manager",value = "update manager message")@RequestBody Manager manager){

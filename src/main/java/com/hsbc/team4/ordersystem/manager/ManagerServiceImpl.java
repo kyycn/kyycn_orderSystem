@@ -5,6 +5,7 @@ import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.PageableTools;
 import com.hsbc.team4.ordersystem.common.utils.ValidatorTools;
+import com.hsbc.team4.ordersystem.common.utils.WorkNumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,18 @@ public class ManagerServiceImpl implements IManagerService{
     private final IManagerAccountService managerAccountService;
     private final UUIDFactory uuidFactory;
     private final BeanValidator beanValidator;
+    private final WorkNumberUtil workNumberUtil;
+    private final IDepartmentService departmentService;
 
     @Autowired
-    public ManagerServiceImpl(IManagerRepository iManagerRepository, IManagerAccountService managerAccountService, UUIDFactory uuidFactory, BeanValidator beanValidator) {
+    public ManagerServiceImpl(IManagerRepository iManagerRepository, IManagerAccountService managerAccountService, UUIDFactory uuidFactory, BeanValidator beanValidator, WorkNumberUtil workNumberUtil, IDepartmentService departmentService) {
         this.iManagerRepository = iManagerRepository;
         this.managerAccountService = managerAccountService;
         this.uuidFactory = uuidFactory;
         this.beanValidator = beanValidator;
+        this.workNumberUtil = workNumberUtil;
+        this.departmentService = departmentService;
     }
-
 
     @Override
     public Manager findByWordNumber(String wordNumber) {
@@ -49,13 +53,24 @@ public class ManagerServiceImpl implements IManagerService{
         return iManagerRepository.findByStatus(status, PageableTools.basicPage(current,pageSize));
     }
 
+    /**
+     * @Description set the workNumber for manager, update department, add ManagerAccount, add manager
+     * @Date: 14:55 2018-08-13
+     * @Param manager
+     * @return com.hsbc.team4.ordersystem.manager.Manager
+     */
     @Override
     public Manager addEntity(Manager manager) {
         if (!beanValidator.validateObject(manager).isEmpty()){
             return null;
         }
-        if (iManagerRepository.findByWorkNumber(manager.getWorkNumber())==null){
+        Department department = departmentService.findByName(manager.getDepartment());
+        if (department != null){
+            String workNumber = workNumberUtil.getWordNumber(department.getId(), department.getOrderNum()+1);
+            department.setOrderNum(department.getOrderNum()+1);
+            departmentService.updateEntity(department);
             manager.setId(uuidFactory.getUUID());
+            manager.setWorkNumber(workNumber);
             manager.setStatus(1);
             manager.setCreateTime(System.currentTimeMillis());
             ManagerAccount managerAccount = new ManagerAccount();

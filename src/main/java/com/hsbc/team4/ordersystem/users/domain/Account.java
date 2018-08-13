@@ -1,5 +1,6 @@
 package com.hsbc.team4.ordersystem.users.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -26,6 +27,7 @@ public class Account {
     @NotBlank(message = "The realName can not be empty")
     private String realName;
     @NotBlank(message = "The tradePassword can not be empty")
+    @JsonIgnore
     private String tradePassword;
     @NotNull(message = "The usableBalance can not be null")
     private BigDecimal usableBalance;

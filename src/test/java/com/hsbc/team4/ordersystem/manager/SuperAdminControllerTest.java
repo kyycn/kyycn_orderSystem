@@ -76,7 +76,7 @@ public class SuperAdminControllerTest {
     public void testAddManager() throws Exception {
         Manager manager = new Manager();
         manager.setName("superadd");
-        manager.setWorkNumber("85245");
+        //manager.setWorkNumber("85245");
         manager.setDepartment("dev");
         String json = JSON.toJSONString(manager);
         mockMvc.perform(post("/super/add")
@@ -122,7 +122,7 @@ public class SuperAdminControllerTest {
     */
     @Test
     public void testUpdateManager() throws Exception {
-        Manager manager = managerService.findById("1");
+        Manager manager = managerService.findById("2");
         manager.setStatus(1);
         String json = JSON.toJSONString(manager);
         mockMvc.perform(post("/super/update")

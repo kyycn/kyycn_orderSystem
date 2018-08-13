@@ -1,12 +1,17 @@
 package com.hsbc.team4.ordersystem.users.controller;
 
+import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import com.hsbc.team4.ordersystem.users.domain.UserInfo;
 import com.hsbc.team4.ordersystem.users.service.IUserInfoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author : Kevin
@@ -22,16 +27,19 @@ public class UserInfoController {
 
     private final IUserInfoService iUserInfoService;
     private final ResponseResults responseResults;
+    private final BeanValidator beanValidator;
 
     /**
      * UserInfoController
-     * @param iUserInfoService
      * @param responseResults
+     * @param iUserInfoService
+     * @param beanValidator
      */
     @Autowired
-    public UserInfoController(ResponseResults responseResults, IUserInfoService iUserInfoService) {
+    public UserInfoController(ResponseResults responseResults, IUserInfoService iUserInfoService, BeanValidator beanValidator) {
         this.iUserInfoService = iUserInfoService;
         this.responseResults = responseResults;
+        this.beanValidator = beanValidator;
     }
 
     /**
@@ -43,6 +51,10 @@ public class UserInfoController {
     @ApiImplicitParam(name = "userInfo",value = "userInfo",dataType="UserInfo")
     @PutMapping("/")
     public ResponseResults updateUserInfo(@RequestBody UserInfo userInfo){
+        Map<String,String> errors=beanValidator.validateObject(userInfo);
+        if(!CollectionUtils.isEmpty(errors)){
+            return responseResults.responseByErrors("errors",errors);
+        }
         UserInfo userInfo1=iUserInfoService.addUserInfo(userInfo);
         if(userInfo!=null){
             return responseResults.responseBySuccess("ok",userInfo1);
@@ -59,7 +71,10 @@ public class UserInfoController {
     @ApiImplicitParam(name = "username",value = "username",dataType="String")
     @GetMapping("/{username}")
     public ResponseResults queryUserInfoUsername(@PathVariable String username){
-        return responseResults.responseBySuccess("ok",iUserInfoService.findByUsername(username));
+        if(!StringUtils.isEmpty(username)){
+            return responseResults.responseBySuccess("ok",iUserInfoService.findByUsername(username));
+        }
+        return responseResults.responseByErrorMessage(" username error,the username is not be empty");
     }
 
 }

@@ -54,6 +54,7 @@ public class RoleController {
     public ResponseResults saveRole(@RequestBody Role role){
         User user=global.getUserByToken();
         role.setId(uuidFactory.getUUID());
+        role.setRoleName("ROLE_"+role.getRoleName());
         role.setCreateUsername(user.getUsername());
         role.setUpdateUsername(user.getUsername());
         Map<String,String> map= beanValidator.validateObject(role);
@@ -100,7 +101,7 @@ public class RoleController {
     @ApiImplicitParam(name = "id",value = "id",dataType="String")
     @ValidateFiled(index = 0,notNull = true,message = "id is not be empty")
     @DeleteMapping()
-    public ResponseResults deleteRoleById( String  id){
+    public ResponseResults deleteRoleById( @RequestParam(name = "id") String  id){
         int row =iRoleService.updateStatusById(id,1);
         if(row>0){
             return responseResults.responseBySuccess("ok");
