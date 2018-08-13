@@ -1,9 +1,7 @@
 package com.hsbc.team4.ordersystem;
 
 import com.alibaba.fastjson.JSON;
-import com.hsbc.team4.ordersystem.products.Product;
 import com.hsbc.team4.ordersystem.products.ProductDto;
-import io.swagger.annotations.ApiOperation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -52,18 +51,6 @@ public class ProductControllerTest {
      * @Date: 2018/8/3
      */
     @Test
-
-    public void saveProduct(){
-        ProductDto productDto=new ProductDto();
-        productDto.setProductName("credit card purchase");
-        productDto.setProductPrice(3000);
-        productDto.setProductDescription("a good product");
-        productDto.setProductIcon("gold.jpg");
-        productDto.setProductType("week in search");
-        productDto.setId("210180605");
-        String json= JSON.toJSONString(productDto);
-        if(!"".equals(json)){
-
     public void saveProduct() {
         ProductDto productDto = new ProductDto();
         productDto.setId("20180802");
@@ -103,10 +90,6 @@ public class ProductControllerTest {
         String id="a09f32895d87437ea8324de090c5e49f1533706523174";
         try {
             mockMvc.perform(get("/product/productId/"+id)
-    public void query() {
-        String id = "20180802";
-        try {
-            mockMvc.perform(get("/product/query?id=" + id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
                     //.andExpect(status().isOk())   //判断接收到的状态是否是200
@@ -161,14 +144,6 @@ public class ProductControllerTest {
      */
     @Test
     public void updateProduct() {
-        ProductDto productDto=new ProductDto();
-        productDto.setId("a09f32895d87437ea8324de090c5e49f1533706523174");
-        productDto.setProductName("credit card purchase");
-        productDto.setProductPrice(3000);
-        productDto.setProductDescription("a good product");
-        productDto.setProductIcon("credit.jpg");
-        productDto.setProductType("month in search");
-        String json=JSON.toJSONString(productDto);
         ProductDto productDto = new ProductDto();
         productDto.setId("20180802");
         productDto.setProductName("平板");
@@ -199,9 +174,6 @@ public class ProductControllerTest {
     @Test
     public void deleteByProductId() {
         String id="a09f32895d87437ea8324de090c5e49f1533706523174";
-    public void deleteByUserId() {
-        String id = "20180802";
-
         try {
             mockMvc.perform(delete("/product/" + id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -270,5 +242,3 @@ public class ProductControllerTest {
         }
     }
 }
-
-// mapper

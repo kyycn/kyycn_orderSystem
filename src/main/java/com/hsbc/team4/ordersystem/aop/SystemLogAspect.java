@@ -1,9 +1,12 @@
 package com.hsbc.team4.ordersystem.aop;
 
+import com.hsbc.team4.ordersystem.aop.annotations.SysLog;
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
+import com.hsbc.team4.ordersystem.common.utils.Global;
 import com.hsbc.team4.ordersystem.common.utils.LoggerUtil;
 import com.hsbc.team4.ordersystem.log.ILogService;
 import com.hsbc.team4.ordersystem.log.Log;
+import com.hsbc.team4.ordersystem.users.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,6 +14,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -33,12 +37,14 @@ public class SystemLogAspect {
     private final ILogService iLogService;
     private final LoggerUtil loggerUtil;
     private final UUIDFactory uuidFactory;
+    private final Global global;
 
     @Autowired
-    public SystemLogAspect(ILogService iLogService, LoggerUtil loggerUtil, UUIDFactory uuidFactory) {
+    public SystemLogAspect(ILogService iLogService, LoggerUtil loggerUtil, UUIDFactory uuidFactory, Global global) {
         this.iLogService = iLogService;
         this.loggerUtil = loggerUtil;
         this.uuidFactory = uuidFactory;
+        this.global = global;
     }
 
     @Pointcut("execution(* com.hsbc.team4.ordersystem..*Controller..*(..))")
@@ -62,22 +68,16 @@ public class SystemLogAspect {
                     params.append(";");
                 }
             }
-            try {
-                log.info("=====start=====");
-                log.info("method :" + joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
-                //log.info("method  description :" + getControllerMethodDescription(joinPoint));
-                log.info("operator :" + logger.getOperateName());
-                log.info("operate IP:" + logger.getOperateIP());
-                log.info("operate params:" + params);
-                logger.setId(uuidFactory.getUUID());
-                //logger.setOperationDescribe(getControllerMethodDescription(joinPoint));
-                this.iLogService.insertLog(logger);
-                System.out.println("=====end=====");
-            } catch (Exception var7) {
-                log.error("==exception==");
-                log.error("exception message:{}", var7.getMessage());
-            }
-
+            log.info("=====request start=====");
+            log.info("method :" + joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
+            //log.info("method  description :" + getControllerMethodDescription(joinPoint));
+            log.info("operator :" + logger.getOperateName());
+            log.info("operate IP:" + logger.getOperateIP());
+            log.info("operate params:" + params);
+            logger.setId(uuidFactory.getUUID());
+            //logger.setOperationDescribe(getControllerMethodDescription(joinPoint));
+            this.iLogService.insertLog(logger);
+            System.out.println("=====end=====");
         }
     }
 

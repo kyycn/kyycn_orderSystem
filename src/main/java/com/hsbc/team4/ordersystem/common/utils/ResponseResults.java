@@ -72,7 +72,7 @@ public class ResponseResults<T> implements Serializable {
         return this.status == ResponseCode.SUCCESS.getCode();
     }
 
-    /**
+    /**responseBySuccess
      * @param <T>
      * @return ResponseResults
      */
@@ -91,20 +91,22 @@ public class ResponseResults<T> implements Serializable {
     }
 
     /**
+     *  responseBySuccess
+     * @param msg
+     * @param <T>
+     * @return
+     */
+    public  <T> ResponseResults<T> responseBySuccess(String msg){
+        return new ResponseResults<>(ResponseCode.SUCCESS.getCode(), msg);
+    }
+
+    /**
      * @param result
      * @param <T>
      * @return ResponseResults
      */
     public  <T> ResponseResults<T> responseBySuccess(T result){
         return new ResponseResults<T>(ResponseCode.SUCCESS.getCode(),result);
-    }
-    /**
-     * @param result
-     * @param <T>
-     * @return ResponseResults
-     */
-    public  <T> ResponseResults<T> responseByErrors(T result){
-        return new ResponseResults<T>(ResponseCode.ERROR.getCode(),result);
     }
 
     /**
@@ -115,10 +117,6 @@ public class ResponseResults<T> implements Serializable {
      */
     public  <T> ResponseResults<T> responseBySuccess(String msg, T data){
         return new ResponseResults<>(ResponseCode.SUCCESS.getCode(), msg, data);
-    }
-
-    public  <T> ResponseResults<T> responseBySuccess(String msg){
-        return new ResponseResults<>(ResponseCode.SUCCESS.getCode(), msg);
     }
 
     /**
@@ -136,6 +134,25 @@ public class ResponseResults<T> implements Serializable {
      */
     public  <T> ResponseResults<T> responseByErrorMessage(String errorMessage){
         return new ResponseResults<T>(ResponseCode.ERROR.getCode(),errorMessage);
+    }
+
+
+    /**
+     * @param result
+     * @param <T>
+     * @return ResponseResults
+     */
+    public  <T> ResponseResults<T> responseByErrors(T result){
+        return new ResponseResults<T>(ResponseCode.ERROR.getCode(),result);
+    }
+    /**
+     *  responseByErrors
+     * @param result
+     * @param <T>
+     * @return
+     */
+    public  <T> ResponseResults<T> responseByErrors(String msg,T result){
+        return new ResponseResults<T>(ResponseCode.ERROR.getCode(),msg,result);
     }
 
     /**

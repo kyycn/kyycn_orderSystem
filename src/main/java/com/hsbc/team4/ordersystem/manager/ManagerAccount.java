@@ -25,7 +25,6 @@ public class ManagerAccount extends BaseEntity{
      * account id
      */
     @Id
-
     private String id;
 
     /**
@@ -40,9 +39,4 @@ public class ManagerAccount extends BaseEntity{
     @NotBlank(message = "The password can not be empty")
     private String password;
 
-    /**
-     * status
-     */
-    @NotNull(message = "The status can not be null")
-    private int status;
 }

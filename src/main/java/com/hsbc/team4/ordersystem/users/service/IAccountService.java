@@ -39,4 +39,5 @@ public interface IAccountService {
      * @return int
      */
     int updateStatusById(String id, int status);
+
 }

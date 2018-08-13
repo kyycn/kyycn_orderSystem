@@ -85,7 +85,7 @@ public class SenderController {
     @ApiOperation(value = "getSenderList",notes = "getSenderList",httpMethod = "GET")
     @GetMapping("/{status}")
     public ResponseResults getSenderList(@RequestParam(value = "current",defaultValue = "0") int current,
-                                       @RequestParam(value = "current",defaultValue = "10") int pageSize,
+                                       @RequestParam(value = "pageSize",defaultValue = "10") int pageSize,
                                        @PathVariable int status){
         return responseResults.responseBySuccess("ok",iSenderService.findByStatus(current,pageSize,status));
     }

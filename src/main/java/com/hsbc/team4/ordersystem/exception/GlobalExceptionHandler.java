@@ -1,5 +1,6 @@
 package com.hsbc.team4.ordersystem.exception;
 
+import com.hsbc.team4.ordersystem.common.enums.ResponseCode;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,30 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * userNotLoginHandle
+     * @return
+     */
+    @ExceptionHandler(UserNotLoginException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ResponseResults userNotLoginHandle(UserNotLoginException e){
+        Map<String,Object> map=new HashMap<>();
+        map.put("code", ResponseCode.NOTLOGIN.getCode());
+        map.put("message",e.getMessage()+",please sign in before operate");
+        return responseResults.responseByErrors(e.getMessage(),map);
+    }
+
+    @ExceptionHandler(ValidateFiledException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ResponseResults validateFiledHandle(ValidateFiledException e){
+        Map<String,Object> map=new HashMap<>();
+        map.put("code", ResponseCode.VALIDATEFAILURE.getCode());
+        map.put("message",e.getMessage());
+        return responseResults.responseByErrors(e.getMessage(),map);
+    }
+
+    /**
      * 500 - Bad Request
      * @ExceptionHandler
      */
@@ -81,6 +106,7 @@ public class GlobalExceptionHandler {
     public ResponseResults notFound(HttpServletRequest request, HttpServletResponse response, Exception ex, Model model) {
         return responseResults.responseByErrorMessage("please check you request url");
     }
+
 
 
 }
