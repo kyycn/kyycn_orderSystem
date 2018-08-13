@@ -5,9 +5,9 @@ import com.hsbc.team4.ordersystem.aop.annotations.ValidateFiled;
 import com.hsbc.team4.ordersystem.aop.annotations.ValidateGroup;
 import com.hsbc.team4.ordersystem.exception.ValidateFiledException;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -38,8 +38,8 @@ public class ValidateAspect {
      * @throws Throwable
      */
     @SuppressWarnings({ "finally", "rawtypes" })
-    @Before("execution(* com.hsbc.team4.ordersystem..*Controller..*(..))")
-    public void validateGroupAround(JoinPoint joinPoint) throws Throwable  {
+    @Around("execution(* com.hsbc.team4.ordersystem..*Controller..*(..))")
+    public void validateGroupAround(ProceedingJoinPoint joinPoint) throws Throwable  {
         Object[] args= joinPoint.getArgs();
         Object target= joinPoint.getTarget();
         String methodName= joinPoint.getSignature().getName();
@@ -52,9 +52,11 @@ public class ValidateAspect {
             }
         }else {
             ValidateFiled validateFiled = (ValidateFiled)getAnnotationByMethod(method ,ValidateFiled.class );
-            Map<String,Object> map= validateFiled(Lists.newArrayList(validateFiled) , args);
-            if(!CollectionUtils.isEmpty(map)){
-                throw new ValidateFiledException("The params validate failure,please check you params",map);
+            if(validateFiled!=null){
+                Map<String,Object> map= validateFiled(Lists.newArrayList(validateFiled) , args);
+                if(!CollectionUtils.isEmpty(map)){
+                    throw new ValidateFiledException("The params validate failure,please check you params",map);
+                }
             }
         }
 

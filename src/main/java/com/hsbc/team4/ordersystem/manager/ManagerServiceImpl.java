@@ -1,7 +1,12 @@
 package com.hsbc.team4.ordersystem.manager;
 
+import com.hsbc.team4.ordersystem.common.base.BaseEntity;
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
+import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
+import com.hsbc.team4.ordersystem.common.utils.PageableTools;
 import com.hsbc.team4.ordersystem.common.utils.ValidatorTools;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -19,11 +24,15 @@ public class ManagerServiceImpl implements IManagerService{
 
     private final IManagerRepository iManagerRepository;
     private final IManagerAccountService managerAccountService;
+    private final UUIDFactory uuidFactory;
+    private final BeanValidator beanValidator;
 
     @Autowired
-    public ManagerServiceImpl(IManagerRepository iManagerRepository, IManagerAccountService managerAccountService) {
+    public ManagerServiceImpl(IManagerRepository iManagerRepository, IManagerAccountService managerAccountService, UUIDFactory uuidFactory, BeanValidator beanValidator) {
         this.iManagerRepository = iManagerRepository;
         this.managerAccountService = managerAccountService;
+        this.uuidFactory = uuidFactory;
+        this.beanValidator = beanValidator;
     }
 
 
@@ -37,17 +46,20 @@ public class ManagerServiceImpl implements IManagerService{
 
     @Override
     public Page<Manager> findByStatus(int current, int pageSize, int status) {
-        return null;
+        return iManagerRepository.findByStatus(status, PageableTools.basicPage(current,pageSize));
     }
 
     @Override
     public Manager addEntity(Manager manager) {
+        if (!beanValidator.validateObject(manager).isEmpty()){
+            return null;
+        }
         if (iManagerRepository.findByWorkNumber(manager.getWorkNumber())==null){
-            manager.setId(new UUIDFactory().getUUID());
+            manager.setId(uuidFactory.getUUID());
             manager.setStatus(1);
             manager.setCreateTime(System.currentTimeMillis());
             ManagerAccount managerAccount = new ManagerAccount();
-            managerAccount.setId(new UUIDFactory().getUUID());
+            managerAccount.setId(uuidFactory.getUUID());
             managerAccount.setName(manager.getWorkNumber());
             managerAccount.setPassword(manager.getWorkNumber());
             managerAccount.setStatus(1);
@@ -64,7 +76,7 @@ public class ManagerServiceImpl implements IManagerService{
 
     @Override
     public Manager updateEntity(Manager manager) {
-        if(manager.getId()!=null&&!"".equals(manager.getId())){
+        if(StringUtils.isNotBlank(manager.getId())){
             return iManagerRepository.save(manager);
         }
         return null;
@@ -72,6 +84,9 @@ public class ManagerServiceImpl implements IManagerService{
 
     @Override
     public Manager findById(String id) {
-        return iManagerRepository.findByEntityId(id);
+        if (StringUtils.isNotBlank(id)){
+            return iManagerRepository.findByEntityId(id);
+        }
+        return null;
     }
 }

@@ -23,15 +23,18 @@ import java.util.Map;
 @Api(value = "manager")
 public class ManagerController {
 
-    private IManagerService managerService;
-    private IManagerAccountService accountService;
+    private final IManagerService managerService;
+    private final IManagerAccountService accountService;
     private final ResponseResults responseResults;
+    private final BeanValidator beanValidator;
+
 
     @Autowired
-    public ManagerController(IManagerService managerService, IManagerAccountService accountService, ResponseResults responseResults) {
+    public ManagerController(IManagerService managerService, IManagerAccountService accountService, ResponseResults responseResults, BeanValidator beanValidator) {
         this.managerService = managerService;
         this.accountService = accountService;
         this.responseResults = responseResults;
+        this.beanValidator = beanValidator;
     }
 
 
@@ -44,10 +47,11 @@ public class ManagerController {
     @ApiOperation(value = "checkLogin",notes = "check manager login",httpMethod = "POST")
     @PostMapping("/login")
     public ResponseResults checkLogin(@ApiParam(required = true,name = "manager",value = "manager name and password")@RequestBody ManagerAccount manager){
-        Map<String,String> validateMap = new BeanValidator().validateObject(manager);
+        Map<String,String> validateMap = beanValidator.validateObject(manager);
         if (validateMap.isEmpty()){
             ManagerAccount managerAccount = accountService.findByName(manager.getName());
             if(managerAccount !=null&&manager.getPassword().equals(managerAccount.getPassword())){
+
                 return responseResults.responseBySuccess("pass",managerService.findByWordNumber(managerAccount.getName()));
             }
             return responseResults.responseByErrorMessage("error");
@@ -58,10 +62,15 @@ public class ManagerController {
     @ApiOperation(value = "managerInfoUpdate",notes = "update own message",httpMethod = "POST")
     @PostMapping("/update")
     public ResponseResults managerInfoUpdate(@ApiParam(required = true,name = "manager",value = "update manager message")@RequestBody Manager manager){
-        Manager reManager = managerService.updateEntity(manager);
-        if (reManager==null){
-            return responseResults.responseByErrorMessage("error");
+
+        if (beanValidator.validateObject(manager).isEmpty()){
+            Manager reManager = managerService.updateEntity(manager);
+            if (reManager!=null){
+                return responseResults.responseBySuccess("success", reManager);
+            }
+            return responseResults.responseByErrorMessage("update error");
         }
-        return responseResults.responseBySuccess("success", reManager);
+        return responseResults.responseByErrorMessage("information error");
+
     }
 }
