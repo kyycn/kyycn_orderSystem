@@ -8,10 +8,9 @@ import com.hsbc.team4.ordersystem.users.domain.User;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +50,9 @@ public class OrderController {
     * @Date: 2018/8/3
     */
     @ApiOperation(value = "addOrder",notes = "the param is a orderDto list",httpMethod = "POST",response = ResponseResults.class)
-    @ApiImplicitParam(name = "orderDtoList",value = "orderDtoList",dataType="ArrayList<OrderDto>")
+//    @ApiImplicitParam(name = "orderDtoList",value = "orderDtoList",dataType="ArrayList<OrderDto>")
     @PostMapping("/")
-    @HasLogin(message = "you must be login")
+//    @HasLogin(message = "you must be login")
     public ResponseResults addOrder(@RequestBody ArrayList<OrderDto> orderDtoList){
         User user = global.getUserByToken();
         if (user==null){
@@ -88,7 +87,7 @@ public class OrderController {
      */
     @ApiOperation(value = "updateOrder",notes = "the param is a orderDto",httpMethod = "PUT",response = ResponseResults.class)
     @PutMapping("/")
-    @HasLogin(message = "you must be login")
+//    @HasLogin(message = "you must be login")
     public  ResponseResults updateOrder(@RequestBody OrderDto orderDto){
         User user = global.getUserByToken();
         if (user==null){
