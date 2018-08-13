@@ -101,7 +101,7 @@ public class RoleController {
     @ApiImplicitParam(name = "id",value = "id",dataType="String")
     @ValidateFiled(index = 0,notNull = true,message = "id is not be empty")
     @DeleteMapping()
-    public ResponseResults deleteRoleById( String  id){
+    public ResponseResults deleteRoleById( @RequestParam(name = "id") String  id){
         int row =iRoleService.updateStatusById(id,1);
         if(row>0){
             return responseResults.responseBySuccess("ok");
