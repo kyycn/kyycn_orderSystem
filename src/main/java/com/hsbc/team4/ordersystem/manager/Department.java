@@ -9,38 +9,31 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 /**
- * @author:Cady
+ * @author: Cady
  * @version:
  * @Project: ordersystem
  * @Package: com.hsbc.team4.ordersystem.manager
  * @Description:
- * @Date date: 2018-08-02
+ * @Date date: 2018-08-13
  */
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Manager extends BaseEntity {
+public class Department extends BaseEntity {
     /**
-     * manager id
+     * department id
      */
     @Id
     private String id;
 
     /**
-     * manager name connect to
+     * department's name
      */
-    @NotBlank(message = "The username can not be empty")
+    @NotBlank(message = "department's name can not be blank")
     private String name;
 
     /**
-     * manager workNumber
+     * the order of salary to create workNumber
      */
-    private String workNumber;
-
-    /**
-     * manager department
-     */
-    @NotBlank(message = "The department can not be empty")
-    private String department;
-
+    private Integer orderNum;
 }
