@@ -1,9 +1,12 @@
 package com.hsbc.team4.ordersystem.aop;
 
+import com.hsbc.team4.ordersystem.aop.annotations.HasLogin;
 import com.hsbc.team4.ordersystem.aop.annotations.SysLog;
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.Global;
 import com.hsbc.team4.ordersystem.common.utils.LoggerUtil;
+import com.hsbc.team4.ordersystem.common.utils.ReflectUtils;
+import com.hsbc.team4.ordersystem.exception.UserNotLoginException;
 import com.hsbc.team4.ordersystem.log.ILogService;
 import com.hsbc.team4.ordersystem.log.Log;
 import com.hsbc.team4.ordersystem.users.domain.User;
@@ -70,12 +73,12 @@ public class SystemLogAspect {
             }
             log.info("=====request start=====");
             log.info("method :" + joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
-            //log.info("method  description :" + getControllerMethodDescription(joinPoint));
+            log.info("method  description :" + getControllerMethodDescription(joinPoint));
             log.info("operator :" + logger.getOperateName());
             log.info("operate IP:" + logger.getOperateIP());
             log.info("operate params:" + params);
             logger.setId(uuidFactory.getUUID());
-            //logger.setOperationDescribe(getControllerMethodDescription(joinPoint));
+            logger.setOperationDescribe(getControllerMethodDescription(joinPoint));
             this.iLogService.insertLog(logger);
             System.out.println("=====end=====");
         }
@@ -87,23 +90,15 @@ public class SystemLogAspect {
      * @return
      * @throws Exception
      */
-    private static String getControllerMethodDescription(JoinPoint joinPoint) throws Exception {
-        String targetName = joinPoint.getTarget().getClass().getName();
-        String methodName = joinPoint.getSignature().getName();
-        Object[] arguments = joinPoint.getArgs();
-        Class targetClass = Class.forName(targetName);
-        Method[] methods = targetClass.getMethods();
-        String description = "";
-        for (Method method : methods) {
-            if (method.getName().equals(methodName)) {
-                Class[] clazzs = method.getParameterTypes();
-                if (clazzs.length == arguments.length) {
-                    description = (method.getAnnotation(SysLog.class)).value();
-                    break;
-                }
-            }
+    private static String getControllerMethodDescription(JoinPoint joinPoint) {
+        String description="";
+        Object target=joinPoint.getTarget();
+        String methodName=joinPoint.getSignature().getName();
+        Method method= ReflectUtils.getMethodByClassAndName(target.getClass(), methodName);
+        SysLog sysLog = (SysLog)ReflectUtils.getAnnotationByMethod(method ,SysLog.class );
+        if(sysLog!=null) {
+            description=sysLog.value();
         }
-
         return description;
     }
 }

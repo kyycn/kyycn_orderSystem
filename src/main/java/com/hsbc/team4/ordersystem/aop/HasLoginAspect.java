@@ -2,6 +2,7 @@ package com.hsbc.team4.ordersystem.aop;
 
 import com.hsbc.team4.ordersystem.aop.annotations.HasLogin;
 import com.hsbc.team4.ordersystem.common.utils.Global;
+import com.hsbc.team4.ordersystem.common.utils.ReflectUtils;
 import com.hsbc.team4.ordersystem.exception.UserNotLoginException;
 import com.hsbc.team4.ordersystem.users.domain.User;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
@@ -44,8 +44,8 @@ public class HasLoginAspect {
     public void handleControllerMethod(JoinPoint joinPoint) throws Throwable {
         Object target=joinPoint.getTarget();
         String methodName=joinPoint.getSignature().getName();
-        Method method=getMethodByClassAndName(target.getClass(), methodName);
-        HasLogin hasLogin = (HasLogin)getAnnotationByMethod(method ,HasLogin.class );
+        Method method= ReflectUtils.getMethodByClassAndName(target.getClass(), methodName);
+        HasLogin hasLogin = (HasLogin)ReflectUtils.getAnnotationByMethod(method ,HasLogin.class );
         if(hasLogin!=null) {
             User user = global.getUserByToken();
             if (StringUtils.isEmpty(user)) {
@@ -54,35 +54,4 @@ public class HasLoginAspect {
         }
     }
 
-    /**
-     * getMethodByClassAndName
-     * @param c
-     * @param methodName
-     * @return
-     */
-    public Method getMethodByClassAndName(Class c , String methodName){
-        Method[] methods = c.getDeclaredMethods();
-        for (Method method : methods) {
-            if(method.getName().equals(methodName)){
-                return method ;
-            }
-        }
-        return null;
-    }
-
-    /**
-     *  getAnnotationByMethod
-     * @param method
-     * @param annoClass
-     * @return
-     */
-    public Annotation getAnnotationByMethod(Method method , Class annoClass){
-        Annotation all[] = method.getAnnotations();
-        for (Annotation annotation : all) {
-            if (annotation.annotationType() == annoClass) {
-                return annotation;
-            }
-        }
-        return null;
-    }
 }
