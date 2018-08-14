@@ -34,11 +34,10 @@ public class Product extends BaseEntity{
     private String productIcon;
     @NotBlank(message = "The productType can not be empty")
     private String productType;
-    private String condidtion;
-    @NotBlank(message = "The standar can not be empty")
-    private String standar;
-    @NotBlank(message = "The Type can not be empty")
-    private String Type;
+    @NotBlank(message = "The condition can not be empty")
+    private String condition;
+    @NotBlank(message = "The standard can not be empty")
+    private String standard;
     /**
      * adapt to product
      * @param productDto

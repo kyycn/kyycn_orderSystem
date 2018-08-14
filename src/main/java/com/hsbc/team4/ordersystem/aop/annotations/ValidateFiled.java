@@ -18,37 +18,37 @@ public @interface ValidateFiled {
      * index
      * @return int
      */
-    public int index() default -1 ;
+    int index() default -1 ;
 
     /**
      * regStr
      */
-    public String regStr() default "";
+    String regStr() default "";
     /**
      * notNull
      */
-    public boolean notNull() default false;
+    boolean notNull() default false;
 
     /**
      * maxLen
      */
-    public int maxLen() default -1 ;
+    int maxLen() default -1 ;
 
     /**
      * minLen
      */
-    public int minLen() default -1 ;
+    int minLen() default -1 ;
 
     /**
      * maxVal
      */
-    public int maxVal() default -1 ;
+    int maxVal() default -1 ;
 
     /**
      *minVal
      */
-    public int minVal() default -1 ;
+    int minVal() default -1 ;
 
-    public String message() default "";
+    String message() default "";
 
 }
