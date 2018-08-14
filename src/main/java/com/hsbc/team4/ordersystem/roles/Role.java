@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -24,6 +25,7 @@ public class Role extends BaseEntity{
     @NotBlank(message = " the roleName can not be Blank ")
     private String id;
     @NotBlank(message = " the roleName can not be Empty ")
+    @Min(value =2)
     private String roleName;
 
 }

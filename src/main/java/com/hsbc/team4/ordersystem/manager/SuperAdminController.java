@@ -40,6 +40,12 @@ public class SuperAdminController {
         this.beanValidator = beanValidator;
     }
 
+    /**
+     * @Description super Admin login
+     * @Date: 14:58 2018-08-13
+     * @Param account
+     * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
+     */
     @ApiOperation(value = "superLogin",notes = "root account and password",httpMethod = "POST")
     @PostMapping("/login")
     public ResponseResults superLogin(@ApiParam(required = true,name = "account",value = "managerAccount name and password")@RequestBody ManagerAccount account){
@@ -53,6 +59,12 @@ public class SuperAdminController {
         return responseResults.responseByErrorMessage("error");
     }
 
+    /**
+     * @Description add manager
+     * @Date: 14:59 2018-08-13
+     * @Param manager
+     * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
+     */
     @ApiOperation(value = "addManager",notes = "add a manager by superAdmin",httpMethod = "POST")
     @PostMapping("/add")
     public ResponseResults addManager(@ApiParam(required = true,name = "manager",value = "manager project")@RequestBody Manager manager){
@@ -66,7 +78,14 @@ public class SuperAdminController {
         return responseResults.responseBySuccess("add success", reManager);
     }
 
-    @ApiOperation(value = "disableManager",notes = "set a manager's status to 0",httpMethod = "POST")
+    /**
+     * @Description updateManagerByStatus
+     * @Date: 14:59 2018-08-13
+     * @Param id
+     * @Param status
+     * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
+     */
+    @ApiOperation(value = "updateManagerByStatus",notes = "set a manager's status to 0",httpMethod = "POST")
     @RequestMapping("/delete/{id}/{status}")
     public ResponseResults updateManagerByStatus(@ApiParam(required = true,name = "id",value = "manager id")@PathVariable String id,
                                                  @ApiParam(required = true,name = "id",value = "manager id")@PathVariable Integer status){
@@ -81,6 +100,12 @@ public class SuperAdminController {
         return responseResults.responseByErrorMessage("id can not be blank");
     }
 
+    /**
+     * @Description getManager
+     * @Date: 14:59 2018-08-13
+     * @Param id
+     * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
+     */
     @ApiOperation(value = "getManager",notes = "get a manager",httpMethod = "GET")
     @GetMapping("/manager/{id}")
     public ResponseResults getManager(@ApiParam(required = true,name = "id",value = "manager id")@PathVariable String id){
@@ -95,6 +120,12 @@ public class SuperAdminController {
         return responseResults.responseByErrorMessage("id can not be brank");
     }
 
+    /**
+     * @Description updateManager
+     * @Date: 15:00 2018-08-13
+     * @Param manager
+     * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
+     */
     @ApiOperation(value = "updateManager",notes = "update manager",httpMethod = "POST")
     @PostMapping("/update")
     public ResponseResults updateManager(@ApiParam(required = true, name = "manager",value = "manager message")@RequestBody Manager manager){
@@ -109,6 +140,12 @@ public class SuperAdminController {
         return responseResults.responseByError();
     }
 
+    /**
+     * @Description resetPassword
+     * @Date: 15:00 2018-08-13
+     * @Param pwd
+     * @return com.hsbc.team4.ordersystem.common.utils.ResponseResults
+     */
     @ApiOperation(value = "resetPassword",notes = "reset root's password",httpMethod = "POST")
     @PostMapping("/reset")
     public ResponseResults resetPassword(@ApiParam(required = true, name = "pwd",value = "the old password and the new password")@RequestBody Map<String, String> pwd){
