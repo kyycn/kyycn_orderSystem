@@ -70,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+
     /**
      * 请求授权
      * @param httpSecurity
@@ -81,8 +82,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .headers().frameOptions().disable()
+                .and()
                 .authorizeRequests()
-               .antMatchers("/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
