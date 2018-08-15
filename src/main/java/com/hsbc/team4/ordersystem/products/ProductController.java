@@ -135,7 +135,7 @@ public class ProductController {
     @ApiOperation(value = "status", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
     @GetMapping("/{status}")
     public ResponseResults getProductList(@RequestParam(value = "current", defaultValue = "0") int current,
-                                          @RequestParam(value = "current", defaultValue = "10") int pageSize,
+                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                           @PathVariable int status) {
         if (StringUtils.isEmpty(status)) {
             return responseResults.responseByErrorMessage("the status is empty");
