@@ -13,5 +13,5 @@ import java.util.List;
  * @Date date: 2018-08-09
  */
 public interface IDictionaryService extends IBaseService<Dictionary> {
-    List<Dictionary> findByType(String type);
+    List<Dictionary> findByType(int current, String type);
 }

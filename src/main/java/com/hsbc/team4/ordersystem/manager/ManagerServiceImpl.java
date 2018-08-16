@@ -71,13 +71,13 @@ public class ManagerServiceImpl implements IManagerService{
             departmentService.updateEntity(department);
             manager.setId(uuidFactory.getUUID());
             manager.setWorkNumber(workNumber);
-            manager.setStatus(1);
+            manager.setStatus(0);
             manager.setCreateTime(System.currentTimeMillis());
             ManagerAccount managerAccount = new ManagerAccount();
             managerAccount.setId(uuidFactory.getUUID());
             managerAccount.setName(manager.getWorkNumber());
             managerAccount.setPassword(manager.getWorkNumber());
-            managerAccount.setStatus(1);
+            managerAccount.setStatus(0);
             managerAccountService.addEntity(managerAccount);
             return iManagerRepository.save(manager);
         }

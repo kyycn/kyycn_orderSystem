@@ -30,7 +30,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
 
     @Override
     public Department addEntity(Department department) {
-        department.setStatus(1);
+        department.setStatus(0);
         return departmentRepository.save(department);
     }
 
