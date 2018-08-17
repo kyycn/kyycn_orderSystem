@@ -1,5 +1,6 @@
 package com.hsbc.team4.ordersystem.products;
 
+import com.hsbc.team4.ordersystem.aop.annotations.SysLog;
 import com.hsbc.team4.ordersystem.common.adapt.BeanAdapter;
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
@@ -7,6 +8,7 @@ import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +46,7 @@ public class ProductController {
      * @param productDto
      * @return product
      */
+    @SysLog("保存产品")
     @ApiOperation(value = "save product", httpMethod = "POST", notes = "save product", response = ResponseResults.class)
     @PostMapping("/save")
     public ResponseResults saveProduct(@ApiParam(required = true,name = "productDto",value = "productDto project") @RequestBody ProductDto productDto){

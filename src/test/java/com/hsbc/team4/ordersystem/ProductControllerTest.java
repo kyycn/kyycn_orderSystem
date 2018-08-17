@@ -58,8 +58,8 @@ public class ProductControllerTest {
         productDto.setProductDescription("汇丰银行国内首发汇丰生活信用卡，其包含一张人民币银联白金卡和一张美元MasterCard白金卡\"");
         productDto.setProductIcon("life-card.jpg");
         productDto.setProductPrice(300);
-        productDto.setCondidtion("主卡申请人需年满18周岁，境内居民申请需月薪达人民币4,000元或以上，境外居民申请需月薪达人民币10,000元或以上。附属卡申请人须年满16周岁。 ");
-        productDto.setStandar("汇丰生活信用卡主卡年费人民币300元，内含多项专属权益。首年激活卡片后免收首年年费，刷卡满6次可免次年年费。附属卡免收年费。");
+        productDto.setProductCondition("主卡申请人需年满18周岁，境内居民申请需月薪达人民币4,000元或以上，境外居民申请需月薪达人民币10,000元或以上。附属卡申请人须年满16周岁。 ");
+        productDto.setStandard("汇丰生活信用卡主卡年费人民币300元，内含多项专属权益。首年激活卡片后免收首年年费，刷卡满6次可免次年年费。附属卡免收年费。");
         String json = JSON.toJSONString(productDto);
         if (!"".equals(json)) {
             try {
