@@ -66,7 +66,7 @@ public class DictionaryServiceImplTest {
         Dictionary dictionary = new Dictionary();
         dictionary.setType("orderStatus");
         dictionary.setContent("payed");
-        dictionary.setDescription("ÒÑÖ§¸¶");
+        dictionary.setDescription("ï¿½ï¿½Ö§ï¿½ï¿½");
         dictionaryService.addEntity(dictionary);
     }
 
