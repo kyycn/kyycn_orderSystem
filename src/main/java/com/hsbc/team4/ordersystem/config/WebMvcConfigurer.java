@@ -7,6 +7,7 @@ import com.hsbc.team4.ordersystem.common.adapt.BeanAdapter;
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.LoggerUtil;
+import com.hsbc.team4.ordersystem.common.utils.RedisUtils;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -17,6 +18,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+
 import javax.servlet.MultipartConfigElement;
 import java.nio.charset.Charset;
 import java.util.ArrayList;

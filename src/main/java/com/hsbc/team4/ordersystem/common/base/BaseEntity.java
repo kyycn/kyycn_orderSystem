@@ -1,6 +1,8 @@
 package com.hsbc.team4.ordersystem.common.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
@@ -14,6 +16,7 @@ import javax.persistence.MappedSuperclass;
  */
 @Data
 @MappedSuperclass
+@JsonIgnoreProperties({"createUsername","createTime","updateUsername","updateTime"})
 public class BaseEntity {
     /**
      * create ID
