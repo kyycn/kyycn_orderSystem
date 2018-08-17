@@ -35,7 +35,7 @@ public class DepartmentController {
     @GetMapping("/get/{page}")
     public ResponseResults getAllDepartments(@PathVariable Integer page){
         if (page>=0){
-            Page<Department> departmentPage = departmentService.findByStatus(page,20,1);
+            Page<Department> departmentPage = departmentService.findByStatus(page,20,0);
             if (departmentPage!=null){
                 return responseResults.responseBySuccess("success", departmentPage.getContent());
             }

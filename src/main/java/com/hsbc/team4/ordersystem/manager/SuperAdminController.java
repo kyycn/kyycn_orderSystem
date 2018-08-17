@@ -125,7 +125,7 @@ public class SuperAdminController {
     @GetMapping("/allManager/{page}")
     public ResponseResults getAllManager(@PathVariable Integer page){
         if (page>=0){
-            Page<Manager> managerPage = managerService.findByStatus(page,10,1);
+            Page<Manager> managerPage = managerService.findByStatus(page,10,0);
             if (managerPage!=null){
                 return responseResults.responseBySuccess("success", managerPage.getContent());
             }
