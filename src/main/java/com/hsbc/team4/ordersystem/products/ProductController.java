@@ -45,6 +45,26 @@ public class ProductController {
     }
 
     /**
+     * getProductList
+     *
+     * @param page
+     * @param pageSize
+     * @return product
+     */
+    @ApiOperation(value = "status", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
+    @GetMapping("get/{page}")
+    public ResponseResults getProductList(@RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                          @PathVariable int page) {
+        if (page<0) {
+            return responseResults.responseByErrorMessage("");
+        }
+        Page<Product> products = productService.findByStatus(page, pageSize, 0);
+        if (products != null) {
+            return responseResults.responseBySuccess("query success!", products);
+        }
+        return responseResults.responseByErrorMessage("get productList is failed!");
+    }
+    /**
      * saveProduct
      *
      * @param productDto
@@ -124,49 +144,25 @@ public class ProductController {
         return responseResults.responseByErrorMessage("failure query,please checkout your id!");
     }
 
-    /**
-     * getProductList
-     *
-     * @param current
-     * @param pageSize
-     * @param status
-     * @return product
-     */
-    @ApiOperation(value = "status", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
-    @GetMapping("/{status}")
-    public ResponseResults getProductList(@RequestParam(value = "current", defaultValue = "0") int current,
-                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                          @PathVariable int status) {
-        if (StringUtils.isEmpty(status)) {
-            return responseResults.responseByErrorMessage("the status is empty");
-        }
-        Page<Product> products = productService.findByStatus(current, pageSize, status);
-        if (products != null) {
-            return responseResults.responseBySuccess("query success!", products);
-        }
-        return responseResults.responseByErrorMessage("get productList is failed!");
-    }
 
     /**
      * queryByProductType
      *
-     * @param current
+     * @param page
      * @param pageSize
-     * @param status
      * @param productType
      * @return product
      */
     @ApiOperation(value = "get by productType", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
-    @GetMapping("/queryByProductType/{status}/{productType}")
-    public ResponseResults queryByProductType(@RequestParam(value = "current", defaultValue = "0") int current,
-                                              @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
-                                              @PathVariable int status, @PathVariable String productType) {
-        if (StringUtils.isEmpty(status) && StringUtils.isEmpty(productType)) {
+    @GetMapping("/queryByProductType/{productType}/{page}")
+    public ResponseResults queryByProductType(@RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                              @PathVariable int page, @PathVariable String productType) {
+        if (StringUtils.isEmpty(page) && StringUtils.isEmpty(productType)) {
             return responseResults.responseByErrorMessage("the status is empty");
         }
-        Page<Product> products = productService.findByProductType(current, pageSize, status, productType);
+        Page<Product> products = productService.findByProductType(page, pageSize, 0, productType);
         if (products != null) {
-            return responseResults.responseBySuccess("ok", products);
+            return responseResults.responseBySuccess("query success", products);
         }
         return responseResults.responseByErrorMessage("query failed,please try it again!");
     }
