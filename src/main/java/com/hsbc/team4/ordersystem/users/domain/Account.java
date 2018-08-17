@@ -34,6 +34,6 @@ public class Account {
     @NotNull(message = "The freezeBalance can not be null")
     private BigDecimal freezeBalance;
     @NotNull(message = "The status can not be null")
-    private Integer status;
+    private Integer status=0;
 
 }

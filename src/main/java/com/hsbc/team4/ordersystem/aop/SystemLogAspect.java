@@ -1,15 +1,12 @@
 package com.hsbc.team4.ordersystem.aop;
 
-import com.hsbc.team4.ordersystem.aop.annotations.HasLogin;
 import com.hsbc.team4.ordersystem.aop.annotations.SysLog;
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.Global;
 import com.hsbc.team4.ordersystem.common.utils.LoggerUtil;
 import com.hsbc.team4.ordersystem.common.utils.ReflectUtils;
-import com.hsbc.team4.ordersystem.exception.UserNotLoginException;
 import com.hsbc.team4.ordersystem.log.ILogService;
 import com.hsbc.team4.ordersystem.log.Log;
-import com.hsbc.team4.ordersystem.users.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,7 +14,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
