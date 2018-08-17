@@ -62,7 +62,7 @@ public class ProductController {
         Product product = (Product) beanAdapter.dtoAdapter(productDto, new Product());
         Product product1 = productService.addEntity(product);
         if (product1 != null) {
-            return responseResults.responseBySuccess("ok", productDto);
+            return responseResults.responseBySuccess("save success!", productDto);
         }
         return responseResults.responseByErrorMessage("overtime ,please refresh again");
     }
@@ -101,7 +101,7 @@ public class ProductController {
 
         int row = productService.updateStatusById(id, 1);
         if (row > 0) {
-            return responseResults.responseBySuccess("ok");
+            return responseResults.responseBySuccess("delete success!");
         }
         return responseResults.responseByErrorMessage("failure delete,please try again!");
     }
@@ -142,7 +142,7 @@ public class ProductController {
         }
         Page<Product> products = productService.findByStatus(current, pageSize, status);
         if (products != null) {
-            return responseResults.responseBySuccess("ok", products);
+            return responseResults.responseBySuccess("query success!", products);
         }
         return responseResults.responseByErrorMessage("get productList is failed!");
     }
