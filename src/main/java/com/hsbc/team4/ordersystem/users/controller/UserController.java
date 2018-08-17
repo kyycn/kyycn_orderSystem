@@ -1,6 +1,7 @@
 package com.hsbc.team4.ordersystem.users.controller;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.hsbc.team4.ordersystem.common.utils.RedisUtils;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import com.hsbc.team4.ordersystem.smsmessage.SendMsg;
 import com.hsbc.team4.ordersystem.users.domain.User;
@@ -10,12 +11,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -36,12 +39,19 @@ public class UserController {
     private final IUserService iUserService;
     private final ResponseResults responseResults;
     private final DefaultKaptcha defaultKaptcha;
+    private final RedisUtils redisUtils;
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
 
     @Autowired
-    public UserController(IUserService iUserService, ResponseResults responseResults, DefaultKaptcha defaultKaptcha) {
+    public UserController(IUserService iUserService, ResponseResults responseResults, DefaultKaptcha defaultKaptcha,  RedisUtils redisUtils) {
         this.iUserService = iUserService;
         this.responseResults = responseResults;
         this.defaultKaptcha = defaultKaptcha;
+        this.redisUtils = redisUtils;
     }
     /**
      *  phone
@@ -116,15 +126,21 @@ public class UserController {
         return responseResults.responseBySuccess(iUserService.checkVerifyCode(map));
     }
 
-    @ApiOperation(value = "get defaultVerify", httpMethod = "GET", notes = "get defaultVerify", response = ResponseResults.class)
-    @GetMapping("/imageVerifyCode ")
+    @ApiOperation(value = "get defaultVerify", httpMethod = "GET", notes = "get defaultVerify")
+    @GetMapping("/imageVerifyCode")
     public void imageVerifyCode(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) throws Exception{
         byte[] captchaChallengeAsJpeg;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         try {
             //create verifyCode and save to session
             String createText = defaultKaptcha.createText();
-            httpServletRequest.getSession().setAttribute("verifyCode", createText);
+            HttpSession httpSession=httpServletRequest.getSession(true);
+            httpSession.removeAttribute("verifyCode");
+            httpSession.setAttribute("verifyCode", createText);
+            if(!redisUtils.hasKey("verifyCode")){
+                redisUtils.delete("verifyCode");
+            }
+            redisUtils.addValue("verifyCode",createText);
             BufferedImage challenge = defaultKaptcha.createImage(createText);
             ImageIO.write(challenge, "jpg", jpegOutputStream);
         } catch (IllegalArgumentException e) {
@@ -143,12 +159,12 @@ public class UserController {
         responseOutputStream.close();
     }
 
-    @ApiOperation(value = "verify the imageVerifyCode", httpMethod = "POST", notes = "verify the imageVerifyCode", response = ResponseResults.class)
-    @PostMapping("/imageVerify/{verifyCode}")
-    public ResponseResults verifyCode(HttpServletRequest httpServletRequest,@PathVariable String  verifyCode){
-        String captchaId = (String) httpServletRequest.getSession().getAttribute("verifyCode");
-        log.info("Session  verifyCode "+captchaId+" form verifyCode "+verifyCode);
-        if (!captchaId.equals(verifyCode)) {
+
+    @ApiOperation(value = "verify the imageVerifyCode", httpMethod = "GET", notes = "verify the imageVerifyCode", response = ResponseResults.class)
+    @GetMapping("/imageVerify/{verifyCode}")
+    public ResponseResults verifyCode(@PathVariable String  verifyCode){
+        String code= (String) redisUtils.getValue("verifyCode");
+        if (!code.equals(verifyCode)) {
             return  responseResults.responseByErrorMessage("The verifyCode is not correct");
         } else {
             return responseResults.responseBySuccess("ok");
@@ -164,7 +180,14 @@ public class UserController {
     @ApiImplicitParam(name = "user",value = "The user message",dataType="User")
     @PostMapping("/register")
     public ResponseResults register(@RequestBody User user){
-        return  responseResults.responseBySuccess("保存成功",iUserService.register(user));
+        if(iUserService.findByUsername(user.getUsername())!=null){
+            return  responseResults.responseByErrorMessage("the username is exist");
+        }
+        User user1=iUserService.register(user);
+        if(user1!=null){
+            return  responseResults.responseBySuccess("保存成功",user1);
+        }
+        return  responseResults.responseByErrorMessage("error please try a again");
     }
 
     /**
@@ -196,11 +219,23 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "refresh",notes = "pass the oldToken",httpMethod = "POST",response = ResponseResults.class)
+    @ApiOperation(value = "refresh",notes = "pass the oldToken",httpMethod = "GET",response = ResponseResults.class)
     @ApiImplicitParam(name = "oldToken",value = "The oldToken message",dataType="String")
-    @PostMapping("/")
-    public String refresh(String oldToken){
-        return "ok";
+    @GetMapping("/refresh")
+    public ResponseResults refresh(HttpServletRequest request){
+        //获取tokenHeader
+        final String authHeader = request.getHeader(this.tokenHeader);
+        String authToken;
+        if(authHeader != null && authHeader.startsWith(tokenHead)){
+            // 获取token后面真正的token
+            authToken = authHeader.substring(tokenHead.length());
+            String token=iUserService.refresh(authToken);
+            if(token!=null){
+                return responseResults.responseBySuccess("刷新成功",token);
+            }
+            return responseResults.responseByErrorMessage("刷新失败");
+        }
+        return responseResults.responseByErrorMessage("刷新失败");
     }
 
     @ApiOperation(value = "updatePassword",notes = "pass the oldPassword And newPassword",httpMethod = "POST",response = ResponseResults.class)

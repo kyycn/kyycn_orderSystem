@@ -37,7 +37,6 @@ public class ValidateAspect {
      * @return
      * @throws Throwable
      */
-    @SuppressWarnings({ "finally", "rawtypes" })
     @Before("execution(* com.hsbc.team4.ordersystem..*Controller..*(..))")
     public void validateGroupAround(JoinPoint joinPoint) throws Throwable  {
         Object[] args= joinPoint.getArgs();
