@@ -45,7 +45,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
     @Override
     public Dictionary addEntity(Dictionary dictionary) {
         dictionary.setId(new UUIDFactory().getUUID());
-        dictionary.setStatus(1);
+        dictionary.setStatus(0);
         dictionary.setCreateTime(System.currentTimeMillis());
         if (new BeanValidator().validateObject(dictionary).isEmpty()){
             return dictionaryRepository.save(dictionary);
