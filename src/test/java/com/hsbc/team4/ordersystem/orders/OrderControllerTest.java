@@ -43,11 +43,11 @@ public class OrderControllerTest {
     public void addOrder() throws Exception {
         OrderDto orderDto = new OrderDto();
         orderDto.setId("111111111111");
-        orderDto.setProductId("22222222222");
+        orderDto.setProductName("22222222222");
         orderDto.setProductCount(10);
-        orderDto.setUserId("000000000");
+        orderDto.setCreateUsername("000000000");
         orderDto.setOrderStatus(1);
-        orderDto.setPrice(12.0);
+        orderDto.setProductPrice(12.0);
         ArrayList<OrderDto> list = new ArrayList<>();
         list.add(orderDto);
         String json= JSON.toJSONString(list);
