@@ -40,7 +40,7 @@ public class DictionaryServiceImplTest {
     */
     @Test
     public void testFindByType() throws Exception {
-        log.info(dictionaryService.findByType("sex").toString());
+        log.info(dictionaryService.findByType(0,"sex").toString());
     }
 
     /**
@@ -64,9 +64,9 @@ public class DictionaryServiceImplTest {
     @Test
     public void testAddEntity() throws Exception {
         Dictionary dictionary = new Dictionary();
-        dictionary.setType("orderStatus");
-        dictionary.setContent("payed");
-        dictionary.setDescription("ÒÑÖ§¸¶");
+        dictionary.setType("aaa");
+        dictionary.setContent("aaa");
+        dictionary.setDescription("aaa");
         dictionaryService.addEntity(dictionary);
     }
 
