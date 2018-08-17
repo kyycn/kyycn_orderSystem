@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!--<link rel="stylesheet" type="text/css" href="http://creditcards.hsbc.com.cn/portal/style/common.css">-->
+    <script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+</head>
+<body>
+<div style="margin-left: 100px;margin-top: 20px">
+    <img src="http://creditcards.hsbc.com.cn/portal/img/logo.png">
+</div>
+<hr>
+<div ng-app="myApp" ng-controller="siteCtrl" style="margin-left: 100px;margin-right: 20px;" ng-model="card">
+    <h2>{{card.productName}}</h2>
+    <div> <img ng-src="{{card.productIcon}}" style="margin-right: 20px;"/><img src="http://creditcards.hsbc.com.cn/portal/images/cc_si_sdec_card1.jpg"> </div>
+    <div style="margin-top: 15px;font-size: larger;color: black"><span>汇丰生活人民币白金卡</span><span style="margin-left: 100px;">汇丰生活美元白金卡 </span></div>
+    <p style="font-size: x-large;color: black">{{card.productDescription}}</p>
+    <h2>收费标准</h2>
+    <p style="font-size: larger;color: black">{{card.standard}}</p>
+    <h2>申请条件</h2>
+    <p style="font-size: larger;color: black">{{card.condition}}</p>
+
+</div>
+
+<script>
+    var app = angular.module('myApp', []);
+
+    app.controller('siteCtrl', function($scope, $http) {
+        $http({
+            method: 'GET',
+            url: '/product/query?id=20180813'
+        }).then(function successCallback(response) {
+            $scope.card = response.data.results;
+        }, function errorCallback(response) {
+            // 请求失败执行代码
+        });
+
+    });
+</script>
+
+</body>
+</html>

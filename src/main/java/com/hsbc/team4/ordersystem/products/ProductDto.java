@@ -28,9 +28,9 @@ public class ProductDto {
     private String productIcon;
     @NotBlank(message = "The productType can not be empty")
     private String productType;
-    @NotBlank(message = "The condition can not be empty")
-    private String condition;
-    @NotBlank(message = "The standard can not be empty")
-    private String standard;
+    @NotBlank(message = "The issueDate can not be empty")
+    private String issueDate;
+    @NotNull(message = "The yieldRate can not be empty")
+    private double yieldRate;
 
 }

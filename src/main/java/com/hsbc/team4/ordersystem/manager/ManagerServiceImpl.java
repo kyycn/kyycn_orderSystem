@@ -71,13 +71,13 @@ public class ManagerServiceImpl implements IManagerService{
             departmentService.updateEntity(department);
             manager.setId(uuidFactory.getUUID());
             manager.setWorkNumber(workNumber);
-            manager.setStatus(1);
+            manager.setStatus(0);
             manager.setCreateTime(System.currentTimeMillis());
             ManagerAccount managerAccount = new ManagerAccount();
             managerAccount.setId(uuidFactory.getUUID());
             managerAccount.setName(manager.getWorkNumber());
             managerAccount.setPassword(manager.getWorkNumber());
-            managerAccount.setStatus(1);
+            managerAccount.setStatus(0);
             managerAccountService.addEntity(managerAccount);
             return iManagerRepository.save(manager);
         }
@@ -86,15 +86,18 @@ public class ManagerServiceImpl implements IManagerService{
 
     @Override
     public int updateStatusById(String id, int status) {
-            return iManagerRepository.updateStatusById(id, status);
+        ManagerAccount account = managerAccountService.findByName(findById(id).getWorkNumber());
+        managerAccountService.updateStatusById(account.getId(), status);
+        return iManagerRepository.updateStatusById(id, status);
     }
 
     @Override
     public Manager updateEntity(Manager manager) {
-        if(StringUtils.isNotBlank(manager.getId())){
-            return iManagerRepository.save(manager);
+        if (!beanValidator.validateObject(manager).isEmpty()
+                || departmentService.findByName(manager.getDepartment())==null){
+            return null;
         }
-        return null;
+        return iManagerRepository.save(manager);
     }
 
     @Override
