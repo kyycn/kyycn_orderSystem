@@ -11,7 +11,6 @@ import org.springframework.cache.annotation.EnableCaching;
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableCaching
-//@EnableAutoConfiguration(exclude = {org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 public class OrdersystemApplication {
 
 	public static void main(String[] args) {

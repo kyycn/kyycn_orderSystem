@@ -9,8 +9,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -120,6 +122,17 @@ public class SuperAdminController {
         return responseResults.responseByErrorMessage("id can not be brank");
     }
 
+    @GetMapping("/allManager/{page}")
+    public ResponseResults getAllManager(@PathVariable Integer page){
+        if (page>=0){
+            Page<Manager> managerPage = managerService.findByStatus(page,10,0);
+            if (managerPage!=null){
+                return responseResults.responseBySuccess("success", managerPage.getContent());
+            }
+        }
+        return responseResults.responseByErrorMessage("fail to get");
+    }
+
     /**
      * @Description updateManager
      * @Date: 15:00 2018-08-13
@@ -134,10 +147,10 @@ public class SuperAdminController {
             return responseResults.responseByErrorMessage("information error");
         }
         Manager reManager = managerService.updateEntity(manager);
-        if (manager!=null){
+        if (reManager!=null){
             return responseResults.responseBySuccess("update success", reManager);
         }
-        return responseResults.responseByError();
+        return responseResults.responseByErrorMessage("fail to update");
     }
 
     /**

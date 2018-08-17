@@ -29,14 +29,12 @@ public class DictionaryServiceImpl implements IDictionaryService {
     }
 
     @Override
-    public List<Dictionary> findByType(String type) {
-        List<Dictionary> list = dictionaryRepository.findByType(type);
-        for(Dictionary dic: list){
-            if(dic.getStatus()==0){
-                list.remove(dic);
-            }
+    public List<Dictionary> findByType(int current, String type) {
+        Page<Dictionary> page = dictionaryRepository.findByType(type, PageableTools.basicPage(current));
+        if (page == null){
+            return null;
         }
-        return list;
+        return page.getContent();
     }
 
     @Override
@@ -47,7 +45,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
     @Override
     public Dictionary addEntity(Dictionary dictionary) {
         dictionary.setId(new UUIDFactory().getUUID());
-        dictionary.setStatus(1);
+        dictionary.setStatus(0);
         dictionary.setCreateTime(System.currentTimeMillis());
         if (new BeanValidator().validateObject(dictionary).isEmpty()){
             return dictionaryRepository.save(dictionary);
@@ -57,10 +55,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
 
     @Override
     public int updateStatusById(String id, int status) {
-        if (status==0 ||status==1){
-            return dictionaryRepository.updateStatusById(id, status);
-        }
-        return 0;
+        return dictionaryRepository.updateStatusById(id, status);
     }
 
     @Override

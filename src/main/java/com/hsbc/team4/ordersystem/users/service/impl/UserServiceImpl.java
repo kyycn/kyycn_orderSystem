@@ -19,6 +19,7 @@ import com.hsbc.team4.ordersystem.users.repository.IUserRepository;
 import com.hsbc.team4.ordersystem.users.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +37,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,9 +63,14 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     private final IAccountRepository iAccountRepository;
     private final IRoleRepository iRoleRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
+    @Value("${jwt.header}")
+    private String tokenHeader;
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
     @Autowired
     private AuthenticationManager authenticationManager;
-
+    @Autowired
+    private  UserDetailsService userDetailsService;
     @Autowired
     public UserServiceImpl(IUserRepository iUserRepository, ISenderRepository iSenderRepository, UUIDFactory uuidFactory, ISendMsgService iSendMsgService, IUserInfoRepository iUserInfoRepository, IAccountRepository iAccountRepository, IRoleRepository iRoleRepository, JwtTokenGenerator jwtTokenGenerator) {
         this.iUserRepository = iUserRepository;
@@ -82,7 +90,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         user.setPassword(encoder.encode(user.getPassword()));
         Role role=new Role();
         role.setId(uuidFactory.getUUID());
-        role.setRoleName("user");
+        role.setRoleName("ROLE_ADMIN");
         List<Role> roles=new ArrayList<>();
         roles.add(role);
         List<Role> roleList=iRoleRepository.saveAll(roles);
@@ -134,6 +142,18 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 
     @Override
     public String refresh(String oldToken) {
+        //获取用户名
+        String username = jwtTokenGenerator.getUsernameFromToken(oldToken);
+        User user = (User) userDetailsService.loadUserByUsername(username);
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+        //刷新token
+        try {
+            if (jwtTokenGenerator.canTokenBeRefreshed(oldToken, format.parse(format.format(user.getLastLoginTime())))){
+                return jwtTokenGenerator.refreshToken(oldToken);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -205,17 +225,21 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
 
     @Override
     public String updatePassword(Map<String,String> map) {
+        BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
         String id=map.get("id");
         String oldPassword=map.get("oldPassword");
         String newPassword=map.get("newPassword");
-        User user=iUserRepository.findByIdAndPassword(id,oldPassword);
+        User user=iUserRepository.findByEntityId(id);
         if(user!=null){
-            int row = iUserRepository.updatePassword(id, newPassword);
-            if(row>0){
-                return "ok";
+            if(bCryptPasswordEncoder.matches(oldPassword,user.getPassword())){
+                int row = iUserRepository.updatePassword(id, newPassword);
+                if(row>0){
+                    return "ok";
+                }
             }
+            return "The original password is not correct";
         }
-        return "The original password is not correct";
+        return "The user is not exists";
     }
 
 
@@ -244,8 +268,6 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     public User findById(String id) {
         return iUserRepository.findByEntityId(id);
     }
-
-
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
