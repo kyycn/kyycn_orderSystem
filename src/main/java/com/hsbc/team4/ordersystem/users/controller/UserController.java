@@ -47,7 +47,7 @@ public class UserController {
     private String tokenHead;
 
     @Autowired
-    public UserController(IUserService iUserService, ResponseResults responseResults, DefaultKaptcha defaultKaptcha, RedisUtils redisUtils) {
+    public UserController(IUserService iUserService, ResponseResults responseResults, DefaultKaptcha defaultKaptcha,  RedisUtils redisUtils) {
         this.iUserService = iUserService;
         this.responseResults = responseResults;
         this.defaultKaptcha = defaultKaptcha;
@@ -271,6 +271,12 @@ public class UserController {
         }
         return responseResults.responseByErrorMessage("update Failure");
     }
+
+
+
+
+
+
 
 
 }

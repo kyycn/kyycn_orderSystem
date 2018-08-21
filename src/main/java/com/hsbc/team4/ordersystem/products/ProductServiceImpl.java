@@ -43,7 +43,7 @@ public class ProductServiceImpl implements IProductService {
      */
     @Override
     public Page<Product> findByStatus(int current, int pageSize, int status) {
-        Pageable pageable = PageableTools.basicPage(current, pageSize);
+        Pageable pageable = PageableTools.addTimeSortForDescAndPage(current, pageSize);
         return productRepository.findByStatus(status, pageable);
     }
 
@@ -96,8 +96,8 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Page<Product> findByProductType(int current,  int status, String productType) {
-        Pageable pageable = PageableTools.basicPage(current);
+    public Page<Product> findByProductType(int current, int pageSize, int status, String productType) {
+        Pageable pageable = PageableTools.basicPage(current, pageSize);
         return productRepository.findByProductType(status, productType, pageable);
     }
 

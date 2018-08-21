@@ -48,9 +48,10 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Orders addEntity(Orders order) {
         order.setId(uuidFactory.getUUID());
-        Double totalFree = order.getProductPrice()*order.getProductCount();
+        order.setCreateTime(System.currentTimeMillis());
+        Double totalFree = order.getPrice()*order.getProductCount();
         order.setTotalFree(totalFree);
-        order.setOrderStatus(0);
+        order.setOrderStatus(1);
         return orderRepository.save(order);
     }
 
@@ -114,9 +115,11 @@ public class OrderServiceImpl implements IOrderService {
     public List<Orders> addOrdersList(List<Orders> orderList) {
         for (Orders order : orderList) {
             order.setId(uuidFactory.getUUID());
-            Double totalFree = order.getProductPrice()*order.getProductCount();
+            order.setCreateTime(System.currentTimeMillis());
+            Double totalFree = order.getPrice()*order.getProductCount();
             order.setTotalFree(totalFree);
-            order.setOrderStatus(0);
+            order.setOrderStatus(1);
+            order.setStatus(1);
         }
         return orderRepository.saveAll(orderList);
     }

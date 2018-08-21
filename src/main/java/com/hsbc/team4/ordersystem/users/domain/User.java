@@ -1,6 +1,5 @@
 package com.hsbc.team4.ordersystem.users.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hsbc.team4.ordersystem.common.base.BaseEntity;
 import com.hsbc.team4.ordersystem.roles.Role;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +28,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class User extends BaseEntity implements UserDetails,Serializable{
+public class User extends BaseEntity implements UserDetails{
     /**
      * The account id
      */
@@ -54,7 +52,6 @@ public class User extends BaseEntity implements UserDetails,Serializable{
      */
     @NotBlank(message = "The password can not be empty")
     @ApiModelProperty(name = "password")
-    @JsonIgnore
     private String password;
 
     @ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.LAZY)
@@ -87,8 +84,6 @@ public class User extends BaseEntity implements UserDetails,Serializable{
             this.setPassword(user.getPassword());
             this.setRoles(user.getRoles());
             this.setLocked(user.getExpired());
-            this.setRoles(user.getRoles());
-            this.setLastLoginTime(user.getLastLoginTime());
         }
     }
 
