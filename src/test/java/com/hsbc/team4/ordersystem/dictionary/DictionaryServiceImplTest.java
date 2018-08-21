@@ -40,7 +40,7 @@ public class DictionaryServiceImplTest {
     */
     @Test
     public void testFindByType() throws Exception {
-        log.info(dictionaryService.findByType("sex").toString());
+        log.info(dictionaryService.findByType(1,"sex").toString());
     }
 
     /**
