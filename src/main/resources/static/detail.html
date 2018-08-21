@@ -11,89 +11,89 @@
     <script type="text/javascript" src="swiper/js/swiper-3.4.0.jquery.min.js" ></script>
 
     <style>
-    .nav{
-        width: 100%;
-        height: 120px;
-        background-color: lavender;
-    }
-    a{
-        text-decoration: none;
-        font-size: large;
-    }
-    .brief{
-        margin-left: 180px;
-        margin-top: 24px;
-    }
-    .div2 span{
-        margin-left: 5px;
-        margin-right: 40px;
-        font-size: x-large;
-    }
-    .warn{
-        margin-left: 180px;
-        margin-top: 20px;
-    }
-    p{
-        font-size: 14px;
-        opacity: 0.7;
-    }
-    .swiper1 {
-        width: 100%;
-    }
-    .swiper1 .selected {
-        color: #ec5566;
-        border-bottom: 2px solid #ec5566;
-    }
-    .swiper1 .swiper-slide {
-        text-align: center;
-        font-size: 16px;
-        height: 50px;
-        /* Center slide text vertically */
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        -webkit-align-items: center;
-        align-items: center;
-        cursor: pointer;
-    }
-    .swiper2 {
-        width: 100%;
-    }
-    .swiper2 .swiper-slide {
-        height: calc(100vh - 50px);
-        /*background-color: #ccc;*/
-        /*color: #fff;*/
-        text-align: center;
-        box-sizing: border-box !important;
-        overflow-x: hidden !important;
-    }
-    .detailed-parameters .hd {
-        font-size: 16px;
-        line-height: 34px;
-        font-weight: bold;
-        /*color: #333;*/
-        background: #fafafa;
-    }
-    .tab2, th,td  {
-        border: 1px solid grey;
-        border-collapse: collapse;
-        padding: 5px;
-        width: 1000px;
-        height: 40px;
+        .nav{
+            width: 100%;
+            height: 120px;
+            background-color: lavender;
+        }
+        a{
+            text-decoration: none;
+            font-size: large;
+        }
+        .brief{
+            margin-left: 180px;
+            margin-top: 24px;
+        }
+        .div2 span{
+            margin-left: 5px;
+            margin-right: 40px;
+            font-size: x-large;
+        }
+        .warn{
+            margin-left: 180px;
+            margin-top: 20px;
+        }
+        p{
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        .swiper1 {
+            width: 100%;
+        }
+        .swiper1 .selected {
+            color: #ec5566;
+            border-bottom: 2px solid #ec5566;
+        }
+        .swiper1 .swiper-slide {
+            text-align: center;
+            font-size: 16px;
+            height: 50px;
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .swiper2 {
+            width: 100%;
+        }
+        .swiper2 .swiper-slide {
+            height: calc(100vh - 50px);
+            /*background-color: #ccc;*/
+            /*color: #fff;*/
+            text-align: center;
+            box-sizing: border-box !important;
+            overflow-x: hidden !important;
+        }
+        .detailed-parameters .hd {
+            font-size: 16px;
+            line-height: 34px;
+            font-weight: bold;
+            /*color: #333;*/
+            background: #fafafa;
+        }
+        .tab2, th,td  {
+            border: 1px solid grey;
+            border-collapse: collapse;
+            padding: 5px;
+            width: 1000px;
+            height: 40px;
 
-    }
-    table td:nth-child(odd)	{
-        background-color: lavender;
+        }
+        table td:nth-child(odd)	{
+            background-color: lavender;
 
-    }
-</style>
+        }
+    </style>
 </head>
 <body ng-app="myApp" ng-controller="showPro">
 <div style="margin-left: 100px;margin-top: 20px">
@@ -103,24 +103,24 @@
 </div>
 <hr>
 <div class="nav">
- <div class="brief" ng-model="product">
-     <div>
-         <span style="font-size: x-large">{{product.productName}}</span>
-         <span style="margin-left: 100px;">GD07QYSX201800228</span>
-         <br>
-         <div class="div2" style="margin-top: 15px;">
-             预期年化收益率:<span>4.45%</span>
-             起购金额∶<span>100万</span>
-             投资期限:<span>102天</span>
-             发行时间:<span>8.20 - 8.22</span>
-         </div>
-     </div>
- </div>
+    <div class="brief" ng-model="product">
+        <div>
+            <span style="font-size: x-large">{{product.productName}}</span>
+            <span style="margin-left: 100px;">GD07QYSX201800228</span>
+            <br>
+            <div class="div2" style="margin-top: 15px;">
+                预期年化收益率:<span>4.45%</span>
+                起购金额∶<span>100万</span>
+                投资期限:<span>102天</span>
+                发行时间:<span>8.20 - 8.22</span>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="warn">
     <p><span><span style="margin-right: 5px;font-size: 16px;">提醒</span>1.请使用产品发行区域内开户汇丰储蓄卡购买，若是首次购买理财产品，请确认您已在汇丰网点进行过风险承受能力评测。</p>
 
-      <p style="margin-top: -10px;margin-left: 35px;">  2.产品预约功能仅支持网站实名用户登录后使用，额度预约成功后请于产品募集期内、预约失效日之前完成购买。</p>
+    <p style="margin-top: -10px;margin-left: 35px;">  2.产品预约功能仅支持网站实名用户登录后使用，额度预约成功后请于产品募集期内、预约失效日之前完成购买。</p>
 </div>
 <div class="container">
     <div class="swiper-container swiper1">
@@ -137,7 +137,7 @@
                 <table border="1" cellspacing="0" cellpadding="0" >
                     <tbody>
                     <tr style="background-color: lavender;">
-                       <td style="width:1000px;height:50px;text-align: center">基本信息</td>
+                        <td style="width:1000px;height:50px;text-align: center">基本信息</td>
                     </tr>
                     </tbody>
                 </table>
