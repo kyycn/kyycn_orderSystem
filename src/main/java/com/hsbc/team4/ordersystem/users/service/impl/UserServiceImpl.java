@@ -2,6 +2,7 @@ package com.hsbc.team4.ordersystem.users.service.impl;
 
 import com.hsbc.team4.ordersystem.common.factory.UUIDFactory;
 import com.hsbc.team4.ordersystem.common.utils.PageableTools;
+import com.hsbc.team4.ordersystem.common.utils.RedisUtils;
 import com.hsbc.team4.ordersystem.common.utils.ValidatorTools;
 import com.hsbc.team4.ordersystem.jwt.JwtTokenGenerator;
 import com.hsbc.team4.ordersystem.roles.IRoleRepository;
@@ -63,6 +64,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     private final IAccountRepository iAccountRepository;
     private final IRoleRepository iRoleRepository;
     private final JwtTokenGenerator jwtTokenGenerator;
+    private final RedisUtils redisUtils;
     @Value("${jwt.header}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
@@ -72,7 +74,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     @Autowired
     private  UserDetailsService userDetailsService;
     @Autowired
-    public UserServiceImpl(IUserRepository iUserRepository, ISenderRepository iSenderRepository, UUIDFactory uuidFactory, ISendMsgService iSendMsgService, IUserInfoRepository iUserInfoRepository, IAccountRepository iAccountRepository, IRoleRepository iRoleRepository, JwtTokenGenerator jwtTokenGenerator) {
+    public UserServiceImpl(IUserRepository iUserRepository, ISenderRepository iSenderRepository, UUIDFactory uuidFactory, ISendMsgService iSendMsgService, IUserInfoRepository iUserInfoRepository, IAccountRepository iAccountRepository, IRoleRepository iRoleRepository, JwtTokenGenerator jwtTokenGenerator, RedisUtils redisUtils) {
         this.iUserRepository = iUserRepository;
         this.iSenderRepository = iSenderRepository;
         this.uuidFactory = uuidFactory;
@@ -81,6 +83,7 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         this.iAccountRepository = iAccountRepository;
         this.iRoleRepository = iRoleRepository;
         this.jwtTokenGenerator = jwtTokenGenerator;
+        this.redisUtils = redisUtils;
     }
 
     @Override
@@ -196,15 +199,13 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     @Override
     public String checkVerifyCode(Map<String,String> map) {
         BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
-        SendMsg sendMsg=iSendMsgService.findById(map.get("msgId"));
-        long time=sendMsg.getCreateTime()+Long.parseLong(sendMsg.getExpirationTime())*60*1000;
-        if(System.currentTimeMillis()<=time){
-            if(bCryptPasswordEncoder.matches(map.get("verifyCode"),sendMsg.getCode())){
+        String code= (String) redisUtils.getValue(map.get("phone"));
+        if(code!=null){
+            if(bCryptPasswordEncoder.matches(map.get("verifyCode"),code)){
                 return "you enter the verifyCode is correct";
             }
-            return "you enter the code is verifyCode correct";
+            return "you enter the code is verifyCode not correct";
         }
-
         return "The verifyCode was expired";
     }
 

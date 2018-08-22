@@ -1,6 +1,6 @@
 package com.hsbc.team4.ordersystem.users.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hsbc.team4.ordersystem.common.base.BaseEntity;
 import com.hsbc.team4.ordersystem.roles.Role;
 import io.swagger.annotations.ApiModelProperty;
@@ -54,7 +54,6 @@ public class User extends BaseEntity implements UserDetails,Serializable{
      */
     @NotBlank(message = "The password can not be empty")
     @ApiModelProperty(name = "password")
-    @JsonIgnore
     private String password;
 
     @ManyToMany(cascade= CascadeType.ALL,fetch= FetchType.LAZY)
@@ -92,6 +91,10 @@ public class User extends BaseEntity implements UserDetails,Serializable{
         }
     }
 
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

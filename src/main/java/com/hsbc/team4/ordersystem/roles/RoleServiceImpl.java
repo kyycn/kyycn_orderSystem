@@ -27,7 +27,7 @@ public class RoleServiceImpl implements IRoleService{
     }
 
     @Override
-    @Cacheable(cacheNames = "role",key = "#current(#pageSize)(#status)")
+    @Cacheable(cacheNames = "role",key = "#current+(#pageSize)+(#status)")
     public Page<Role> findByStatus(int current, int pageSize, int status) {
         Pageable pageable= PageableTools.addTimeSortForDescAndPage(current,pageSize);
         return iRoleRepository.findByStatus(status,pageable);
