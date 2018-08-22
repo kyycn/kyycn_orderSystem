@@ -53,5 +53,7 @@ public interface IProductService extends IBaseService<Product> {
      * @return
      */
     Page<Product> orderByProductPrice(int current,int pageSize,int status);
-      Product query(String id);
+    Product query(String id);
+    Page<Product> queryLike(String productType,String str,int current,int pageSize);
+
 }

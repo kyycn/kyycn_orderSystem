@@ -138,6 +138,12 @@ public class ProductServiceImpl implements IProductService {
 //        return product;
             return productRepository.findByEntityId(id);
         }
+
+    @Override
+    public Page<Product> queryLike(String productType,String str,int current, int pageSize) {
+        Pageable pageable = PageableTools.basicPage(current, pageSize);
+        return productRepository.queryLike(productType,str,pageable);
+    }
     }
 
 

@@ -24,13 +24,21 @@ public class ProductDto {
     private double productPrice;
     @NotBlank(message = "The productDescription can not be empty")
     private String productDescription;
+    @NotBlank(message = "The status can not be empty")
+    private String status;
     @NotBlank(message = "the productIcon cannot be empty")
     private String productIcon;
     @NotBlank(message = "The productType can not be empty")
     private String productType;
-    @NotBlank(message = "The condition can not be empty")
-    private String productCondition;
-    @NotBlank(message = "The standard can not be empty")
-    private String standard;
+    @NotBlank(message = "The issueDate can not be empty")
+    private String issueDate;
+    @NotBlank(message = "The yieldRate can not be empty")
+    private String yieldRate;
+    @NotBlank(message = "The productNumber can not be empty")
+    private String productNumber;
+    @NotBlank(message = "The riskLevel can not be empty")
+    private String riskLevel;
+    @NotBlank(message = "The currencyType can not be empty")
+    private String currencyType;
 
 }

@@ -162,7 +162,7 @@ public class ProductController {
     @ApiOperation(value = "get by productType", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
     @GetMapping("/queryByProductType/{status}/{productType}")
     public ResponseResults queryByProductType(@RequestParam(value = "current", defaultValue = "0") int current,
-                                              @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                                              @RequestParam(value = "pageSize", defaultValue = "4") int pageSize,
                                               @PathVariable int status, @PathVariable String productType) {
         if (StringUtils.isEmpty(status) && StringUtils.isEmpty(productType)) {
             return responseResults.responseByErrorMessage("the status is empty");
@@ -210,7 +210,7 @@ public class ProductController {
     @ApiOperation(value = "queryByProductNameContains", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
     @GetMapping("/queryByProductNameContains/{status}/{productName}")
     public ResponseResults queryByProductNameContains(@RequestParam(value = "current", defaultValue = "0") int current,
-                                                      @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+                                                      @RequestParam(value = "pageSize", defaultValue = "4") int pageSize,
                                                       @PathVariable int status, @PathVariable String productName) {
         if (StringUtils.isEmpty(status) && StringUtils.isEmpty(productName)) {
             return responseResults.responseByErrorMessage("the status is empty!");
@@ -244,6 +244,17 @@ public class ProductController {
         }
         return responseResults.responseByErrorMessage("show list failed,please try it again!");
 
-
     }
+    @ApiOperation(value = "query like", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
+    @GetMapping("/like")
+    public ResponseResults queryLike(@RequestParam(value = "current", defaultValue = "0") int current,
+                                     @RequestParam(value = "pageSize", defaultValue = "4") int pageSize,@RequestParam String productType,@RequestParam String str) {
+        Page<Product> products = productService.queryLike(productType,str,current, pageSize);
+        if (products != null) {
+            return responseResults.responseBySuccess("ok", products);
+        }
+        return responseResults.responseByErrorMessage("get productList is failed!");
+    }
+
 }
+

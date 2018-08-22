@@ -57,4 +57,6 @@ public interface IProductRepository extends IBaseRepository<Product,String> {
     @Query(value = "select * from Product p where p.status=? order by p.productPrice desc",nativeQuery = true)
     Page<Product> orderByProductPrice(int status,Pageable pageable);
 
+    @Query(value = "SELECT * FROM Product p where  p.productType=?1 and p.productName like %?2% or p.productNumber  like %?2%",nativeQuery=true)
+    Page<Product> queryLike(String productType,String str, Pageable pageable);
 }

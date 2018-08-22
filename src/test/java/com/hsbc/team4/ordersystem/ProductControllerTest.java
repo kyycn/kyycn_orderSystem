@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.UUID;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -65,8 +67,6 @@ public class ProductControllerTest {
         productDto.setProductDescription("1");
         productDto.setProductIcon("1.jpg");
         productDto.setProductType("day in search");
-        productDto.setProductCondition("1");
-        productDto.setStandard("1");
         String json = JSON.toJSONString(productDto);
         if (!"".equals(json)) {
             try {
@@ -246,6 +246,14 @@ public class ProductControllerTest {
 
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void uu(){
+        for(int i=0;i<30;i++) {
+            String u = UUID.randomUUID().toString();
+            System.out.println(u);
         }
     }
 }

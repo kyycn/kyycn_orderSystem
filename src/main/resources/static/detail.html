@@ -13,7 +13,7 @@
     <style>
         .nav{
             width: 100%;
-            height: 120px;
+            height: 80px;
             background-color: lavender;
         }
         a{
@@ -95,7 +95,7 @@
         }
     </style>
 </head>
-<body ng-app="myApp" ng-controller="showPro">
+<body ng-app="myApp" ng-controller="detail">
 <div style="margin-left: 100px;margin-top: 20px">
     <img src="http://creditcards.hsbc.com.cn/portal/img/logo.png">
     <span style="margin-left: 300px;"><a href="#" style="text-decoration: none;color: black;" >理财首页</a></span>
@@ -105,22 +105,22 @@
 <div class="nav">
     <div class="brief" ng-model="product">
         <div>
-            <span style="font-size: x-large">{{product.productName}}</span>
-            <span style="margin-left: 100px;">GD07QYSX201800228</span>
+            <span style="font-size: 24px;color: black;font-weight: bold">{{product.productName}}</span><br>
+            <!--<span style="font-size: 16px;margin-left: 20px;">开放式海外基金-债券型 </span>-->
+            <!--<span style="margin-left: 100px;">GD07QYSX201800228</span>-->
             <br>
-            <div class="div2" style="margin-top: 15px;">
-                预期年化收益率:<span>4.45%</span>
-                起购金额∶<span>100万</span>
-                投资期限:<span>102天</span>
-                发行时间:<span>8.20 - 8.22</span>
-            </div>
+
+            <!--<div class="div2" style="margin-top: 15px;">-->
+                <!--预期年化收益率:<span>4.45%</span>-->
+                <!--起购金额∶<span>100万</span>-->
+                <!--投资期限:<span>102天</span>-->
+                <!--发行时间:<span>8.20 - 8.22</span>-->
+            <!--</div>-->
         </div>
     </div>
 </div>
 <div class="warn">
-    <p><span><span style="margin-right: 5px;font-size: 16px;">提醒</span>1.请使用产品发行区域内开户汇丰储蓄卡购买，若是首次购买理财产品，请确认您已在汇丰网点进行过风险承受能力评测。</p>
-
-    <p style="margin-top: -10px;margin-left: 35px;">  2.产品预约功能仅支持网站实名用户登录后使用，额度预约成功后请于产品募集期内、预约失效日之前完成购买。</p>
+    <p style="margin-top: -5px;margin-left: 30px;">合格投资者范围，收费标准及收费方式详见产品说明书的具体规定</p>
 </div>
 <div class="container">
     <div class="swiper-container swiper1">
@@ -128,6 +128,7 @@
             <div class="swiper-slide selected">产品详情</div>
             <div class="swiper-slide">产品说明书</div>
             <div class="swiper-slide">产品公告</div>
+            <div style="margin-left: 330px;"><button type="button" class="btn btn-primary">购买</button></div>
         </div>
     </div>
     <!-- swiper2 -->
@@ -143,22 +144,10 @@
                 </table>
                 <table class="tab2">
                     <tr>
-                        <td>预期年化收益率</td>
-                        <td>{{product.yieldRate}}</td>
-                        <td>首次起购金额</td>
-                        <td>{{product.purFloorAmt}}</td>
-                    </tr>
-                    <tr>
-                        <td>投资期限</td>
-                        <td>{{product.investPeriod}}</td>
-                        <td>发行时间</td>
-                        <td>{{product.collBgnDate}}-{{product.collEndDate}}</td>
-                    </tr>
-                    <tr>
-                        <td>是否保本</td>
-                        <td>{{product.yieldSpec}}</td>
-                        <td>可否赎回</td>
-                        <td>{{product.proMode}}</td>
+                    <td>产品编号</td>
+                    <td>{{product.productNumber}}</td>
+                        <td>客户类型</td>
+                        <td>{{product.productDescription}}</td>
                     </tr>
                     <tr>
                         <td>投资币种</td>
@@ -168,18 +157,22 @@
                     </tr>
                 </table>
                 <table class="tab2">
-                    <tr>
-                        <td style="width: 296px;">发行区域</td>
-                        <td>{{product.issueRegion}}</td>
-                    </tr>
-                </table>
+                <tr>
+                    <td style="width: 310px;">所属类型</td>
+                    <td>{{product.productType}}</td>
+                </tr>
+               </table>
             </div>
             <div class="swiper-slide swiper-no-swiping">
                 <div >
                     <table border="0" cellspacing="0" cellpadding="0" >
                         <tbody>
                         <tr style="background-color: lavender;">
-                            <td style="width:1000px;height:50px;text-align: center">该产品暂无说明书</td>
+                            <td style="width:1000px;height:150px;text-align: center" ng-model="num">
+                                <a href="https://personal.hsbc.com.cn/content/dam/hsbc/cn/docs/investment/qdii/bonds/{{num}}.pdf" target="_blank" style="color: black">
+                                     {{product.productName}}说明书
+                                </a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -190,7 +183,7 @@
                     <table border="0" cellspacing="0" cellpadding="0" >
                         <tbody>
                         <tr style="background-color: lavender;">
-                            <td style="width:1000px;height:50px;text-align: center">该产品暂无公告</td>
+                            <td style="width:1000px;height:150px;text-align: center">该产品暂无公告</td>
                         </tr>
 
                         </tbody>
@@ -202,6 +195,9 @@
     </div>
 
 </div>
+<div style="margin-left:100px;margin-top: -320px;margin-right: 100px; ">
+    <span style="font-size: x-large;color: black;font-weight: bold">说明:</span><span style="letter-spacing:1px;font-size: larger">本理财计划是非保本浮动收益类产品，不保证本金和收益，是高风险的投资产品，您的本金可能蒙受重大損失，您应充分认识投资风险，
+    谨慎投资。本理财计划与储蓄存款存在明显区別，具有投资风险。投资有可能在赎回時受到本金損失，甚至赎回额为零。</span></div>
 <script>
     $(function() {
         function setCurrentSlide(ele, index) {
@@ -252,14 +248,20 @@
 <script>
     var app = angular.module('myApp', []);
 
-    app.controller('showPro', function($scope, $http,$location) {
+    app.controller('detail', function($scope, $http,$location) {
         var str=$location.absUrl().toString();
-        var id=str.charAt(str.length-1);
+        var i=str.indexOf("=");
+        var id=str.substring(i+1,str.length);
+      //  alert(id);
         $http({
             method: 'GET',
-            url: '/finance/query?id='+id
+            url: '/product/productId/'+id
         }).then(function successCallback(response) {
             $scope.product= response.data.results;
+            var number=response.data.results.productNumber;
+            var num=number.substring(number.length-4,number.length);
+            $scope.num=num;
+
         }, function errorCallback(response) {
             // 请求失败执行代码
         });
