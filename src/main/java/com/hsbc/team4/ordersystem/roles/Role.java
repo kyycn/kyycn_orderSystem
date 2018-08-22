@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * @author : Kevin
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-public class Role extends BaseEntity{
+public class Role extends BaseEntity implements Serializable{
     @Id
     @NotBlank(message = " the roleName can not be Blank ")
     private String id;

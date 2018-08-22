@@ -21,7 +21,7 @@ public class SendMsg {
 	private String id;
     @ApiModelProperty(value = "message：1 SMS,2 voice", required = true)
     private String msgType;
-	@ApiModelProperty(value = "bizType:1.register verifyCode2.login verifyCode3.update password verifyCode 4.update msg verifyCode", required = true)
+	@ApiModelProperty(value = "bizType:1.register verifyCode 2.login verifyCode3.update password verifyCode 4.update msg verifyCode", required = true)
 	private String bizType;
 	@ApiModelProperty(value = "phone", required = true)
 	private String phone;

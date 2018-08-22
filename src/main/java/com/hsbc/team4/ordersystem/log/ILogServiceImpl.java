@@ -34,5 +34,11 @@ public class ILogServiceImpl implements ILogService{
         return iLogRepository.findByOperateTypeContains(operateType,pageable);
     }
 
+    @Override
+    public Page<Log> findAll(int current, int pageSize) {
+        Pageable pageable= PageableTools.basicPage(current,pageSize);
+        return iLogRepository.findAll(pageable);
+    }
+
 
 }

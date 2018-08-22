@@ -17,7 +17,6 @@ public interface ILogService {
      * @return  Log
      */
     Log insertLog(Log log);
-
     /**
      *  findByOperateTypeContains
      * @param operateType
@@ -26,5 +25,13 @@ public interface ILogService {
      * @return
      */
     Page<Log> findByOperateTypeContains(String operateType,int current,int pageSize);
+
+    /**
+     * findAll
+     * @param current
+     * @param pageSize
+     * @return
+     */
+    Page<Log> findAll(int current,int pageSize);
 
 }

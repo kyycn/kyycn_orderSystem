@@ -18,12 +18,11 @@ public interface IProductService extends IBaseService<Product> {
     /**
      * 根据产品类型查询理财产品，分页展示
      * @param current
-     * @param pageSize
      * @param status
      * @param productType
      * @return Product
      */
-    Page<Product> findByProductType(int current, int pageSize, int status, String productType);
+    Page<Product> findByProductType(int current, int status, String productType);
 
     /**
      * 模糊查询（产品类型）

@@ -8,10 +8,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -48,17 +48,15 @@ public class ProductController {
      * getProductList
      *
      * @param page
-     * @param pageSize
      * @return product
      */
     @ApiOperation(value = "status", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
     @GetMapping("get/{page}")
-    public ResponseResults getProductList(@RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                          @PathVariable int page) {
+    public ResponseResults getProductList(@PathVariable Integer page) {
         if (page<0) {
             return responseResults.responseByErrorMessage("");
         }
-        Page<Product> products = productService.findByStatus(page, pageSize, 0);
+        Page<Product> products = productService.findByStatus(page, 10, 0);
         if (products != null) {
             return responseResults.responseBySuccess("query success!", products);
         }
@@ -104,7 +102,7 @@ public class ProductController {
         Product product = (Product) beanAdapter.dtoAdapter(productDto, new Product());
         Product product1 = productService.updateEntity(product);
         if (product1 != null) {
-            return responseResults.responseBySuccess("ok", productDto);
+            return responseResults.responseBySuccess("update success", productDto);
         }
         return responseResults.responseByErrorMessage("it's overtime!please refresh again");
     }
@@ -116,9 +114,12 @@ public class ProductController {
      * @return product
      */
     @ApiOperation(value = "delete by Id", httpMethod = "DELETE", notes = "delete product by Id", response = ResponseResults.class)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseResults deleteProductById(@ApiParam(required = true, name = "id", value = "the product id") @PathVariable String id) {
 
+        if(StringUtils.isBlank(id)){
+            return responseResults.responseByErrorMessage("error!");
+        }
         int row = productService.updateStatusById(id, 1);
         if (row > 0) {
             return responseResults.responseBySuccess("delete success!");
@@ -134,7 +135,7 @@ public class ProductController {
     @ApiOperation(value = "get by Id", httpMethod = "GET", notes = "get product by id", response = ResponseResults.class)
     @GetMapping("/productId/{id}")
     public ResponseResults queryProductById(@ApiParam(required = true, name = "id", value = "the product id") @PathVariable String id) {
-        if (StringUtils.isEmpty(id)) {
+        if (StringUtils.isBlank(id)) {
             return responseResults.responseByErrorMessage("id is empty");
         }
         Product product = productService.findById(id);
@@ -149,18 +150,16 @@ public class ProductController {
      * queryByProductType
      *
      * @param page
-     * @param pageSize
      * @param productType
      * @return product
      */
     @ApiOperation(value = "get by productType", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
     @GetMapping("/queryByProductType/{productType}/{page}")
-    public ResponseResults queryByProductType(@RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                              @PathVariable int page, @PathVariable String productType) {
-        if (StringUtils.isEmpty(page) && StringUtils.isEmpty(productType)) {
-            return responseResults.responseByErrorMessage("the status is empty");
+    public ResponseResults queryByProductType(@PathVariable Integer page, @PathVariable String productType) {
+        if (StringUtils.isBlank(productType) || page<0) {
+            return responseResults.responseByErrorMessage("error");
         }
-        Page<Product> products = productService.findByProductType(page, pageSize, 0, productType);
+        Page<Product> products = productService.findByProductType(page,0, productType);
         if (products != null) {
             return responseResults.responseBySuccess("query success", products);
         }
@@ -171,20 +170,17 @@ public class ProductController {
      * queryByProductTypeContains(productType)
      *
      * @param current
-     * @param pageSize
-     * @param status
      * @param productType
      * @return product
      */
     @ApiOperation(value = "queryByProductTypeContains", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
-    @GetMapping("/queryByProductTypeContains/{status}/{productType}")
+    @GetMapping("/queryByProductTypeContains/{productType}")
     public ResponseResults queryByProductTypeContains(@RequestParam(value = "current", defaultValue = "0") int current,
-                                                      @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
-                                                      @PathVariable int status, @PathVariable String productType) {
-        if (StringUtils.isEmpty(status) && StringUtils.isEmpty(productType)) {
-            return responseResults.responseByErrorMessage("the status is empty");
+                                                      @PathVariable String productType) {
+        if ( StringUtils.isEmpty(productType)) {
+            return responseResults.responseByErrorMessage("error");
         }
-        Page<Product> products = productService.findByProductTypeContains(current, pageSize, status, productType);
+        Page<Product> products = productService.findByProductTypeContains(current, 10, 0, productType);
         if (products != null) {
             return responseResults.responseBySuccess("ok", products);
         }
@@ -195,20 +191,17 @@ public class ProductController {
      * queryByProductNameContains(productName)
      *
      * @param current
-     * @param pageSize
-     * @param status
      * @param productName
      * @return product
      */
     @ApiOperation(value = "queryByProductNameContains", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
-    @GetMapping("/queryByProductNameContains/{status}/{productName}")
+    @GetMapping("/queryByProductNameContains/{productName}")
     public ResponseResults queryByProductNameContains(@RequestParam(value = "current", defaultValue = "0") int current,
-                                                      @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
-                                                      @PathVariable int status, @PathVariable String productName) {
-        if (StringUtils.isEmpty(status) && StringUtils.isEmpty(productName)) {
+                                                      @PathVariable String productName) {
+        if (StringUtils.isEmpty(productName)) {
             return responseResults.responseByErrorMessage("the status is empty!");
         }
-        Page<Product> products = productService.findByProductNameContains(current, pageSize, status, productName);
+        Page<Product> products = productService.findByProductNameContains(current, 10, 0, productName);
         if (products != null) {
             return responseResults.responseBySuccess("ok", products);
         }
@@ -219,19 +212,12 @@ public class ProductController {
      * orderByProdcutPrice desc
      *
      * @param current
-     * @param pageSize
-     * @param status
      * @return product
      */
     @ApiOperation(value = "orderByProductPrice", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
-    @GetMapping("/orderByProductPrice/{status}")
-    public ResponseResults orderByProductPrice(@RequestParam(value = "current", defaultValue = "0") int current,
-                                               @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
-                                               @PathVariable int status) {
-        if (StringUtils.isEmpty(status)) {
-            return responseResults.responseByErrorMessage("the status is empty!");
-        }
-        Page<Product> products = productService.orderByProductPrice(current, pageSize, status);
+    @GetMapping("/orderByProductPrice")
+    public ResponseResults orderByProductPrice(@PathVariable int current) {
+        Page<Product> products = productService.orderByProductPrice(current, 10, 0);
         if (products != null) {
             return responseResults.responseBySuccess("ok", products);
         }
