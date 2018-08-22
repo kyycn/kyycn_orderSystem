@@ -16,7 +16,7 @@ import javax.persistence.MappedSuperclass;
  */
 @Data
 @MappedSuperclass
-@JsonIgnoreProperties({"createUsername","createTime","updateUsername","updateTime"})
+//@JsonIgnoreProperties({"createUsername","createTime","updateUsername","updateTime"})
 public class BaseEntity {
     /**
      * create ID
