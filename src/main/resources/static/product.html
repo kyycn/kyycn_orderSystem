@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">-->
+    <meta name=”viewport” content=”width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no”/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <link rel="stylesheet" href="swiper/css/swiper-3.2.7.min.css"/>
+    <link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <script src="swiper/js/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+    <script type="text/javascript" src="swiper/js/swiper-3.4.0.jquery.min.js"></script>
+
+    <title>Title</title>
+
+</head>
+<style>
+    @media only screen and (max-width: 768px) {
+        #turnover, tr td:nth-child(9) {
+            display: none;
+            visibility: hidden;
+        }
+    }
+
+    @media only screen and (max-width: 868px) {
+        #op, tr td:nth-child(6) {
+            display: none;
+            visibility: hidden;
+        }
+    }
+
+    @media only screen and (max-width: 520px) {
+        #money, tr td:nth-child(2) {
+            display: none;
+            visibility: hidden;
+        }
+
+        #period, tr td:nth-child(3) {
+            display: none;
+            visibility: hidden;
+        }
+
+        #date, tr td:nth-child(4) {
+            display: none;
+            visibility: hidden;
+        }
+
+        #rate, tr td:nth-child(5) {
+            display: none;
+            visibility: hidden;
+        }
+
+        #op, tr td:nth-child(6) {
+            display: none;
+            visibility: hidden;
+        }
+    }
+
+    table {
+        border-left: 1px lightgrey solid;
+        border-right: 1px lightgrey solid;
+    }
+
+    tr:hover {
+        background-color: #b3d4fd;
+    }
+
+    th, td {
+        border-bottom: 1px lightgrey solid;
+        margin-top: 50px;
+        text-align: center;
+        padding-top: 12px;
+        padding-bottom: 10px;
+    }
+
+    span {
+        font-size: x-small;
+        margin-right: 5px;
+    }
+
+    .active {
+        color: blue;
+    }
+
+    /*.container {*/
+    /*!*width: 100%;*!*/
+    /*border: 1px solid #ccc;*/
+    /*}*/
+    .swiper1 {
+        width: 100%;
+    }
+
+    .swiper1 .selected {
+        color: #ec5566;
+        border-bottom: 2px solid #ec5566;
+    }
+
+    .swiper1 .swiper-slide {
+        text-align: center;
+        font-size: 16px;
+        height: 50px;
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .swiper2 {
+        width: 100%;
+    }
+
+    .swiper2 .swiper-slide {
+        height: calc(100vh - 50px);
+        /*background-color: #ccc;*/
+        /*color: #fff;*/
+        text-align: center;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    .detailed-parameters .hd {
+        font-size: 16px;
+        line-height: 34px;
+        font-weight: bold;
+        /*color: #333;*/
+        background: #fafafa;
+    }
+
+    a {
+        text-decoration: none;
+        font-size: large;
+
+    }
+
+    p {
+        font-size: larger;
+        letter-spacing: 1px;
+        color: black;
+    }
+
+</style>
+<body ng-app="myApp" ng-controller="product">
+<div style="margin-left: 100px;margin-top: 20px">
+    <img src="http://creditcards.hsbc.com.cn/portal/img/logo.png">
+    <span style="margin-left: 300px;"><a href="#" style="text-decoration: none;color: black;">理财首页</a></span>
+    <span><a href="#" style="text-decoration: none;margin-left: 150px;">理财产品</a></span>
+</div>
+<hr>
+<div class="container">
+    <div class="swiper-container swiper1">
+        <div class="">
+            <div class="swiper-slide selected"><span
+                    style="color:black;font-size: x-large;font-weight: bold;margin-left: 280px;" ng-model="type">开放式海外基金-{{type}}</span>
+                <input type="text" style="height: 35px;width: 220px;margin-left: 150px;text-align: center;color: black"
+                       placeholder="请输入产品编号或名称" ng-model="queryStr">
+                <button type="button" class="btn btn-primary" style="margin-left: 15px;" ng-click="queryLike()">搜索
+                </button>
+            </div>
+            <!--<div class="swiper-slide selected">乾元</div>-->
+            <!--<div class="swiper-slide">双币投资</div>-->
+            <!--<div class="swiper-slide">基金</div>-->
+        </div>
+    </div>
+    <!-- swiper2 -->
+    <div class="swiper-container swiper2">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide swiper-no-swiping">
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <colgroup>
+                        <col width="11%"/>
+                        <col width="40%"/>
+                        <col width="12%"/>
+                        <col width="13%"/>
+                        <col width="12%"/>
+                    </colgroup>
+                    <tbody>
+                    <tr style="background-color: lavender;">
+                        <th>参考编号</th>
+                        <th>海外基金名称</th>
+                        <th>海外基金计价货币</th>
+                        <th>风险等级</th>
+                        <th>适用客户<br>
+                        </th>
+                        <th>操作</th>
+                    </tr>
+                    <tr ng-show="isEmpty">
+                        <td></td>
+                        <td style="text-align: center"></td>
+                        <td>暂时无此类产品</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr ng-repeat="x in products.content">
+                        <td>{{x.productNumber}}</td>
+                        <td><a href="detail.html?id={{x.id}}" style="text-decoration: none;color: black">{{x.productName}}</a>
+                        </td>
+                        <td>{{x.currencyType}}</td>
+                        <td>{{x.riskLevel}}</td>
+                        <td>{{x.productDescription}}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary">购买</button>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <div class="col-sm-8" ng-model="pages" ng-init="flag=false" style="margin-left: 150px;margin-top:30px;">
+                    <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate"
+                         ng-model="currentPage">
+                        <ul class="pagination" ng-model="flag3" ng-show="flag3">
+                            <li class="paginate_button previous disabled" aria-controls="DataTables_Table_0"
+                                tabindex="0"><a href="#" ng-show="isAble1">上一页</a></li>
+                            <li class="paginate_button previous" aria-controls="DataTables_Table_0"
+                                tabindex="0" ng-show="isAble2"><a ng-click="turn(currentPage-1)">上一页</a></li>
+                            <li ng-class="style:style," ria-controls="DataTables_Table_0" atabindex="0"><a
+                                    ng-click="turn(0)">1</a></li>
+                            <li ng-class="style:style," ria-controls="DataTables_Table_0" atabindex="0"><a
+                                    ng-click="turn(1)">2</a></li>
+                            <li ng-class="style:style," ria-controls="DataTables_Table_0" atabindex="0"><a
+                                    ng-click="turn(2)">3</a></li>
+
+                            <!--<li ng-repeat="p in pages " ng-class="style:style," ria-controls="DataTables_Table_0" atabindex="0" >-->
+                            <!--<a ng-click="turn(p-1)">{{p}}</a></li>-->
+                            <li class="paginate_button " aria-controls="DataTables_Table_0" tabindex="0"><a
+                            >...</a></li>
+                            <li class="paginate_button next" aria-controls="DataTables_Table_0" tabindex="0"
+                            ><a ng-click="turn(currentPage+1)">下一页</a></li>
+                            <li><span
+                                    style="margin-left: 30px;font-size: 18px;">共&nbsp;{{products.totalPages}}&nbsp;页</span>
+                            </li>
+                        </ul>
+
+                        <ul class="pagination" ng-model="flag4" ng-show="flag4">
+                            <li class="paginate_button previous disabled" aria-controls="DataTables_Table_0"
+                                tabindex="0" id="DataTables_Table_0_previous"><a href="#" ng-show="isAble1">上一页</a></li>
+                            <li class="paginate_button previous" aria-controls="DataTables_Table_0"
+                                tabindex="0" id="DataTables_Table_0_previous2" ng-show="isAble2"><a
+                                    ng-click="turn(currentPage-1)">上一页</a></li>
+                            <li ng-repeat="p in pages " ng-class="style:style," ria-controls="DataTables_Table_0"
+                                atabindex="0">
+                                <a ng-click="turn(p-1)">{{p}}</a></li>
+                            <li class="paginate_button next" aria-controls="DataTables_Table_0" tabindex="0"
+                                id="DataTables_Table_0_next"><a ng-click="turn(currentPage+1)">下一页</a></li>
+                            <li><span
+                                    style="margin-left: 30px;font-size: 18px;">共&nbsp;{{products.totalPages}}&nbsp;页</span>
+                            </li>
+                            <li><span style="margin-left: 10px;font-size: 18px;"><a ng-click="turn(pageNum)">跳转至</a></span>
+                            </li>
+                            <span style="margin-left: 10px;font-size: 18px;"><input type="text" style="width: 50px;height: 35px;text-align: center"ng-model="pageNum"></span>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div style="margin-top: -120px;">
+            <p style="font-size: larger;font-weight: bold">说明</p>
+
+
+            <br>
+            <p> **本理财计划适合于同时满足以下条件的投资者：
+            <p>
+            <p> 1.基于风险评估问卷对投资者整体投资经验的评估结果，投资者系有投资经验客户；</p>
+            <p>2.投资者对开放式基金有认知及/或有交易经验；</p>
+            <p> 3.投资者同意遵守理财计划有关条款并愿意承担相关投资风险；</p>
+            <p>4.就理财计划下任一海外基金而言，投资者的风险承受程度不低于产品风险水平（详见适用的《海外基金基本信息》）；</p>
+            <p>5.就理财计划下任一海外基金而言，投资者还须满足相应《海外基金基本信息》列明的其他条件，包括但不限于对高资产净值客户的要求（若未特别说明，则该理财计划同时适合一般个人客户和高资产净值客户）。</p>
+
+
+            <br>
+            <p>高资产净值客户是满足下列条件之一的客户：</p>
+            <p>1.单笔申/认购理财产品不少于100万元人民币的自然人；</p>
+            <p>2.申/认购理财产品时，个人或家庭金融净资产总计超过100万元人民币，且能提供相关证明的自然人；</p>
+            <p>3.个人收入在最近三年每年超过20万元人民币或者家庭合计收入在最近三年内每年超过30万元人民币，且能提供相关证明的自然人。</p>
+            <p>***仅限汇丰卓越理财∙尚玉客户购买。</p>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []);
+        var page = [];
+        var page2 = [];
+        var productType="海外债券型";
+        app.controller('product', function ($scope, $http,$location) {
+            // var str=$location.absUrl().toString();       //根据首页点击的产品类型进行显示
+            // var i=str.lastIndexOf("/");
+            // productType=str.substring(i+1,str.length);
+            $scope.type=productType
+            $scope.isAble1 = true;
+            $scope.style = "active"
+            $scope.currentPage = 0;
+            $http({
+                method: 'GET',
+                url: '/product/queryByProductType/0/'+productType
+            }).then(function successCallback(response) {
+                $scope.products = response.data.results;
+                if (response.data.results.totalPages <=0) {
+                    $scope.isEmpty=true;
+                }
+                if (response.data.results.totalPages > 0) {
+                    for (var i = 1; i <= response.data.results.totalPages; i++) {
+                        page2.push(i);
+                    }
+                    $scope.pages = page2;
+                }
+                if (response.data.results.totalPages >= 4) {
+                    $scope.flag4 = false;
+                    $scope.flag3 = true;
+                }
+                else {
+                    $scope.flag3 = false;
+                    $scope.flag4 = true;
+                }
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+            });
+            $scope.turn = function (index) {
+                //  alert(index);
+
+                if (index >= 0 && index < $scope.products.totalPages) {
+                    $scope.isAble2 = true;
+                    $scope.isAble1 = false;
+                    $scope.currentPage = index;
+                    $http({
+                        method: 'GET',
+                        url: '/product/queryByProductType/0/'+productType+'?current='+index
+                    }).then(function successCallback(response) {
+                        $scope.products = response.data.results;
+
+                    }, function errorCallback(response) {
+                        // 请求失败执行代码
+                    });
+                }
+            };
+
+            $scope.queryLike = function () {
+                var str = $scope.queryStr.toString();
+                $scope.flag3 = false;
+                $scope.flag4 = false;
+                $scope.currentPage = 0;
+
+                $http({
+                    method: 'GET',
+                    url: '/product/like?productType='+productType+'&str=' + str
+                }).then(function successCallback(response) {
+                    $scope.products = response.data.results;
+                    if(response.data.results.totalPages <= 0){
+                        $scope.isEmpty=true;
+                    }
+                    if (response.data.results.totalPages > 0) {
+                        for (var i = 1; i <= response.data.results.totalPages; i++) {
+                            page.push(i);
+                        }
+                        $scope.pages = page;
+                        $scope.isEmpty=false;
+                    }
+                    if (response.data.results.totalPages >= 4) {
+                        $scope.flag4 = false;
+                        $scope.flag3 = true;
+                    }
+                    else {
+                        $scope.flag3 = false;
+                        $scope.flag4 = true;
+                    }
+                    $scope.turn = function (index) {
+                        if (index >= 0 && index < $scope.products.totalPages) {
+                            $scope.isAble2 = true;
+                            $scope.isAble1 = false;
+                            $scope.currentPage = index;
+                            $http({
+                                method: 'GET',
+                                url: '/product/queryByProductType/0/'+productType+'?current='+index
+                            }).then(function successCallback(response) {
+                                $scope.products = response.data.results;
+
+                            }, function errorCallback(response) {
+                                // 请求失败执行代码
+                            });
+                        }
+                    }
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                });
+            }
+        });
+
+    </script>
+
+</div>
+</body>
+
+
+</html>
