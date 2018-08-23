@@ -4,6 +4,7 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.hsbc.team4.ordersystem.aop.annotations.SysLog;
 import com.hsbc.team4.ordersystem.common.utils.RedisUtils;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
+import com.hsbc.team4.ordersystem.common.utils.ValidatorTools;
 import com.hsbc.team4.ordersystem.smsmessage.SendMsg;
 import com.hsbc.team4.ordersystem.users.domain.User;
 import com.hsbc.team4.ordersystem.users.service.IUserService;
@@ -221,11 +222,22 @@ public class UserController {
             final String token = iUserService.login(user.getUsername(),user.getPassword(),request);
             resultMap.put("token",token);
             if(token!=null){
-                User user1=iUserService.findByUsername(user.getUsername());
-                user1.setLastLoginTime(System.currentTimeMillis());
-                User user2=iUserService.updateEntity(user1);
-                resultMap.put("user",user2);
-                return responseResults.responseBySuccess("succeed",resultMap);
+                String username=user.getUsername();
+                User user1=null;
+                if(ValidatorTools.isMobile(username)){
+                    user1=iUserService.findByPhone(username);
+                }else if(ValidatorTools.isEmail(username)){
+                    user1=iUserService.findByEmail(username);
+                }else if (ValidatorTools.isUsername(username)) {
+                    user1 = iUserService.findByUsername(username);
+                }
+                if(user1!=null){
+                    user1.setLastLoginTime(System.currentTimeMillis());
+                    User user2=iUserService.updateEntity(user1);
+                    resultMap.put("user",user2);
+                    return responseResults.responseBySuccess("succeed",resultMap);
+                }
+                return responseResults.responseByErrorMessage("errors,please try again");
             }
             return responseResults.responseByErrorMessage("The password is not correct，please enter again");
         }catch (Exception e){
@@ -242,20 +254,19 @@ public class UserController {
         String code= (String) redisUtils.getValue(map.get("phone"));
         if(code!=null){
             if(bCryptPasswordEncoder.matches(map.get("verifyCode"),code)){
-                return responseResults.responseByErrorMessage("you enter the verifyCode is correct");
+                Map<String,Object> resultMap=new HashMap<>();
+                User user=iUserService.findByPhone(map.get("phone"));
+                final String token = iUserService.login(user.getUsername(),user.getPassword(),request);
+                resultMap.put("token",token);
+                if(token!=null){
+                    User user1=iUserService.findByUsername(user.getUsername());
+                    user1.setLastLoginTime(System.currentTimeMillis());
+                    User user2=iUserService.updateEntity(user1);
+                    resultMap.put("user",user2);
+                    return responseResults.responseBySuccess("succeed",resultMap);
+                }
             }
             return responseResults.responseByErrorMessage("you enter the code is verifyCode not correct");
-        }
-        Map<String,Object> resultMap=new HashMap<>();
-        User user=iUserService.findByPhone(map.get("phone"));
-        final String token = iUserService.login(user.getUsername(),user.getPassword(),request);
-        resultMap.put("token",token);
-        if(token!=null){
-            User user1=iUserService.findByUsername(user.getUsername());
-            user1.setLastLoginTime(System.currentTimeMillis());
-            User user2=iUserService.updateEntity(user1);
-            resultMap.put("user",user2);
-            return responseResults.responseBySuccess("succeed",resultMap);
         }
         return responseResults.responseByErrorMessage( "The verifyCode was expired");
     }

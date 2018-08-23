@@ -123,7 +123,9 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //将用户名和密码封装到一个UsernamePasswordAuthenticationToken对象中
         UserDetails userDetails = loadUserByUsername(username);
-        if(!passwordEncoder.matches(password.trim(),userDetails.getPassword())){
+        if(userDetails.getPassword().equals(password.trim())){
+            return jwtTokenGenerator.generateToken(userDetails);
+        }else if(!passwordEncoder.matches(password.trim(),userDetails.getPassword())){
             return null;
         }
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),password,userDetails.getAuthorities());
@@ -273,12 +275,12 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user;
-        if(ValidatorTools.isUsername(s)){
-            user=this.findByUsername(s);
+        if(ValidatorTools.isMobile(s)){
+            user=this.findByPhone(s);
         }else if(ValidatorTools.isEmail(s)){
             user=this.findByEmail(s);
-        }else if (ValidatorTools.isMobile(s)){
-            user=this.findByPhone(s);
+        }else if (ValidatorTools.isUsername(s)){
+            user=this.findByUsername(s);
         }else {
             throw new UsernameNotFoundException("The user format is not correct");
         }
