@@ -59,7 +59,7 @@ public class ProductControllerTest {
         productDto.setProductIcon("1.jpg");
         productDto.setProductType("day in search");
         productDto.setIssueDate("2018.8.16");
-        productDto.setYieldRate(0.0468);
+        productDto.setYieldRate("5.6%");
         String json = JSON.toJSONString(productDto);
         if (!"".equals(json)) {
             try {
