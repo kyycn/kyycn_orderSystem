@@ -91,7 +91,6 @@ public class OrderController {
         Orders order = (Orders) beanAdapter.dtoAdapter(orderDto, new Orders());
         User user = global.getUserByToken();
         order.setUpdateUsername(user.getUsername());
-        order.setUpdateTime(System.currentTimeMillis());
         Orders orders = orderService.updateEntity(order);
         if (orders!=null){
             return responseResults.responseBySuccess("ok!",orders);
@@ -169,6 +168,19 @@ public class OrderController {
                                                      @RequestParam(name = "pageSize",defaultValue = "10") int pageSize,
                                                      @RequestParam(name = "orderStatus") int orderStatus){
         Page<Orders> orders = orderService.findByOrderStatus(current, pageSize, orderStatus);
+        if (orders!=null){
+            return responseResults.responseBySuccess("ok!",orders);
+        } else {
+            return responseResults.responseByErrorMessage("getOrderList Failure,please try again.");
+        }
+    }
+
+    @ApiOperation(value = "listUserOrders",notes = "the param is the userId",httpMethod = "GET",response = ResponseResults.class)
+    @GetMapping("/listUserOrders")
+    public ResponseResults listUserOrders(@RequestParam(name = "current",defaultValue = "0") int current,
+                                                     @RequestParam(name = "pageSize",defaultValue = "10") int pageSize,
+                                                     @RequestParam(name = "userId") String userId){
+        Page<Orders> orders = orderService.findByUserIdAndStatus(current, pageSize, userId,0);
         if (orders!=null){
             return responseResults.responseBySuccess("ok!",orders);
         } else {

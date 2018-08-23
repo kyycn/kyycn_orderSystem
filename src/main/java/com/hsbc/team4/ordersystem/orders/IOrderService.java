@@ -1,7 +1,6 @@
 package com.hsbc.team4.ordersystem.orders;
 import com.hsbc.team4.ordersystem.common.base.IBaseService;
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 
 /**
@@ -31,4 +30,13 @@ public interface IOrderService extends IBaseService<Orders>{
     * @Date: 2018/8/8 
     */
      List<Orders> addOrdersList(List<Orders> orderList);
+
+    /**
+     * @Description: Query the user order list.
+     * @Param: [userId, status]
+     * @return: java.util.List<com.hsbc.team4.ordersystem.orders.Orders>
+     * @Author: Young
+     * @Date: 2018/8/20
+     */
+    Page<Orders> findByUserIdAndStatus(int current, int pageSize, String userId, int status);
 }

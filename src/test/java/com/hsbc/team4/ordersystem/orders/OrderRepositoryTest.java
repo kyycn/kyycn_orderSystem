@@ -31,11 +31,10 @@ public class OrderRepositoryTest {
         Orders order = new Orders();
         order.setId("1111");
         order.setOrderStatus(1);
-        order.setProductCount(10);
         order.setCreateUsername("100000");
         order.setProductName("111123");
         order.setProductPrice(12.1);
-        order.setTotalFree(order.getProductPrice()*order.getProductCount());
+        order.setTotalFree(order.getProductPrice());
         Orders order1 = orderRepository.save(order);
         OrderDto dto = (OrderDto) beanAdapter.daoAdapter(order1, new OrderDto());
         System.out.println(dto);

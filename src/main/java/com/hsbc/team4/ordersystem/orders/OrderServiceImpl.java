@@ -48,7 +48,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Orders addEntity(Orders order) {
         order.setId(uuidFactory.getUUID());
-        Double totalFree = order.getProductPrice()*order.getProductCount();
+        Double totalFree = order.getProductPrice();
         order.setTotalFree(totalFree);
         order.setOrderStatus(0);
         return orderRepository.save(order);
@@ -75,6 +75,8 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public Orders updateEntity(Orders order) {
+        order.setUpdateTime(System.currentTimeMillis());
+        order.setTotalFree(order.getProductPrice());
         return orderRepository.saveAndFlush(order);
     }
 
@@ -114,10 +116,24 @@ public class OrderServiceImpl implements IOrderService {
     public List<Orders> addOrdersList(List<Orders> orderList) {
         for (Orders order : orderList) {
             order.setId(uuidFactory.getUUID());
-            Double totalFree = order.getProductPrice()*order.getProductCount();
+            Double totalFree = order.getProductPrice();
             order.setTotalFree(totalFree);
             order.setOrderStatus(0);
         }
         return orderRepository.saveAll(orderList);
+    }
+
+
+        /**
+        * @Description: Query the user order list.
+        * @Param: [current, pageSize, createUsername, status]
+        * @return: org.springframework.data.domain.Page<com.hsbc.team4.ordersystem.orders.Orders>
+        * @Author: Young
+        * @Date: 2018/8/20
+        */
+    @Override
+    public Page<Orders> findByUserIdAndStatus(int current, int pageSize, String userId, int status) {
+        Pageable pageable= PageableTools.addTimeSortForDescAndPage(current,pageSize);
+        return orderRepository.findByUserIdAndStatus(userId,status,pageable);
     }
 }

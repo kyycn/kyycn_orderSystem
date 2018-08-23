@@ -44,8 +44,7 @@ public class OrderControllerTest {
         OrderDto orderDto = new OrderDto();
         orderDto.setId("111111111111");
         orderDto.setProductName("22222222222");
-        orderDto.setProductCount(10);
-        orderDto.setCreateUsername("000000000");
+        orderDto.setUsername("000000000");
         orderDto.setOrderStatus(1);
         orderDto.setProductPrice(12.0);
         ArrayList<OrderDto> list = new ArrayList<>();

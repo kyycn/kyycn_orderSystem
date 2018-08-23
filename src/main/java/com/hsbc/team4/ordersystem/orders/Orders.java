@@ -20,13 +20,14 @@ import javax.validation.constraints.NotNull;
 public class Orders extends BaseEntity {
     @Id
     private String id;
-    @NotBlank(message = "The createUsername can not be empty")
-    private String createUsername;
+    @NotBlank(message = "The userId can not be empty")
+    private String userId;
+    @NotBlank(message = "The username can not be empty")
+    private String username;
+    @NotBlank(message = "The productId can not be empty")
+    private String productId;
     @NotBlank(message = "The productName can not be empty")
     private String productName;
-    @NotNull(message = "The productCount can not be empty")
-    private Integer productCount;
-    @NotNull(message = "The orderStatus can not be empty")
     private Integer orderStatus;
     @NotNull(message = "The productPrice can not be empty")
     private Double productPrice;

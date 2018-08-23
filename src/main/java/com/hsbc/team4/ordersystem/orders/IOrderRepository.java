@@ -22,4 +22,13 @@ public interface IOrderRepository extends IBaseRepository<Orders,String>{
     * @Date: 2018/8/9 
     */
     Page<Orders> findByOrderStatus(int orderStatus, Pageable pageable);
+
+    /**
+     * @Description: Query the user order list.
+     * @Param: [username, status]
+     * @return: java.util.List<com.hsbc.team4.ordersystem.orders.Orders>
+     * @Author: Young
+     * @Date: 2018/8/20
+     */
+    Page<Orders> findByUserIdAndStatus(String userId, int status, Pageable pageable);
 }
