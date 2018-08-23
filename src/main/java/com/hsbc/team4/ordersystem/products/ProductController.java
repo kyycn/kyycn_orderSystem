@@ -158,8 +158,8 @@ public class ProductController {
      * @return product
      */
     @ApiOperation(value = "get by productType", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
-    @GetMapping("/queryByProductType/{productType}/{page}")
-    public ResponseResults queryByProductType(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,@PathVariable Integer page, @PathVariable String productType) {
+    @GetMapping("/queryByProductType/{productType}/{page}/{pageSize}")
+    public ResponseResults queryByProductType(@PathVariable Integer pageSize,@PathVariable Integer page, @PathVariable String productType) {
         if (StringUtils.isEmpty(productType) || page<0) {
             return responseResults.responseByErrorMessage("error");
         }
