@@ -57,6 +57,8 @@ public class SenderControllerTest {
         sender.setTemplateType("login");
         sender.setCreateTime(System.currentTimeMillis());
         sender.setUpdateTime(System.currentTimeMillis());
+        sender.setCreateUsername("Kevin");
+        sender.setUpdateUsername("Kevin");
         String json= JSON.toJSONString(sender);
         if(!"".equals(json)){
             try {

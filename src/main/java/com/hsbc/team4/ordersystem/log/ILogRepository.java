@@ -23,5 +23,12 @@ public interface ILogRepository extends JpaRepository<Log,String>{
      */
     Page<Log> findByOperateTypeContains(String operateType, Pageable pageable);
 
+    /**
+     *  pageable
+     * @param pageable
+     * @return Page<Log>
+     */
+    @Override
+    Page<Log> findAll(Pageable pageable);
 
 }

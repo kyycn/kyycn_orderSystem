@@ -4,12 +4,15 @@ import com.hsbc.team4.ordersystem.common.utils.BeanValidator;
 import com.hsbc.team4.ordersystem.common.utils.ResponseResults;
 import com.hsbc.team4.ordersystem.users.domain.UserInfo;
 import com.hsbc.team4.ordersystem.users.service.IUserInfoService;
+import com.hsbc.team4.ordersystem.users.service.impl.ImportResourceServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -28,18 +31,21 @@ public class UserInfoController {
     private final IUserInfoService iUserInfoService;
     private final ResponseResults responseResults;
     private final BeanValidator beanValidator;
+    private final ImportResourceServiceImpl importResourceService;
 
     /**
      * UserInfoController
      * @param responseResults
      * @param iUserInfoService
      * @param beanValidator
+     * @param importResourceService
      */
     @Autowired
-    public UserInfoController(ResponseResults responseResults, IUserInfoService iUserInfoService, BeanValidator beanValidator) {
+    public UserInfoController(ResponseResults responseResults, IUserInfoService iUserInfoService, BeanValidator beanValidator, ImportResourceServiceImpl importResourceService) {
         this.iUserInfoService = iUserInfoService;
         this.responseResults = responseResults;
         this.beanValidator = beanValidator;
+        this.importResourceService = importResourceService;
     }
 
     /**
@@ -76,5 +82,25 @@ public class UserInfoController {
         }
         return responseResults.responseByErrorMessage(" username error,the username is not be empty");
     }
+
+    @ApiOperation(value = "uploadHeaderImage",notes = "the param is multipartFile",httpMethod = "POST",response = ResponseResults.class)
+    @PostMapping("/uploadHeaderImage/{id}")
+    public ResponseResults uploadHeaderImage(@ApiParam(name = "multipartFile",value = "multipartFile") MultipartFile multipartFile, @PathVariable String id){
+        UserInfo userInfo=iUserInfoService.findByUsername(id);
+        if(userInfo!=null){
+            Map<String,String> map=importResourceService.uploadFile(multipartFile,"headImage/");
+            String path=map.get("path");
+            if(path!=null){
+                userInfo.setHeadURL(path);
+                UserInfo userInfo1=iUserInfoService.updateUserInfo(userInfo);
+                if(userInfo1!=null){
+                    return responseResults.responseBySuccess("ok",userInfo);
+                }
+                return responseResults.responseByErrorMessage("save headImage  Failure");
+            }
+        }
+        return responseResults.responseByErrorMessage("the username is not exist");
+    }
+
 
 }
