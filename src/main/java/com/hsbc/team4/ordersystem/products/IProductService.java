@@ -22,7 +22,7 @@ public interface IProductService extends IBaseService<Product> {
      * @param productType
      * @return Product
      */
-    Page<Product> findByProductType(int current, int status, String productType);
+    Page<Product> findByProductType(int current,int pageSize, int status, String productType);
 
     /**
      * 模糊查询（产品类型）
