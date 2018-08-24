@@ -65,7 +65,7 @@ public class ProductController {
         Product product = (Product) beanAdapter.dtoAdapter(productDto, new Product());
         Product product1 = productService.addEntity(product);
         if (product1 != null) {
-            return responseResults.responseBySuccess("ok", productDto);
+            return responseResults.responseBySuccess("save success", productDto);
         }
         return responseResults.responseByErrorMessage("overtime ,please refresh again");
     }
@@ -87,7 +87,7 @@ public class ProductController {
         Product product = (Product) beanAdapter.dtoAdapter(productDto, new Product());
         Product product1 = productService.updateEntity(product);
         if (product1 != null) {
-            return responseResults.responseBySuccess("ok", productDto);
+            return responseResults.responseBySuccess("update success", productDto);
         }
         return responseResults.responseByErrorMessage("it's overtime!please refresh again");
     }
@@ -99,12 +99,12 @@ public class ProductController {
      * @return product
      */
     @ApiOperation(value = "delete by Id", httpMethod = "DELETE", notes = "delete product by Id", response = ResponseResults.class)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseResults deleteProductById(@ApiParam(required = true, name = "id", value = "the product id") @PathVariable String id) {
 
         int row = productService.updateStatusById(id, 1);
         if (row > 0) {
-            return responseResults.responseBySuccess("ok");
+            return responseResults.responseBySuccess("delete success");
         }
         return responseResults.responseByErrorMessage("failure delete,please try again!");
     }
@@ -130,22 +130,20 @@ public class ProductController {
     /**
      * getProductList
      *
-     * @param current
+     * @param page
      * @param pageSize
-     * @param status
      * @return product
      */
     @ApiOperation(value = "status", httpMethod = "GET", notes = "get productList", response = ResponseResults.class)
-    @GetMapping("/{status}")
-    public ResponseResults getProductList(@RequestParam(value = "current", defaultValue = "0") int current,
-                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                          @PathVariable int status) {
-        if (StringUtils.isEmpty(status)) {
+    @GetMapping("/get/{page}")
+    public ResponseResults getProductList(@PathVariable Integer page,
+                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        if (page<0) {
             return responseResults.responseByErrorMessage("the status is empty");
         }
-        Page<Product> products = productService.findByStatus(current, pageSize, status);
+        Page<Product> products = productService.findByStatus(page, pageSize, 0);
         if (products != null) {
-            return responseResults.responseBySuccess("ok", products);
+            return responseResults.responseBySuccess("query success!", products);
         }
         return responseResults.responseByErrorMessage("get productList is failed!");
     }
