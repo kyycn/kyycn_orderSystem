@@ -30,7 +30,7 @@ public class ProductDto {
     private String productType;
     @NotBlank(message = "The issueDate can not be empty")
     private String issueDate;
-    @NotNull(message = "The yieldRate can not be empty")
+    @NotBlank(message = "The yieldRate can not be empty")
     private String yieldRate;
     @NotBlank(message = "The productNumber can not be empty")
     private String productNumber;
